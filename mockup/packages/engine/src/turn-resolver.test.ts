@@ -185,4 +185,115 @@ describe('resolveTurn', () => {
     });
     expect(result.nextState.player.experience.simsar).toBe(baseState.player.experience.simsar + 2);
   });
+
+  it('transitions season from kis to yaz at turn 9 (after turn 8)', () => {
+    const turn8State: GameState = {
+      ...baseState,
+      turn: 8,
+      season: 'kis',
+      player: { ...baseState.player, currentPortId: 'venedik' },
+    };
+    const result = resolveTurn({
+      state: turn8State,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.season).toBe('yaz');
+    expect(result.nextState.turn).toBe(9);
+  });
+
+  it('includes trade result in TurnResolution when intent is kervan', () => {
+    const tradeState: GameState = {
+      ...baseState,
+      player: { ...baseState.player, currentPortId: 'palermo' },
+    };
+    const result = resolveTurn({
+      state: tradeState,
+      order: { destinationPort: 'tunus', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.trade).toBeDefined();
+    expect(typeof result.trade?.goldDelta).toBe('number');
+    expect(typeof result.trade?.stars).toBe('number');
+    expect(Array.isArray(result.trade?.sold)).toBe(true);
+  });
+
+  it('does not include trade result for non-kervan intents', () => {
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.trade).toBeUndefined();
+  });
+
+  it('preserves gold and durability on combat win', () => {
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kara_bayrak' },
+      ports,
+      routes,
+      goods,
+      tactic: 'pruva',
+    });
+    if (result.combat?.result === 'kazandi') {
+      expect(result.nextState.player.gold).toBe(baseState.player.gold);
+      expect(result.nextState.player.ship.durability).toBe(baseState.player.ship.durability);
+    }
+  });
+
+  it('produces three whisper lines after a valid turn', () => {
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.whispers).toHaveLength(3);
+  });
+
+  it('includes destination port name in whispers', () => {
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.whispers.some((w) => w.includes('İstanbul') || w.includes('istanbul'))).toBe(true);
+  });
+
+  it('kervan intent gains 2 terazi experience', () => {
+    const tradeState: GameState = {
+      ...baseState,
+      player: { ...baseState.player, currentPortId: 'palermo' },
+    };
+    const result = resolveTurn({
+      state: tradeState,
+      order: { destinationPort: 'tunus', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.experience.terazi).toBe(baseState.player.experience.terazi + 2);
+  });
+
+  it('kara_bayrak intent gains 2 meltem experience', () => {
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kara_bayrak' },
+      ports,
+      routes,
+      goods,
+      tactic: 'pruva',
+    });
+    expect(result.nextState.player.experience.meltem).toBe(baseState.player.experience.meltem + 2);
+  });
 });

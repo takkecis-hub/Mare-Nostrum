@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Ship } from '../../shared/src/types/index.js';
-import { repairCost, repairShip } from './shipyard.js';
+import { effectiveCostPerPoint, repairCost, repairShip } from './shipyard.js';
 
 const damagedKaraka: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 60 };
 const fullKaraka: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 100 };
@@ -68,5 +68,24 @@ describe('repairShip', () => {
     const original: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 60 };
     repairShip(original, 200, []);
     expect(original.durability).toBe(60);
+  });
+});
+
+describe('effectiveCostPerPoint', () => {
+  it('returns base cost when no tersane special', () => {
+    expect(effectiveCostPerPoint([])).toBe(4);
+  });
+
+  it('returns discounted cost when tersane is present', () => {
+    // ceil(4 * 0.75) = ceil(3) = 3
+    expect(effectiveCostPerPoint(['tersane'])).toBe(3);
+  });
+
+  it('returns base cost with unrelated specials', () => {
+    expect(effectiveCostPerPoint(['depo', 'kahve'])).toBe(4);
+  });
+
+  it('returns discounted cost even with additional specials alongside tersane', () => {
+    expect(effectiveCostPerPoint(['depo', 'tersane'])).toBe(3);
   });
 });
