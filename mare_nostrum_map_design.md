@@ -221,7 +221,7 @@ Pahalı mal: Savaş (Levant silah ithal eder)
            Memlük/Osmanlı döneminde: düzenli ama vergili.
            İskenderiye'ye alternatif Doğu rotası.
 
-Bağlantılar: İstanbul (Kabotaj — kıyı boyunca, uzun), 
+Bağlantılar: İstanbul (Kabotaj — kıyı boyunca, 3 tur — "Uzun Kabotaj"),
              Kıbrıs (Kabotaj), İskenderiye (Kabotaj)
 ```
 
@@ -258,8 +258,10 @@ Pahalı mal: Yemek (çöl, tarım zayıf)
 Özel:      Altın kaynağı: Sahra altını buradan Avrupa'ya girer.
            Uzak ve tehlikeli ama kârlı.
            Korsanlık sonrası (16. yy): korsan üssü potansiyeli.
+           İzolasyon avantajı: çok az oyuncu gelir → pazar HER ZAMAN AÇ → her zaman iyi fiyat.
+           İlk gelen oyuncuya ekstra "nadir mal bonusu" (Sahra Altını menşe güçlendirmesi).
 
-Bağlantılar: İskenderiye (Fortuna), Tunus (Kabotaj), Cezayir (Fortuna)
+Bağlantılar: İskenderiye (Fortuna), Tunus (Tramontana), Cezayir (Fortuna)
 ```
 
 **13. Tunus** — *Afrika'nın Roma'sı*
@@ -276,7 +278,7 @@ Pahalı mal: Lüks (Avrupa lüks malı talebi)
            Palermo'nun karşısı — ikisi arasında yoğun trafik.
 
 Bağlantılar: Palermo (DARBOĞAZ — Sicilya Boğazı), 
-             Barselona (Fortuna), Cezayir (Kabotaj), Trablus (Kabotaj)
+             Barselona (Fortuna), Cezayir (Kabotaj), Trablus (Tramontana)
 ```
 
 **14. Cezayir** — *Korsanlar Yuvası*
@@ -294,7 +296,7 @@ Pahalı mal: Yemek (kıyı şeridi dar, tarım az)
            Hristiyan tüccarlara "Kem Göz" — ama rüşvetle "Yabancı" olunabilir.
            Barbaros event'inden sonra (16. yy): Osmanlı bayrağı altında güçlenir.
 
-Bağlantılar: Tunus (Kabotaj), Barselona (Fortuna), Trablus (Fortuna)
+Bağlantılar: Tunus (Kabotaj), Barselona (Fortuna), Trablus (Fortuna), Malta (Fortuna)
 ```
 
 ### BAĞIMSIZ — ÖZEL STATÜ
@@ -314,7 +316,7 @@ Pahalı mal: Yemek (küçük ada, tarım minimal), Lüks (üretim yok)
            Korsan avı görevleri buradan alınır.
            Küçük ama stratejik konum — Sicilya Boğazı yakını.
 
-Bağlantılar: Palermo (Kabotaj), Tunus (Tramontana), Girit (Fortuna)
+Bağlantılar: Palermo (Kabotaj), Tunus (Tramontana), Girit (Fortuna), Cezayir (Fortuna)
 ```
 
 ---
@@ -327,9 +329,10 @@ Bağlantılar: Palermo (Kabotaj), Tunus (Tramontana), Girit (Fortuna)
 TRAMONTANA (Normal):  1 tur seyahat. Standart karşılaşma riski.
 KABOTAJ (Kıyı):      2 tur seyahat. Düşük risk, yavaş.
 FORTUNA (Açık deniz): 1 tur ama %20 fırtına riski. %15 erken varış şansı.
+UZUN KABOTAJ (Özel): 3 tur seyahat. Sadece Beyrut ↔ İstanbul rotasına özel. Düşük risk ama çok yavaş.
 ```
 
-## 3.2 Tam Rota Listesi (28 Rota)
+## 3.2 Tam Rota Listesi (29 Rota)
 
 ```
 #   ROTA                         TİP          DARBOĞAZ?
@@ -361,18 +364,19 @@ FORTUNA (Açık deniz): 1 tur ama %20 fırtına riski. %15 erken varış şansı
 18  Girit ↔ İskenderiye          Fortuna       Hayır
 19  Kıbrıs ↔ Beyrut             Kabotaj       Hayır
 20  Kıbrıs ↔ İskenderiye        Tramontana    Hayır
-21  İstanbul ↔ Beyrut           Kabotaj       Hayır (kıyı boyunca, uzun)
+21  İstanbul ↔ Beyrut           Kabotaj       Hayır (kıyı boyunca, 3 tur — Uzun Kabotaj)
 22  Beyrut ↔ İskenderiye         Kabotaj       Hayır
 
     GÜNEY AKDENİZ
 23  İskenderiye ↔ Trablus        Fortuna       Hayır
-24  Trablus ↔ Tunus              Kabotaj       Hayır
+24  Trablus ↔ Tunus              Tramontana    Hayır
 25  Trablus ↔ Cezayir            Fortuna       Hayır
 26  Tunus ↔ Cezayir              Kabotaj       Hayır
 
     ÖZEl ROTALAR
 27  Malta ↔ Girit                Fortuna       Hayır
 28  Cenova ↔ Tunus               Fortuna       Hayır (kestirme, riskli)
+29  Malta ↔ Cezayir              Fortuna       Hayır (Şövalye vs Korsan gerilimi)
 ```
 
 ## 3.3 Rota Haritası (ASCII)
@@ -399,6 +403,8 @@ FORTUNA (Açık deniz): 1 tur ama %20 fırtına riski. %15 erken varış şansı
           (T) = Tramontana    ══ = DARBOĞAZ
           (K) = Kabotaj
           (F) = Fortuna
+
+   [Yeni rota: Malta ↔ Cezayir (Fortuna) — tarihsel Şövalye-Korsan gerilimi]
 ```
 
 ---
@@ -503,6 +509,20 @@ DARBOĞAZDA KARŞILAŞMA TABLOSU:
 
   Boş geçiş (%10):
     → Şanslısın — kimse yok
+```
+
+## 4.3 Darboğaz Alternatifleri — Güçlendirilmiş Cazibe
+
+Alternatif rotaların (Fortuna) daha cazip olması için:
+
+```
+  → Fortuna alternatifleriyle giden oyuncuya %15 erken varış şansı
+    (mevcut) + DARBOĞAZ BİLGİSİ: darboğazda kimin beklediğini
+    göremezsin ama alternatifle gidince istihbarat toplarsın
+  → Darboğaz karşılaşma oranı %80+'ye çıkarıldı (eski: %65-75)
+    → Bu, alternatif arayışını doğal olarak güçlendirir
+  → Fortuna alternatifi kullanan oyuncuya Simsar +1 deneyim
+    (keşifçi ruhu ödüllendirilir)
 ```
 
 ---

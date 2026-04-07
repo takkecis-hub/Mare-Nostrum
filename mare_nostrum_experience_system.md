@@ -32,7 +32,7 @@ Her havuz 0'dan başlar ve oyuncunun eylemleriyle sessizce dolar:
 
 ```
 EYLEM                              HANGİ HAVUZ    NE KADAR
-Denize çıktı (herhangi bir yolculuk)  Meltem       +1
+Denize çıktı (herhangi bir yolculuk)  Meltem       +0 (kaldırıldı — deneyim YAŞANARAK kazanılır)
 Fırtınada hayatta kaldı               Meltem       +3
 Savaşa girdi (kazansın kaybetsin)     Meltem       +2
 Kaçış denemesi yaptı                  Meltem       +1
@@ -63,6 +63,17 @@ AĞIRLIK HESABI:
   Örnek oyuncu B: Meltem 30, Terazi 90, Mürekkep 50, Simsar 20 = toplam 190
     Terazi oranı = 90/190 = %47 → Tüccar ağırlıklı
 ```
+
+## Generalist Dezavantajları
+
+Oran %25'in altında olan havuzlarda oyuncu belirli fırsatları TAMAMEN KAÇIRIR:
+
+  → Meltem %25 altı: fırtına öncesi uyarı ASLA duyulmaz
+  → Terazi %25 altı: sahte piyasa söylentilerini ASLA fark edemezsin
+  → Mürekkep %25 altı: şehir yöneticisinin gizli bilgilerini ASLA duyamazsın
+  → Simsar %25 altı: kahvehanede gizli fısıltıları ASLA duyamazsın
+
+Ün kazanmak için minimum %35 oran gereksinimi: her şeyi yapan generalist oyuncuya HİÇBİR ün gelmez. Bu, uzmanlaşma baskısını pekiştirir.
 
 ---
 
@@ -311,6 +322,26 @@ NASIL ÇALIŞIR:
 **Bu, uzmanlaşma baskısı yaratır.** Her şeyi yapan oyuncu hiçbir alanda derin olamaz. Ama tek alana yoğunlaşan oyuncu diğer alanlarda kör kalır. İkilem.
 
 **Ve bu ikilem, oyuncu-oyuncu ilişkilerini DOĞAL OLARAK yaratır:** Meltem denizcisi, Terazi tüccarına ihtiyaç duyar (iyi fiyat bilgisi için). Terazi tüccarı, Meltem denizcisine ihtiyaç duyar (güvenli yolculuk için). Simsar operatörü, Mürekkep diplomatına ihtiyaç duyar (söylenti yönetimi için). Ortaklık mekanik olarak zorlanmıyor — DOĞAL olarak ortaya çıkıyor.
+
+---
+
+# MOD-SPESİFİK DENEYİM DENGELEMESİ
+
+Mürekkep multiplayer'da çok hızlı, Simsar singleplayer'da çok kolay büyür. Denge için:
+
+```
+SINGLEPLAYER AYARLARI:
+  → NPC etkileşimlerinden Mürekkep +2 (artırılmış — MP'deki oyuncu
+    mesajlaşmasını telafi eder)
+  → Kaçakçılık yakalanma oranları %5 artırılmış (Simsar dengelemesi —
+    NPC'ler daha kolay manipüle edildiği için)
+
+MULTIPLAYER AYARLARI:
+  → Mesajlaşma Mürekkep'i her 2 mesajda +1'e düşürülmüş
+    (spam önleme + denge — her mesaj puan vermez)
+  → Kaçakçılık yakalanma oranları standart
+    (gerçek oyuncuları gözetlemek zaten zor)
+```
 
 ---
 
