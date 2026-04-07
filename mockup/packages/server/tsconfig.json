@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "..",
+    "declaration": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "../shared/src/**/*.ts",
+    "../engine/src/**/*.ts",
+    "../../data/**/*.json"
+  ],
+  "exclude": ["../engine/src/**/*.test.ts"]
+}
