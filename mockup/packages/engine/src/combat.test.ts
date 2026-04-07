@@ -33,8 +33,8 @@ describe('calculatePower', () => {
   it('gives no tactic bonus for wrong ship/tactic combo', () => {
     // karaka + pruva: no bonus
     expect(calculatePower(karaka, 'pruva', baseExperience)).toBe(5);
-    // kadirga + manevra: no bonus
-    expect(calculatePower(kadirga, 'manevra', baseExperience)).toBe(6);
+    // kadirga + manevra: no bonus, base = 3 + 100/50 = 5
+    expect(calculatePower(kadirga, 'manevra', baseExperience)).toBe(5);
   });
 });
 

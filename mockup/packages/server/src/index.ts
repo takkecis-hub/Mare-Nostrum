@@ -116,7 +116,7 @@ app.post('/api/buy-good', (req, res) => {
     return;
   }
 
-  if (!currentPort.produces.includes(goodId)) {
+  if (currentPort.produces.good !== goodId) {
     res.status(400).json({ error: 'Bu liman bu malı üretmiyor' });
     return;
   }
