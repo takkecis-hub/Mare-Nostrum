@@ -21,7 +21,8 @@ Bu master doküman, aşağıdaki modüler çalışma dokümanlarının konsolide
 | 6 | `mare_nostrum_combat_narrative.md` | 🔧 WIP | Savaş taktiği + singleplayer anlatı + tarihsel trivia |
 | 7 | `mare_nostrum_quest_chains.md` | 🔧 WIP | 4 köken hikayesi tam senaryo (Kayıp Hazine, Baba'nın Şerefi, İntikam, Saf Merak) |
 | 8 | `mare_nostrum_implementation_plan.md` | 🔧 WIP | Teknik implementasyon planı, stack, fazlar, maliyet, DB şeması |
-| 9 | `akdeniz_events.md` | ⚠️ OUTDATED | 92 event'lik ham tarihsel kaynak listesi (hâlâ referans) |
+| 9 | `mare_nostrum_mechanics_review.md` | ✅ TAMAMLANDI | Mekanik review — tüm modüllere uygulanan denge önerileri |
+| 10 | `akdeniz_events.md` | ⚠️ OUTDATED | 92 event'lik ham tarihsel kaynak listesi (hâlâ referans) |
 
 **Eskimiş dokümanlar (sadece arşiv):**
 `akdeniz_game_mechanics.md`, `akdeniz_player_relations.md`, `mare_nostrum_v2.md`, `mare_nostrum_master_gdd.md` — v1/v2 tasarım süreci, artık geçersiz.
@@ -142,6 +143,8 @@ Oyuncu limanda (hepsi opsiyonel, sıra yok):
 
 **Tersane** — Gemi tamiri, gemi değiştirme.
 
+**Fondaco sınırlamaları:** İlk 5 tur: Fondaco zamanlayıcısı %50 uzatılmış (yeni oyuncular için öğrenme süresi). Her aksiyon zaman maliyetli — tur başına EN FAZLA 3 aksiyona vakit var (Kahvehane + Pazar + 1 ek). Bu, analiz felcini engeller.
+
 ## 2.3 Emir: Üç Seçim
 
 ```
@@ -177,11 +180,11 @@ Her önemli eylem tek cümlelik söylenti üretir (savaş, büyük ticaret, kaç
 
 ## 3.2 Söylenti Yayılması
 
-Söylenti kaynak limandan başlar, her tur komşu limanlara yayılır. Yayıldıkça ÇARPITILIR — seni seven limanlar olumluya, sevmeyen limanlar olumsuza çevirir. 5-8 tur sonra zayıflar. Büyük olaylar kalıcı.
+Söylenti kaynak limandan başlar, her tur komşu limanlara yayılır. Çarpıtma ŞABLON BAZLI — her söylenti tipinin 2 versiyonu: seven limanda olumlu, sevmeyende olumsuz. Söylenti ömrü: küçük 3-4 tur, orta 5-6 tur, büyük 8-10 tur. 3+ aynı tip söylenti birikirse ün'e dönüşür (kalıcı).
 
 ## 3.3 Söylenti Silahları (Rüzgâr Ek)
 
-Şablon bazlı söylenti yayma — kişi hakkında (gözdağı, suçlama, karalama, övgü, ifşa) veya piyasa hakkında (fiyat manipülasyonu). Maliyet: 10 altın.
+Şablon bazlı söylenti yayma — kişi hakkında (gözdağı, suçlama, karalama, övgü, ifşa) veya piyasa hakkında (fiyat manipülasyonu). Maliyet: 25 altın. 5 turda 3+ söylenti yayarsan "çok fısıldıyor" söylentisi doğar.
 
 ## 3.4 Söylenti Savunması
 
@@ -189,7 +192,7 @@ Söylenti kaynak limandan başlar, her tur komşu limanlara yayılır. Yayıldı
 
 ## 3.5 Söylenti → Şehir İlişkisi
 
-Şehir devletleri seni söylentilere göre karşılar: **Tanıdık Yüz** (olumlu) / **Yabancı** (nötr) / **Kem Göz** (olumsuz). İttifak bulaşması: bir güçle Tanıdık Yüz olursan, düşmanlarıyla her 3 turda 1 kademe düşüş (Mürekkep yüksekse 6 tur).
+Şehir devletleri seni söylentilere göre karşılar: **Tanıdık Yüz** (olumlu) / **Yabancı** (nötr) / **Kem Göz** (olumsuz). İttifak bulaşması: artık OTOMATİK değil, SÖYLENTI BAZLI. "Osmanlı dostu" söylentisi yayılınca etkili olur — yayılmazsa etkisi yok. Oyuncu aktif söylenti yönetimiyle (Ateşe Su, karşı söylenti) önleyebilir.
 
 ---
 
@@ -200,6 +203,7 @@ Söylenti kaynak limandan başlar, her tur komşu limanlara yayılır. Yayıldı
 ## 4.1 Dört Gizli Havuz
 
 Oyuncu görmez, oyun sessizce izler. Meltem (deniz), Terazi (ticaret), Mürekkep (diplomasi), Simsar (gölge). Eylemler otomatik olarak ilgili havuzu doldurur.
+Not: Denize çıkmanın otomatik Meltem +1 katkısı kaldırıldı — Meltem sadece aktif deneyimlerle (fırtına, savaş, kaçış) kazanılır. Generalist dezavantajı eklendi: %25 altı havuzlarda belirli fırsatlar tamamen kaçırılır.
 
 ## 4.2 Oran Bazlı Etki
 
@@ -241,11 +245,16 @@ Savaş başlamadan HER İKİ TARAF gizlice taktik seçer:
 
 **Gemi sinerjileri:** Feluka → Manevra'da +1 ekstra. Kadırga → Pruva'da +1 ekstra.
 
-**Güç formülü:** Gemi değeri + Ün bonusu + Taktik bonusu + Zar (Meltem'e göre 1-6 veya 2-6 veya 3-6).
+**Güç formülü:** Gemi değeri + Ün bonusu + Taktik bonusu + Zar (Meltem'e göre 1-6 veya 2-6 — üst sınır 2-6, 3-6 kaldırıldı).
+
+**Manevra zaferi ödülü:** Manevra ile kazanan düşmanın kargosunu ve emrini görür (istihbarat), düşmana -1 moral penaltısı verir.
+
+**Savunan taraf kaçış hakkı:** Savunan savaşı kabul etmek zorunda değil — KAÇIŞ seçebilir (hız karşılaştırması).
 
 ## 5.3 Duman Niyeti — Saldırmamanın Gücü
 
 Birini görüp saldırmamak: borç yaratır, bilgi toplar, gizliliği korur. Mürekkep ve Simsar havuzunu besler. Pasifist oyuncu da gelişir.
+Multiplayer'da hedef oyuncuya "seni gördü ama saldırmadı" bildirimi gider. Singleplayer'da NPC borç sayacı ile izlenir.
 
 ## 5.4 Sosyal ve Ekonomik Saldırı
 
@@ -275,7 +284,7 @@ Birini görüp saldırmamak: borç yaratır, bilgi toplar, gizliliği korur. Mü
 | İstanbul | Doğu İpeği [Lüks] | Katalan Demiri [Savaş] |
 | Girit | Girit Zeytinyağı [Yemek] | Doğu İpeği [Lüks] |
 | Kıbrıs | Kıbrıs Tuzu [Yemek] | Mısır Baharatı [Lüks] |
-| Beyrut | Halep Sabunu [Lüks] | Katalan Demiri [Savaş] |
+| Beyrut | Halep Sabunu [Lüks], Lübnan Sediri [Savaş] | Katalan Demiri [Savaş] |
 | İskenderiye | Mısır Baharatı [Lüks] | Lübnan Sediri [Savaş] |
 | Trablus | Sahra Altını [Lüks] | Provence Şarabı [Yemek] |
 | Tunus | Tunus Zeytinyağı [Yemek] | Ligurya Mercanı [Lüks] |
@@ -283,7 +292,7 @@ Birini görüp saldırmamak: borç yaratır, bilgi toplar, gizliliği korur. Mü
 
 ## 6.2 Açlık / Doyma Mekaniği
 
-Her limanın her menşe mala açlık seviyesi var: AÇ (kimse getirmemiş, fiyat tavan) → NORMAL → TOK (çok getirilmiş, fiyat dip). Her tur kimse getirmezse açlık +1, bir oyuncu getirirse -2, iki oyuncu aynı anda getirirse DİBE düşer.
+Her limanın her menşe mala açlık seviyesi var: AÇ (kimse getirmemiş, fiyat tavan) → NORMAL → TOK (çok getirilmiş, fiyat dip). Doyma hızı oyuncu sayısına göre ölçeklenir: 2 oyuncu'da 1 getirme -1, 2 getirme -3. 4 oyuncu'da 1/-1, 2/-2, 3+/DİBE. 6+ oyuncu'da daha yavaş doyma. İlk gelen bonusu kargo miktarıyla ters orantılı (Feluka hız meta'sı kırılır).
 
 **Sabit rota çalışmaz** — herkes aynı rotayı keşfedince fiyat çöker.
 
@@ -301,7 +310,7 @@ LLM şehir yöneticisi sabit gelir garantili kontratlar teklif eder. Bozarsan ce
 
 ## 6.6 Kaçak Mal
 
-Bazı mallar bazı limanlarda yasak. Kaçakçılık: yakalanma Simsar'a bağlı (%40 → %3). Yasak mal 3-5x normal fiyat.
+Bazı mallar bazı limanlarda yasak. Kaçakçılık: yakalanma Simsar'a bağlı (%40 → %3). Yasak mal 2-3x normal fiyat. Yakalanma cezası artırıldı: 2 tur hapis + 200 altın para cezası.
 
 ## 6.7 Sezon Etkisi
 
@@ -310,6 +319,7 @@ Yaz: trafik yoğun, yemek ucuz, lüks pahalı. Kış: fırtına riski, yemek pah
 ## 6.8 Commenda
 
 Yatırımcı sermaye koyar + Tüccar denize çıkar. Kâr paylaşımı serbest anlaşma. İhanet her zaman mümkün — ama söylenti üretir.
+İhanet cezası zamana göre ağırlaşır: 1. ihanet hafif söylenti (3 tur), 2. ihanet güçlü söylenti (6+ tur), 3. ihanet kalıcı "Akrep" ünü.
 
 ---
 
@@ -318,6 +328,7 @@ Yatırımcı sermaye koyar + Tüccar denize çıkar. Kâr paylaşımı serbest a
 ## 7.1 Ün Kazanma
 
 İki koşul: yeterli deneyim oranı + yeterli söylenti. Örn: Altın Parmak = Terazi %35+ VE 3+ aktif ticaret söylentisi. Maximum 3 ün. Kaybedilebilir (5 tur kullanmama veya çelişen eylemler).
+Ün kaybı kuralları: 5 tur boyunca ünle ilgili eylem yoksa uyarı, 8 tur sonra kayıp. Çelişen eylem (Altın Parmak iken ihanet) anında kaybetme riski.
 
 ## 7.2 Oyuncuya Görünen Tek Stat
 
@@ -343,6 +354,19 @@ Yatırımcı sermaye koyar + Tüccar denize çıkar. Kâr paylaşımı serbest a
 
 Gemi durumu: **Denize Hazır** → **Yaralı** (performans yarı, 1 tur onarım) → **Denizin Dibi** (yeni gemi satın al).
 
+**Karaka savunma bonusu:** Ateş taktiğinde +1 ("ağır yük" koruması). Kaybedildiğinde kargonun %50'si kurtarılabilir.
+
+**Gemi fiyatları ve geçiş maliyeti:**
+| İşlem | Maliyet |
+|---|---|
+| Feluka satın al | 100 altın |
+| Karaka satın al | 300 altın |
+| Kadırga satın al | 500 altın |
+| Gemi değiştirme (eski gemiyi sat) | Yeni fiyat - eski fiyatın %50'si |
+| Yaralı gemi tamiri | Gemi fiyatının %25'i |
+
+**Kadırga yavaşlığı:** Kadırga, Kabotaj rotalarında 1 ekstra tur ekler (toplam 3 tur). Tramontana'da normal. Bu, Kadırga'nın "savaş makinesi ama lojistik kabus" temasını güçlendirir.
+
 ---
 
 # BÖLÜM 9: HARİTA
@@ -351,7 +375,7 @@ Gemi durumu: **Denize Hazır** → **Yaralı** (performans yarı, 1 tur onarım)
 
 ## 9.1 Yapı
 
-15 liman, 4 bölge, 28 rota, 3 darboğaz.
+15 liman, 4 bölge, 29 rota, 3 darboğaz.
 
 **Bölgeler:** Frenk Denizi (Batı — güvenli, rekabetli), Ara Deniz (Orta — kavşak, kaotik), Şark Denizi (Doğu — zengin, tehlikeli), Berber Kıyısı (Güney — kanunsuz, gölgeler).
 
@@ -366,10 +390,13 @@ Her darboğazın alternatifi var ama ya daha riskli ya daha yavaş.
 ## 9.3 Özel Limanlar
 
 **Ragusa:** Nötr — hiçbir oyuncuyu Kem Göz yapmaz. Bilgi merkezi, kahvehanede ekstra fısıltı. Diplomatik sığınak.
+Ragusa transit vergisi: %10 ekstra ticaret vergisi (nötralite bedeli).
 
 **Cezayir:** Korsan limanı — Kara Bayrak cezasız. Ganimet pazarı. Hristiyanlara Kem Göz.
 
 **Malta:** Savaşçı — Kadırga ve tamir ucuz. Müslümanlara Kem Göz.
+
+**Malta ↔ Cezayir Fortuna rotası (yeni):** Şövalye vs Korsan gerilimi doğrudan rota bağlantısıyla pekiştirildi.
 
 ## 9.4 Başlangıç
 
@@ -414,6 +441,7 @@ Mega (yüzyılda 2-3), Büyük (10-15 turda), Orta (5-10 turda), Küçük (1-3 t
 **NPC'ler:** 3-4 derin karakter (gizli motivasyon, tarihsel gönderme, kendi trivia'ları). Mesaj atar, teklif/tehdit/bilgi sunar, blöf atar.
 
 **Kişisel görev zinciri:** Oyun başında köken hikayesi seçimi → oyun boyunca ilerleyen kişisel anlatı. 4 tam senaryo: Kayıp Hazine (5 aşama, çoklu yol), Baba'nın Şerefi (komplo çözme, adalet/intikam ikilemi), İntikam (düşman avı, affetme seçeneği), Saf Merak (7 sır keşif zinciri, trivia merkezli). Tam detay → `mare_nostrum_quest_chains.md`
+Not: Görev zincirleri SADECE singleplayer'da aktif. Multiplayer'da drama oyunculardan gelir.
 
 **10 tur özeti:** LLM, Kaptanın Günlüğü yazar — kişisel dram + NPC ilişkileri + stratejik soru + tarihsel perspektif.
 
@@ -471,6 +499,8 @@ PUAN = (aktif söylenti sayısı × yayılma genişliği) + (ün sayısı × 10)
 
 **Efsanevi başarımlar (bonus puan):** Tüm Akdeniz'i gez, Büyük İhanet, Barış Elçisi, Veba Kahramanı, Korsan Avcısı, Hayalet, Tekelci, Herkesin Arkadaşı.
 
+**Zafer dengesi:** Çeşitlilik çarpanı eklendi — tek tip söylenti (hep ticaret) yerine çeşitli (ticaret + diplomasi + savaş) söylentiye sahip oyuncu bonus puan alır. Efsanevi başarımlar arasında denge: "kolay" başarımlar düşük puan, "zor" başarımlar yüksek puan.
+
 ---
 
 # BÖLÜM 15: TEKNİK MİMARİ
@@ -520,6 +550,8 @@ Oyun motoru ve söylenti motoru **deterministik** — LLM'e bağlı değil. LLM 
 
 ```
 ✅ İMPLEMENTASYON PLANI — Teknik yol haritası yazıldı → `mare_nostrum_implementation_plan.md`
+✅ MEKANİK REVİEW — Tüm sistemler incelendi → `mare_nostrum_mechanics_review.md`
+✅ DENGE GÜNCELLEMELERİ — Ekonomi, savaş, deneyim, söylenti denge ayarları uygulandı
 □ HARİTA GÖRSELİ — Oyuncu referans haritaları derleyecek, grafik dil belirlenecek
 □ PROTOTİP — Fondaco + emir + Rüzgâr çözümleme (minimal teknik demo)
 □ LLM PROMPT TESTLERİ — Kahvehane, şehir yöneticisi, NPC tutarlılık testi
