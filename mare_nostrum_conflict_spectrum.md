@@ -92,7 +92,12 @@ Oyuncu kahvehanede bir söylenti başlatır. Serbest metin değil, şablon seçi
 │    ○ "... şu güçle gizlice çalışıyor" (ifşa)       │
 │    ○ "[mal] fiyatı [liman]'da fırlıyor"  (piyasa)  │
 │                                                      │
-│  MALİYET: 10 altın (kahvehanede birileriyle içersin) │
+│  MALİYET: 25 altın (kahvehanede birileriyle içersin) │
+│                                                      │
+│  TEKRARLAYAN SÖYLENTİ CEZASI: Aynı oyuncu 5 tur    │
+│  içinde 3+ söylenti yayarsa, kahvehanedeki NPC'ler   │
+│  "Bu adam çok fısıldıyor" diye kendi hakkında         │
+│  söylenti üretir                                      │
 │                                                      │
 └──────────────────────────────────────────────────────┘
 ```
@@ -109,6 +114,38 @@ DEMİR SALDIRISI:                  SÖYLENTİ SALDIRISI:
   → Herkes bilir (savaş söylentisi)   → Kaynağı gizli kalabilir
   → Hedef seni tanır                  → Hedef kimin yaptığını bilemeyebilir
   → 1 kişiye etki eder               → Hedefin TÜM ilişkilerini etkiler
+```
+
+## Şablon Bazlı Söylenti Çarpıtması
+
+Söylenti yayıldıkça çarpıtılır — ama LLM'e bırakmak yerine ŞABLON BAZLI:
+
+```
+HER SÖYLENTİ TİPİNİN İKİ VERSİYONU:
+  "Büyük savaş kazandı"  → sevende "kahraman"   / sevmeyende "saldırgan"
+  "Çok ticaret yaptı"    → sevende "zengin tüccar" / sevmeyende "piyasa manipülatörü"
+  "İhanet etti"           → sevende "stratejist"  / sevmeyende "hain"
+  "Kaçakçılık yaptı"     → sevende "cesur"       / sevmeyende "suçlu"
+  "Cömertlik gösterdi"   → sevende "aziz"        / sevmeyende "gösteriş"
+
+Bu, tutarlılığı garanti eder ve LLM hata riskini azaltır.
+Söylenti her yeni limana ulaştığında, o limanın ilişki durumuna
+göre uygun versiyon seçilir.
+```
+
+## Söylenti Ömrü Kuralları
+
+```
+KÜÇÜK SÖYLENTİ (ticaret, sıradan karşılaşma):     3-4 tur ömür
+ORTA SÖYLENTİ (savaş, kaçakçılık):                 5-6 tur ömür
+BÜYÜK SÖYLENTİ (ihanet, büyük hazine, mega event): 8-10 tur ömür
+KALICI SÖYLENTİ: Sadece 3+ aynı tipteki söylenti birikirse
+                  "ün"e dönüşür → kalıcı
+
+Söylenti ömrünü etkileyen faktörler:
+  → Yayılma genişliği arttıkça ömür uzar
+  → Çarpıtma çok fazlaysa ömür kısalır
+  → Söylenti sahibi aktif olarak çürütürse ömür kısalır
 ```
 
 **Somut örnek — Söylenti saldırısının gücü:**
@@ -214,6 +251,23 @@ NASIL ÇALIŞIR:
   Deniz ya kabul eder ya boş döner.
 ```
 
+## Küçük Ölçekli Kuşatma Opsiyonları
+
+Kuşatma saldırısı çok sermaye gerektirdiği için (400+ altın), oyunun her aşamasında erişilebilir olması için küçük ölçekli seçenekler:
+
+```
+"KISA STOK":
+  → Tüm stoku değil, stokun %50'sini satın al
+  → Daha ucuz (200 altın) ama etkisi kısmi
+  → Rakip malı bulabilir ama fiyatı yükselmiş olur
+
+"BİLGİ BLOKAJI":
+  → Bir limanın piyasa bilgisini manipüle et
+  → Kahvehanede yanlış fısıltı yaydır (piyasa söylentisi)
+  → Maliyet düşük (25 altın) ama etki dolaylı
+  → Oyuncuları yanlış limanlara yönlendirir
+```
+
 ## Rota Korkutması
 
 ```
@@ -254,6 +308,22 @@ SENARYO:
   Gelecekte: "Can, o gün seni rahat bıraktım. Şimdi bana
   İskenderiye'deki bilgiyi ver." → Can hayır diyemez.
 ```
+
+BORÇ MEKANİĞİ (Singleplayer ve Multiplayer farkı):
+
+  SINGLEPLAYER:
+  → NPC'lere bir "borç sayacı" eklenir
+  → Oyuncu bir NPC'ye iyilik yaptığında (saldırmadı, bilgi paylaştı,
+    yardım etti) NPC'nin borç sayacı +1 artar
+  → Borç 3+ olduğunda: NPC iyilik yapma eğilimi gösterir
+    (indirimli bilgi, konvoy teklifi, savaşta taraf değiştirme)
+
+  MULTIPLAYER:
+  → Duman'ın "gördüğün ama saldırmadığın" durumu, hedef oyuncuya
+    OTOMATİK BİLDİRİM olarak gider:
+    "Yolda [oyuncu adı] seni gördü ama saldırmadı."
+  → Bu, borç duygusunu mekanik olarak tetikler
+  → Kararın sonucu oyuncuların sosyal etkileşimine bırakılır
 
 ## Gizlilik Koruma
 
@@ -301,6 +371,25 @@ Duman + kimseyle karşılaşmadın           → etkisi yok (sıradan yolculuk)
 ```
 
 Bu, SALDIRMAYAN oyuncunun da gelişmesini sağlar. Pasifist tüccar Mürekkep ve Simsar havuzunda derinleşir. Zamanla: kahvehanede daha iyi bilgi duyar, söylentileri daha iyi yönetir, gizli operasyonlarda ustalaşır. Kılıç çekmeden en tehlikeli oyuncu olabilir.
+
+---
+
+## İttifak Bulaşması — Risk Bazlı Sistem
+
+Eski: Bir güçle Tanıdık Yüz olursan, düşmanlarıyla OTOMATİK her 3 turda 1 kademe düşüş.
+Yeni: Düşman güçle otomatik düşmek yerine, SÖYLENTI MEKANİZMASIYLA bağlantılı:
+
+```
+NASIL ÇALIŞIR:
+  → "Osmanlı dostu" söylentisi Venedik'te YAYILINCA etkili olur
+  → Söylenti yayılmazsa: etkisi yok (aktif diplomasiyle önlenebilir)
+  → Oyuncuya aktif karar verme şansı tanır:
+    - Söylentiyi bastırma (Ateşe Su)
+    - Çift taraflı diplomasi (her iki güce de iyilik yapma)
+    - Karşı söylenti yayma (diğer güce de sadık görünme)
+  → Bu, "sürekli otomatik ilişki tamiri" yerine stratejik
+    söylenti yönetimi gerektirir
+```
 
 ---
 
