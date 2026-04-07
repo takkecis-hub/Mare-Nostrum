@@ -1,5 +1,8 @@
 export const DEFAULT_PLAYER_ID = 'player-1';
 export const DEFAULT_PLAYER_NAME = 'Kaptan Leyla';
+export const GOOD_PURCHASE_COST = 40;
+export const REPAIR_COST_PER_POINT = 4;
+export const TERSANE_DISCOUNT = 0.75;
 export const EXPERIENCE_LABELS = {
   meltem: 'Meltem',
   terazi: 'Terazi',

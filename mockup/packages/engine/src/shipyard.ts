@@ -1,10 +1,5 @@
 import type { Ship } from '../../shared/src/types/index.js';
-
-/** Base repair cost per durability point. */
-const COST_PER_POINT = 4;
-
-/** Shipyard discount factor for ports with 'tersane' special. */
-const SHIPYARD_DISCOUNT = 0.75;
+import { REPAIR_COST_PER_POINT, TERSANE_DISCOUNT } from '../../shared/src/constants/index.js';
 
 export interface RepairResult {
   repairedShip: Ship;
@@ -15,10 +10,10 @@ export interface RepairResult {
 /**
  * Return the effective cost-per-point, applying tersane discount if applicable.
  */
-function effectiveCostPerPoint(portSpecials: string[]): number {
+export function effectiveCostPerPoint(portSpecials: string[]): number {
   return portSpecials.includes('tersane')
-    ? Math.ceil(COST_PER_POINT * SHIPYARD_DISCOUNT)
-    : COST_PER_POINT;
+    ? Math.ceil(REPAIR_COST_PER_POINT * TERSANE_DISCOUNT)
+    : REPAIR_COST_PER_POINT;
 }
 
 /**

@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 import portsJson from '../../../data/ports.json' with { type: 'json' };
 import routesJson from '../../../data/routes.json' with { type: 'json' };
 import goodsJson from '../../../data/goods.json' with { type: 'json' };
-import { DEFAULT_PLAYER_ID, DEFAULT_PLAYER_NAME } from '../../shared/src/constants/index.js';
+import { DEFAULT_PLAYER_ID, DEFAULT_PLAYER_NAME, GOOD_PURCHASE_COST } from '../../shared/src/constants/index.js';
 import type { BootstrapPayload, CargoItem, GameState, Good, Order, Port, Route, Tactic } from '../../shared/src/types/index.js';
 import { resolveTurn } from '../../engine/src/turn-resolver.js';
 import { repairShip, repairCost } from '../../engine/src/shipyard.js';
@@ -41,7 +41,7 @@ const initialState: GameState = {
         name: 'Murano Camı',
         quantity: 1,
         originPort: 'venedik',
-        purchasePrice: 40,
+        purchasePrice: GOOD_PURCHASE_COST,
       },
     ],
     ship: {
@@ -128,7 +128,7 @@ app.post('/api/buy-good', (req, res) => {
     return;
   }
 
-  if (state.player.gold < 40) {
+  if (state.player.gold < GOOD_PURCHASE_COST) {
     res.status(400).json({ error: 'Yetersiz altın' });
     return;
   }
@@ -143,12 +143,12 @@ app.post('/api/buy-good', (req, res) => {
     name: good.name,
     quantity: 1,
     originPort: state.player.currentPortId,
-    purchasePrice: 40,
+    purchasePrice: GOOD_PURCHASE_COST,
   };
 
   const player = {
     ...state.player,
-    gold: state.player.gold - 40,
+    gold: state.player.gold - GOOD_PURCHASE_COST,
     cargo: [...state.player.cargo, newCargoItem],
   };
 

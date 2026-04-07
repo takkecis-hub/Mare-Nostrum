@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 import type { RouteType, Intent, Tactic, Port, Route, Good, CargoItem, GameState, BootstrapPayload, TurnResolution } from '../../shared/src/types/index.js';
-import { EXPERIENCE_LABELS } from '../../shared/src/constants/index.js';
+import { EXPERIENCE_LABELS, GOOD_PURCHASE_COST, REPAIR_COST_PER_POINT } from '../../shared/src/constants/index.js';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 const routeColors: Record<RouteType, string> = {
@@ -112,7 +112,7 @@ export default function Page() {
     if (!goodsEntry) return;
 
     const cargoCount = payload.gameState.player.cargo.reduce((total, item) => total + item.quantity, 0);
-    if (cargoCount >= payload.gameState.player.ship.cargoCapacity || payload.gameState.player.gold < 40) return;
+    if (cargoCount >= payload.gameState.player.ship.cargoCapacity || payload.gameState.player.gold < GOOD_PURCHASE_COST) return;
 
     const response = await fetch(`${API_URL}/api/buy-good`, {
       method: 'POST',
@@ -289,7 +289,7 @@ export default function Page() {
         <article className="card">
           <div className="section-head">
             <h2>Pazar</h2>
-            <button onClick={buyCurrentGood} disabled={payload.gameState.player.gold < 40}>Liman malını al (-40)</button>
+            <button onClick={buyCurrentGood} disabled={payload.gameState.player.gold < GOOD_PURCHASE_COST}>{`Liman malını al (-${GOOD_PURCHASE_COST})`}</button>
           </div>
           <p className="note">
             {currentPort?.name} üretimi: <strong>{currentPort?.produces.good}</strong>
@@ -314,7 +314,7 @@ export default function Page() {
             <h2>Tersane</h2>
             <button
               onClick={repairShipAction}
-              disabled={payload.gameState.player.ship.durability >= 100 || payload.gameState.player.gold < 3}
+              disabled={payload.gameState.player.ship.durability >= 100 || payload.gameState.player.gold < REPAIR_COST_PER_POINT}
             >
               Gemiyi tamir et
             </button>
