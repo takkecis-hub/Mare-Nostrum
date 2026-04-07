@@ -69,6 +69,13 @@ GÜÇ = Gemi değeri + Ün bonusu + Taktik bonusu + Zar
   Zar:      1-6 (Meltem deneyimine göre alt sınır değişir)
 
   Toplam karşılaştırma: aynı kurallar (büyük kazanır, eşit berabere)
+
+MELTEM SINIRI (CAP):
+  → Zar alt sınırı EN FAZLA 2-6 olabilir (3-6 çok güçlü, kaldırıldı)
+  → Beraberliklerde kazanma yerine, beraberliklerde TAKTİK
+    DEĞİŞTİRME HAKKI: yeniden taktik seçip 2. tur savaş
+  → Bu, erken dönemde savaşa yatırım yapanın katlanarak
+    güçlenmesini (snowball) engeller
 ```
 
 ## Taktik + Gemi Sinerjileri
@@ -79,8 +86,10 @@ FELUKA (hızlı, hafif):
   "Feluka manevrası" — küçük gemi büyük gemiden kaçınmada usta
 
 KARAKA (ağır, çok kargo):
-  Hiçbir taktikte özel bonus yok — ticaret gemisi, savaş gemisi değil
-  Ama kargo ÇOK olduğu için ganimet de çok: kazanırsan büyük ödül
+  Ateş taktiğinde savunma bonusu: +1 ("Ağır Yük" — kargo kalkan gibi)
+  Savaşta kaybettiğinde kargonun %50'sini kurtarma şansı (büyük ambar = saklama alanı)
+  Kargo ÇOK olduğu için ganimet de çok: kazanırsan büyük ödül
+  "Kaybetsen bile tamamen ezilemezsin" temasıyla tutarlı
 
 KADIRGA (savaş gemisi):
   Pruva'da gizli bonus: +1 ekstra (toplam +3 vs Ateş)
@@ -103,6 +112,28 @@ Rakibinin hangi taktiği seçeceğini TAHMİN etmeye çalışırsın:
   → Meta-oyun başladı — Diplomacy'nin ruhundaki blöf burada da var
 ```
 
+## Savunan Tarafın Seçenekleri
+
+Savaşta savunan tarafın 4 seçeneği var:
+
+```
+SAVUNAN TARAFIN SEÇENEKLERİ:
+
+  1. SAVAŞ KABUL (3 taktik):
+     → Pruva/Ateş/Manevra — aynı kurallarla
+     → Savunan da saldıran gibi taktik seçer
+
+  2. KAÇIŞ DENEMESİ:
+     → Savaşa girmeden kaçmaya çalış
+     → Başarı HIZ karşılaştırmasına bağlı:
+       Feluka > Kadırga > Karaka (hız sırası)
+       Aynı gemi tipiyse: Meltem deneyimiyle bonus
+     → Başarılı: savaş olmaz, kaçarsın
+     → Başarısız: saldıran +1 bonus ile savaş BAŞLAR
+     → Bu, savaştan kaçmayı meşru bir opsiyon yaparak
+       tüccar oyun tarzını korur
+```
+
 ## Savaş Sonucu — Taktiğe Göre Ganimet
 
 ```
@@ -119,7 +150,13 @@ MANEVRA İLE KAZANIRSAN:
   → Düşman gemisini ele geçirmezsin ama tam kaçış hakkın var
   → Kargo transferi yok — ama düşman 1 tur "oyalanmış" olur
   → Veya: pozisyon avantajıyla İKİNCİ BİR SAVAŞ TURUNA zorlarsın
-    (bu sefer sen +1 bonus ile başlarsın)
+    (bu sefer sen +2 bonus yerine +3 bonus ile başlarsın)
+  → İSTİHBARAT ÖDÜLÜ: Düşmanın kargosunu, altınını ve bir sonraki
+    emrini görürsün (Simsar +2 deneyim)
+  → MORAL KIRICI: Düşman bir sonraki turda savaşa girerse -1 moral
+    penaltısı ("korkmuş" etkisi)
+  → Bu, Manevra'yı "bilgi toplama + avantaj oluşturma" taktiğine
+    dönüştürür — korsan olmayan savunmacı oyuncu için ideal
 ```
 
 ---
