@@ -7,13 +7,13 @@ const fullKaraka: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durabilit
 
 describe('repairCost', () => {
   it('calculates cost for damaged ship without discount', () => {
-    // 40 points * 3 gold/point = 120
-    expect(repairCost(damagedKaraka, [])).toBe(120);
+    // 40 points * 4 gold/point = 160
+    expect(repairCost(damagedKaraka, [])).toBe(160);
   });
 
   it('applies tersane discount', () => {
-    // 40 points * 3 * 0.75 = 90
-    expect(repairCost(damagedKaraka, ['tersane'])).toBe(90);
+    // 40 points * ceil(4 * 0.75) = 40 * 3 = 120
+    expect(repairCost(damagedKaraka, ['tersane'])).toBe(120);
   });
 
   it('returns 0 for fully repaired ship', () => {
@@ -29,20 +29,20 @@ describe('repairShip', () => {
   it('fully repairs when player has enough gold', () => {
     const result = repairShip(damagedKaraka, 200, []);
     expect(result.repairedShip.durability).toBe(100);
-    expect(result.goldSpent).toBe(120);
+    expect(result.goldSpent).toBe(160);
     expect(result.durabilityRestored).toBe(40);
   });
 
   it('partially repairs when gold is limited', () => {
-    // 30 gold / 3 per point = 10 points affordable
+    // 30 gold / 4 per point = 7 points affordable (floor), goldSpent = 28
     const result = repairShip(damagedKaraka, 30, []);
-    expect(result.repairedShip.durability).toBe(70);
-    expect(result.goldSpent).toBe(30);
-    expect(result.durabilityRestored).toBe(10);
+    expect(result.repairedShip.durability).toBe(67);
+    expect(result.goldSpent).toBe(28);
+    expect(result.durabilityRestored).toBe(7);
   });
 
   it('applies tersane discount during repair', () => {
-    // With tersane: ceil(3 * 0.75) = 3 per point
+    // With tersane: ceil(4 * 0.75) = 3 per point
     // 9 gold / 3 per point = 3 points
     const result = repairShip(damagedKaraka, 9, ['tersane']);
     expect(result.repairedShip.durability).toBe(63);

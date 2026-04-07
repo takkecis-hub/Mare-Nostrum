@@ -160,9 +160,10 @@ app.post('/api/load-cargo', (req, res) => {
   const state = req.body?.state as GameState | undefined;
   const goodId = typeof req.body?.goodId === 'string' ? req.body.goodId : undefined;
   const action = typeof req.body?.action === 'string' ? req.body.action : undefined;
+  const cargoIndex = typeof req.body?.cargoIndex === 'number' ? req.body.cargoIndex : undefined;
 
-  if (!state || !goodId || !action) {
-    res.status(400).json({ error: 'state, goodId ve action zorunlu' });
+  if (!state || !action) {
+    res.status(400).json({ error: 'state ve action zorunlu' });
     return;
   }
 
@@ -171,40 +172,52 @@ app.post('/api/load-cargo', (req, res) => {
     return;
   }
 
-  const cargoIndex = state.player.cargo.findIndex((c) => c.goodId === goodId);
-  if (cargoIndex === -1) {
-    res.status(400).json({ error: 'Kargoda bu mal yok' });
+  let targetIndex: number;
+  if (cargoIndex !== undefined) {
+    if (cargoIndex < 0 || cargoIndex >= state.player.cargo.length) {
+      res.status(400).json({ error: 'Geçersiz kargo indeksi' });
+      return;
+    }
+    targetIndex = cargoIndex;
+  } else if (goodId) {
+    targetIndex = state.player.cargo.findIndex((c) => c.goodId === goodId);
+    if (targetIndex === -1) {
+      res.status(400).json({ error: 'Kargoda bu mal yok' });
+      return;
+    }
+  } else {
+    res.status(400).json({ error: 'goodId veya cargoIndex zorunlu' });
     return;
   }
 
   const newCargo = [...state.player.cargo];
-  newCargo.splice(cargoIndex, 1);
+  newCargo.splice(targetIndex, 1);
 
   const player = { ...state.player, cargo: newCargo };
   const updatedState: GameState = { ...state, player };
   res.json({ state: updatedState });
 });
 
-app.get('/api/repair-cost', (req, res) => {
-  const portId = typeof req.query?.portId === 'string' ? req.query.portId : undefined;
+app.post('/api/repair-cost', (req, res) => {
+  const state = req.body?.state as GameState | undefined;
 
-  if (!portId) {
-    res.status(400).json({ error: 'portId zorunlu' });
+  if (!state) {
+    res.status(400).json({ error: 'state zorunlu' });
     return;
   }
 
-  const port = ports.find((p) => p.id === portId);
+  const port = ports.find((p) => p.id === state.player.currentPortId);
   if (!port) {
     res.status(400).json({ error: 'Liman bulunamadı' });
     return;
   }
 
-  // Use a default ship for cost preview when no state is available
-  const cost = repairCost(
-    { type: 'karaka', cargoCapacity: 5, power: 2, durability: 60 },
-    port.special,
-  );
-  res.json({ hasTersane: port.special.includes('tersane'), costPerPoint: cost > 0 ? Math.ceil(cost / 40) : 3 });
+  const totalCost = repairCost(state.player.ship, port.special);
+  res.json({
+    hasTersane: port.special.includes('tersane'),
+    totalCost,
+    pointsNeeded: 100 - state.player.ship.durability,
+  });
 });
 
 app.post('/api/repair-ship', (req, res) => {

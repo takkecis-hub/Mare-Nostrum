@@ -1,7 +1,7 @@
 import type { Ship } from '../../shared/src/types/index.js';
 
 /** Base repair cost per durability point. */
-const COST_PER_POINT = 3;
+const COST_PER_POINT = 4;
 
 /** Shipyard discount factor for ports with 'tersane' special. */
 const SHIPYARD_DISCOUNT = 0.75;
@@ -13,6 +13,15 @@ export interface RepairResult {
 }
 
 /**
+ * Return the effective cost-per-point, applying tersane discount if applicable.
+ */
+function effectiveCostPerPoint(portSpecials: string[]): number {
+  return portSpecials.includes('tersane')
+    ? Math.ceil(COST_PER_POINT * SHIPYARD_DISCOUNT)
+    : COST_PER_POINT;
+}
+
+/**
  * Calculate the gold cost to fully repair a ship.
  * Ports with a 'tersane' special tag get a 25 % discount.
  */
@@ -20,9 +29,7 @@ export function repairCost(ship: Ship, portSpecials: string[]): number {
   const pointsNeeded = 100 - ship.durability;
   if (pointsNeeded <= 0) return 0;
 
-  const base = pointsNeeded * COST_PER_POINT;
-  const discount = portSpecials.includes('tersane') ? SHIPYARD_DISCOUNT : 1;
-  return Math.ceil(base * discount);
+  return pointsNeeded * effectiveCostPerPoint(portSpecials);
 }
 
 /**
@@ -39,10 +46,7 @@ export function repairShip(
     return { repairedShip: { ...ship }, goldSpent: 0, durabilityRestored: 0 };
   }
 
-  const costPerPoint = portSpecials.includes('tersane')
-    ? Math.ceil(COST_PER_POINT * SHIPYARD_DISCOUNT)
-    : COST_PER_POINT;
-
+  const costPerPoint = effectiveCostPerPoint(portSpecials);
   const affordablePoints = Math.min(pointsNeeded, Math.floor(availableGold / costPerPoint));
   const goldSpent = affordablePoints * costPerPoint;
 

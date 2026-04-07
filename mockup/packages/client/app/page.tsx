@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 import type { RouteType, Intent, Tactic, Port, Route, Good, CargoItem, GameState, BootstrapPayload, TurnResolution } from '../../shared/src/types/index.js';
-import { indicatorToDots } from '../../shared/src/formulas/index.js';
 import { EXPERIENCE_LABELS } from '../../shared/src/constants/index.js';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
@@ -126,13 +125,13 @@ export default function Page() {
     setPayload({ ...payload, gameState: data.state });
   }
 
-  async function dropCargo(goodId: string) {
+  async function dropCargo(cargoIndex: number) {
     if (!payload) return;
 
     const response = await fetch(`${API_URL}/api/load-cargo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ state: payload.gameState, goodId, action: 'drop' }),
+      body: JSON.stringify({ state: payload.gameState, cargoIndex, action: 'drop' }),
     });
 
     if (!response.ok) return;
@@ -301,7 +300,7 @@ export default function Page() {
               {payload.gameState.player.cargo.map((item, idx) => (
                 <div key={`${item.goodId}-${idx}`} className="cargo-row">
                   <span>{item.name} <span className="muted">({item.originPort})</span></span>
-                  <button className="small" onClick={() => dropCargo(item.goodId)}>At</button>
+                  <button className="small" onClick={() => dropCargo(idx)}>At</button>
                 </div>
               ))}
             </div>

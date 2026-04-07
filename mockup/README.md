@@ -53,7 +53,7 @@ pnpm build       # Üretim derlemesi
 | POST | `/api/resolve-turn` | Tur çözümleme (durum + emir + taktik) |
 | POST | `/api/buy-good` | Limandaki malı satın al |
 | POST | `/api/load-cargo` | Kargo yönetimi (at) |
-| GET | `/api/repair-cost` | Tamir maliyeti sorgusu |
+| POST | `/api/repair-cost` | Tamir maliyeti sorgusu (durum gerekli) |
 | POST | `/api/repair-ship` | Gemiyi tamir et |
 
 ## Mockup Kapsamı (Dikey Kesit)
