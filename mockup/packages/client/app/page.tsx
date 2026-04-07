@@ -122,7 +122,7 @@ export default function Page() {
         setSelectedPortId(data.gameState.player.currentPortId);
       })
       .catch(() =>
-        setError(`Bootstrap verisi alınamadı (${API_URL}/api/bootstrap). Serverı \`pnpm dev\` ile ayağa kaldır.`),
+        setError(`Bootstrap verisi alınamadı (${API_URL}/api/bootstrap). Serverı "pnpm dev" ile ayağa kaldır.`),
       );
 
     const socket = io(API_URL, { transports: ['websocket'] });

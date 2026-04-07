@@ -5,7 +5,7 @@ const whisperPool = whisperPoolJson as Record<string, string[]>;
 
 function getDominantExperienceKey(experience: HiddenExperience) {
   const entries = Object.entries(experience).sort(
-    ([, firstValue], [, secondValue]) => Number(secondValue) - Number(firstValue),
+    ([, valueA], [, valueB]) => Number(valueB) - Number(valueA),
   );
   return entries[0]?.[0] ?? 'terazi';
 }

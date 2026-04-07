@@ -24,8 +24,10 @@ export function resolveTurn(input: {
   const player = { ...state.player };
   const currentPort = ports.find((port) => port.id === player.currentPortId);
   const destinationPort = ports.find((port) => port.id === order.destinationPort);
+  const isInvalidRoute =
+    !currentPort || !destinationPort || !isOrderReachable(order, player.currentPortId, routes);
 
-  if (!currentPort || !destinationPort || !isOrderReachable(order, player.currentPortId, routes)) {
+  if (isInvalidRoute) {
     return {
       nextState: state,
       log: [{ label: 'Emir', detail: 'Seçilen rota geçerli değil.' }],
