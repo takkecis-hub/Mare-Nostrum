@@ -21,8 +21,10 @@
     "trivia": [
       "Reconquista iklimi ticareti kadar savaşı da besler."
     ],
-    "x": 90,
-    "y": 220
+    "x": 105,
+    "y": 177,
+    "lat": 41.39,
+    "lon": 2.17
   },
   {
     "id": "marsilya",
@@ -46,8 +48,10 @@
     "trivia": [
       "Fransız sarayı Doğu lüks mallarına açtır."
     ],
-    "x": 130,
-    "y": 120
+    "x": 171,
+    "y": 122,
+    "lat": 43.3,
+    "lon": 5.37
   },
   {
     "id": "cenova",
@@ -71,8 +75,10 @@
     "trivia": [
       "Kredi fırsatıyla birlikte faiz baskısı da gelir."
     ],
-    "x": 250,
-    "y": 120
+    "x": 244,
+    "y": 89,
+    "lat": 44.41,
+    "lon": 8.93
   },
   {
     "id": "venedik",
@@ -97,8 +103,10 @@
     "trivia": [
       "Arsenal, Akdeniz'in en hızlı gemi üretim merkezidir."
     ],
-    "x": 430,
-    "y": 120
+    "x": 314,
+    "y": 57,
+    "lat": 45.44,
+    "lon": 12.34
   },
   {
     "id": "palermo",
@@ -122,8 +130,10 @@
     "trivia": [
       "Sicilya, Doğu-Batı ticaretinin ekmek sepetidir."
     ],
-    "x": 280,
-    "y": 240
+    "x": 335,
+    "y": 269,
+    "lat": 38.12,
+    "lon": 13.36
   },
   {
     "id": "ragusa",
@@ -148,8 +158,10 @@
     "trivia": [
       "Ragusa bilgi alıp satmanın limanıdır."
     ],
-    "x": 470,
-    "y": 220
+    "x": 432,
+    "y": 141,
+    "lat": 42.65,
+    "lon": 18.09
   },
   {
     "id": "istanbul",
@@ -173,8 +185,10 @@
     "trivia": [
       "Doğu ile Batı burada birbirine hesap verir."
     ],
-    "x": 660,
-    "y": 190
+    "x": 655,
+    "y": 188,
+    "lat": 41.01,
+    "lon": 28.98
   },
   {
     "id": "girit",
@@ -198,8 +212,10 @@
     "trivia": [
       "Girit, rotaların ve pusuların ortasında yatar."
     ],
-    "x": 520,
-    "y": 300
+    "x": 576,
+    "y": 343,
+    "lat": 35.34,
+    "lon": 25.13
   },
   {
     "id": "kibris",
@@ -223,8 +239,10 @@
     "trivia": [
       "Levant'a açılan son güvenli duraklardan biridir."
     ],
-    "x": 660,
-    "y": 330
+    "x": 757,
+    "y": 349,
+    "lat": 35.12,
+    "lon": 33.94
   },
   {
     "id": "beyrut",
@@ -248,8 +266,10 @@
     "trivia": [
       "Kara İpek Yolu burada denize kavuşur."
     ],
-    "x": 760,
-    "y": 300
+    "x": 789,
+    "y": 381,
+    "lat": 33.89,
+    "lon": 35.5
   },
   {
     "id": "iskenderiye",
@@ -273,8 +293,10 @@
     "trivia": [
       "En kârlı lüks mallar en çok göz önündeki mallardır."
     ],
-    "x": 690,
-    "y": 430
+    "x": 675,
+    "y": 450,
+    "lat": 31.2,
+    "lon": 29.92
   },
   {
     "id": "trablus",
@@ -298,8 +320,10 @@
     "trivia": [
       "Buraya ulaşmak zor, dönmek daha da zordur."
     ],
-    "x": 500,
-    "y": 430
+    "x": 331,
+    "y": 407,
+    "lat": 32.9,
+    "lon": 13.19
   },
   {
     "id": "tunus",
@@ -323,8 +347,10 @@
     "trivia": [
       "Sicilya Boğazı'nın güney kapısı ticareti kadar savaşı da çeker."
     ],
-    "x": 230,
-    "y": 350
+    "x": 269,
+    "y": 304,
+    "lat": 36.81,
+    "lon": 10.18
   },
   {
     "id": "cezayir",
@@ -348,8 +374,10 @@
     "trivia": [
       "Burada ganimet pazarı hukuk kadar hızlı çalışır."
     ],
-    "x": 120,
-    "y": 400
+    "x": 123,
+    "y": 306,
+    "lat": 36.75,
+    "lon": 3.06
   },
   {
     "id": "malta",
@@ -374,7 +402,9 @@
     "trivia": [
       "Şövalyeler küçük adayı dev bir karakola çevirmiştir."
     ],
-    "x": 340,
-    "y": 360
+    "x": 358,
+    "y": 329,
+    "lat": 35.9,
+    "lon": 14.51
   }
 ]

@@ -1,0 +1,17 @@
+{
+  "barselona": { "lat": 41.39, "lon": 2.17 },
+  "marsilya": { "lat": 43.30, "lon": 5.37 },
+  "cenova": { "lat": 44.41, "lon": 8.93 },
+  "venedik": { "lat": 45.44, "lon": 12.34 },
+  "palermo": { "lat": 38.12, "lon": 13.36 },
+  "ragusa": { "lat": 42.65, "lon": 18.09 },
+  "istanbul": { "lat": 41.01, "lon": 28.98 },
+  "girit": { "lat": 35.34, "lon": 25.13 },
+  "kibris": { "lat": 35.12, "lon": 33.94 },
+  "beyrut": { "lat": 33.89, "lon": 35.50 },
+  "iskenderiye": { "lat": 31.20, "lon": 29.92 },
+  "trablus": { "lat": 32.90, "lon": 13.19 },
+  "tunus": { "lat": 36.81, "lon": 10.18 },
+  "cezayir": { "lat": 36.75, "lon": 3.06 },
+  "malta": { "lat": 35.90, "lon": 14.51 }
+}

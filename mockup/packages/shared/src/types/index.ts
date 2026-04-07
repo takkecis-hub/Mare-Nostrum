@@ -26,6 +26,8 @@ export interface Port {
   trivia: string[];
   x: number;
   y: number;
+  lat?: number;
+  lon?: number;
 }
 
 export interface Route {
