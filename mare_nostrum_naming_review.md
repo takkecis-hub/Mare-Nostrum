@@ -229,7 +229,7 @@ Rüzgâr — gemini hareket ettiren güç, seni taşıyan ve seni batıran aynı
 | Kulak kabart | Kahve Falı | Fincanın dibinde bilgi |
 | Söylenti yay | Rüzgâr Ek | Tohum ekip meyve toplamak |
 | Yalanlat | Ateşe Su | Söylentiyi söndürmek |
-| Kaynak araştır | İzi Sürmek | Dedeikodunun iplik ucu |
+| Kaynak araştır | İzi Sürmek | Dedikodunun iplik ucu |
 | Usta Tüccar ünü | Altın Parmak | Midas dokunuşu |
 | Savaşçı ünü | Demir Pruva | Kırılmaz gemi burnu |
 | Diplomat ünü | İpek Dil | Yılanı deliğinden çıkaran |

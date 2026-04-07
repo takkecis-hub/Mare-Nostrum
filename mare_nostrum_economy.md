@@ -248,7 +248,7 @@ MEKANİK:
   → Kontratı bozarsan: para cezası + itibar düşüşü
   → Kontratı tamamlarsan: bonus ödeme + "Mühürlü Söz" ününe katkı
 
-TERİZİ ETKİSİ:
+TERAZİ ETKİSİ:
   → Terazi deneyimi yüksek oyuncuya daha iyi kontratlar teklif edilir
   → Terazi çok yüksekse: kontrat şartlarını MÜZAKİRE edebilirsin
     ("4 tur yerine 3 tur olsun" veya "fiyatı %40 üstü yapalım")
@@ -267,7 +267,7 @@ KAÇAK TİCARET:
   → Yasak malı satabilirsin ama KAÇAKÇILIK mekaniği devreye girer
   → Yakalanma riski: Simsar deneyimine bağlı
     Simsar düşük: %40 yakalanma
-    Simsar yüksek: %5 yakalanma
+    Simsar yüksek: %3 yakalanma
   → Yakalanırsan: mal müsadere + para cezası + "Kem Göz" riski
   → Yakalanmazsan: DEVASA kâr (yasak mal 3-5x normal fiyat)
 
