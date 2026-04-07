@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { resolveTurn } from '../packages/engine/src/turn-resolver.js';
-import ports from '../data/ports.json';
-import routes from '../data/routes.json';
-import goods from '../data/goods.json';
-import type { GameState } from '../packages/shared/src/types/index.js';
+import ports from '../../../data/ports.json';
+import routes from '../../../data/routes.json';
+import goods from '../../../data/goods.json';
+import { resolveTurn } from './turn-resolver.js';
+import type { GameState } from '../../shared/src/types/index.js';
 
 const baseState: GameState = {
   turn: 1,
@@ -42,11 +42,19 @@ const baseState: GameState = {
 
 describe('resolveTurn', () => {
   it('moves player and sells profitable cargo on a trade turn', () => {
+    const tradeState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        currentPortId: 'palermo',
+      },
+    };
+
     const result = resolveTurn({
-      state: baseState,
+      state: tradeState,
       order: {
         destinationPort: 'tunus',
-        routeType: 'fortuna',
+        routeType: 'tramontana',
         intent: 'kervan',
       },
       ports,
