@@ -463,6 +463,48 @@ KABUL KRİTERİ:
   → LLM maliyeti kullanıcı başına < $0.50/oturum
 ```
 
+## Disconnect Handling Kuralları
+
+```
+OYUNCUNUN BAĞLANTISI KOPARSA:
+  → Fondaco fazında:
+    - 2 dakika bekleme süresi (otomatik reconnect)
+    - 2 dk sonra: oyuncu "AFK" olarak işaretlenir
+    - AFK oyuncunun emri: "aynı limanda kal + Duman niyeti" (pasif)
+    - 3 tur AFK → NPC autopilot devralır (basit ticaret mantığıyla)
+    - 5 tur AFK → oyuncu otomatik çıkarılır, NPC kalır
+
+  → Rüzgâr fazında:
+    - Emir kilitlenmişse: normal çözümleme devam eder
+    - Emir kilitlenmemişse: varsayılan emir uygulanır (aynı liman + Duman)
+    - Savaşta disconnect: savunan Manevra seçmiş kabul edilir
+
+  → Reconnect:
+    - Oyuncu geri geldiğinde: son durum özetini görür
+    - NPC autopilot'un yaptıklarını iptal edemez
+```
+
+## Metagaming ve Adil Oyun Politikası
+
+```
+EMİR GİZLİLİĞİ:
+  → Emirler SUNUCU TARAFINDA şifrelenir, çözümleme anına kadar
+    hiçbir client'a gönderilmez
+  → Browser devtools ile emir gözetlenemez
+  → API rate limiting: saniyede max 10 istek (bot koruması)
+
+CHAT SINIRLARI:
+  → Fondaco fazı dışında chat kapalı (Rüzgâr fazında mesaj yok)
+  → Özel mesajlar loglanır (şikayet durumunda inceleme için)
+  → Emoji/GIF yerine şablon mesajlar opsiyonu (hızlı iletişim)
+
+3. PARTI İLETİŞİM:
+  → Discord/Zoom kullanımı engellenemez ama emir gizliliği
+    korunduğu sürece avantaj sınırlı
+  → Bilgi asimetrisi mekanikleri (farklı kahvehane fısıltıları)
+    3. parti iletişimi bile tam avantaja çevirmez
+```
+
 ---
 
 # BÖLÜM 3: LLM MALİYET MODELİ
@@ -525,6 +567,31 @@ MALİYET OPTİMİZASYONU:
   → Trivia'ları statik JSON'dan çek (LLM gerekmez)
   → Küçük model kullan (Haiku/mini) — kalite yeterli
   → Batch çağrı (tüm oyuncuların kahvehane promptlarını tek seferde)
+```
+
+## 3.3 LLM Tutarlılık ve Performans
+
+```
+TUTARLILIK (Review 11.1):
+  → NPC kişilik kartları: her NPC için sabit 5-7 maddelik kişilik
+    tanımı, her prompt'a otomatik eklenir
+  → Söylenti geçmişi: son 5 turun söylenti özeti prompt'a dahil
+  → Önbellek anahtarı: liman + deneyim profili + tur = aynı
+    fısıltıyı ikinci kez üretmez
+
+GECIKME (Review 11.2):
+  → Fondaco fazı başlarken TÜM kahvehane promptları paralel gönderilir
+  → Oyuncu kahvehaneye girene kadar cevap hazır olur
+  → Timeout: 5 saniye sonra fallback (JSON'dan statik fısıltı)
+  → Streaming yanıt: uzun NPC diyaloglarında token'lar canlı gösterilir
+
+MALİYET ÖLÇEKLEME (Review 11.3):
+  → 100 günlük aktif oyuncu (DAU) senaryosu:
+    - Günde ~50 singleplayer oturum × $0.37 = $18.50/gün
+    - Günde ~20 multiplayer oturum × $0.41 = $8.20/gün
+    - Toplam: ~$800/ay (yönetilebilir)
+  → 10.000 DAU senaryosunda: ~$80.000/ay → freemium model gerekli
+  → Maliyet düşürme stratejisi: Claude Haiku + agresif cache + batch
 ```
 
 ---
@@ -595,8 +662,36 @@ CREATE TABLE orders (
   destination_port VARCHAR(50),
   route_type VARCHAR(20),
   intent VARCHAR(20), -- kervan, kara_bayrak, pusula, duman
-  combat_tactic VARCHAR(20), -- pruva, ates, manevra (savaş olursa)
+  -- combat_tactic artık combat_encounters tablosunda (savaş SIRASINDA seçilir)
   locked BOOLEAN DEFAULT FALSE
+);
+
+-- Savaş taktiği orders tablosundan ayrıldı — savaş SIRASINDA seçilir, emir SIRASINda değil
+CREATE TABLE combat_encounters (
+  id UUID PRIMARY KEY,
+  game_id UUID REFERENCES games,
+  turn INTEGER,
+  attacker_id UUID REFERENCES players,
+  defender_id UUID REFERENCES players,
+  attacker_tactic VARCHAR(20), -- pruva, ates, manevra
+  defender_tactic VARCHAR(20), -- pruva, ates, manevra, kacis
+  attacker_power INTEGER,
+  defender_power INTEGER,
+  result VARCHAR(20), -- 'attacker_wins', 'defender_wins', 'draw', 'escape'
+  loot JSONB, -- el değiştiren kargo
+  route_id VARCHAR(50) REFERENCES routes,
+  created_at TIMESTAMP
+);
+
+CREATE TABLE city_relations (
+  id UUID PRIMARY KEY,
+  game_id UUID REFERENCES games,
+  player_id UUID REFERENCES players,
+  port_id VARCHAR(50) REFERENCES ports,
+  relation_level VARCHAR(20) DEFAULT 'yabanci', -- 'tanidik_yuz', 'yabanci', 'kem_goz'
+  relation_score INTEGER DEFAULT 0, -- -100 to +100 arası detaylı skor
+  last_visit_turn INTEGER,
+  active_rumors_about INTEGER DEFAULT 0 -- bu limandaki aktif söylenti sayısı
 );
 
 CREATE TABLE rumors (
