@@ -85,7 +85,7 @@ Malta          Şövalye Zırhı [Savaş]         Sicilya Buğdayı [Yemek]
 İstanbul       Doğu İpeği [Lüks]             Katalan Demiri [Savaş]
 Girit          Girit Zeytinyağı [Yemek]       Doğu İpeği [Lüks]
 Kıbrıs         Kıbrıs Tuzu [Yemek]           Mısır Baharatı [Lüks]
-Beyrut         Halep Sabunu [Lüks]            Katalan Demiri [Savaş]
+Beyrut         Halep Sabunu [Lüks], Lübnan Sediri [Savaş]   Katalan Demiri [Savaş]
 İskenderiye    Mısır Baharatı [Lüks]          Lübnan Sediri [Savaş]
 Trablus        Sahra Altını [Lüks]            Provence Şarabı [Yemek]
 Tunus          Tunus Zeytinyağı [Yemek]       Ligurya Mercanı [Lüks]
@@ -95,6 +95,8 @@ Cezayir        Ganimet Silahı [Savaş]         Provence Şarabı [Yemek]
 **Kural:** Bir limanın ürettiği malı o limanda satmak KÖTÜ fiyat. Bir limanın arzuladığı malı satmak ÇOK İYİ fiyat. Diğer mallar ORTA fiyat.
 
 **Ragusa özel:** Ragusa hiçbir şey üretmez ama transit liman. Her şey normal fiyat — ne çok ucuz ne çok pahalı. Ragusa'nın değeri bilgi ve nötr statüsünde.
+
+**Ragusa transit vergisi:** Ragusa'da alışveriş yapınca %10 ekstra vergi uygulanır. Nötr statünün bedeli. Çok fazla trafik olunca (3+ oyuncu aynı turda) Ragusa'nın nötr statüsü gerilim altına girer — event olarak taraf tutmaya başlayabilir.
 
 ---
 
@@ -111,8 +113,11 @@ HER LİMANIN HER MENŞE MAL İÇİN "AÇLIK" SEVİYESİ VAR:
 
 AÇLIK NASIL DEĞİŞİR:
   → Her tur hiçbir oyuncu o malı getirmezse: açlık +1 artar
-  → Bir oyuncu getirirse: açlık 2 kademe düşer
-  → İki oyuncu aynı turda aynı malı getirirse: açlık DİBE düşer (tok)
+  → Doyma hızı OYUNCU SAYISINA göre ölçeklenir:
+    2 oyuncu: 1 getirirse -1, 2 getirirse -3
+    4 oyuncu: 1 getirirse -1, 2 getirirse -2, 3+ getirirse DİBE
+    6+ oyuncu: 1 getirirse -1, 2 getirirse -1, 3 getirirse -2, 4+ getirirse DİBE
+  → Toparlanma hızı (kimse getirmezse açlık artışı) oyuncu sayısı arttıkça hızlanır
 
   Yani: 5 tur boyunca kimse Marsilya'ya baharat götürmezse,
   Marsilya baharata AÇ — fiyat tavan yapar.
@@ -212,6 +217,12 @@ NEDEN ÖNEMLİ: Bu, rota seçimini ilginç kılar.
   Ve bu, bilgi asimetrisini ödüllendiriyor:
   Rakibinin nereye gittiğini biliyorsan, ondan ÖNCE varabileceğin
   bir rota seçersin. Veya farklı bir limana yönelirsin.
+
+KARGO-BONUS DENGESİ:
+  → İlk gelen bonusunun büyüklüğü kargo miktarına TERS orantılı
+  → Az kargo getiren ilk gelen = küçük bonus (Feluka hız avantajını sınırlar)
+  → Çok kargo getiren ilk gelen = büyük bonus (Karaka hacim avantajını ödüllendirir)
+  → Bu, Feluka + Fortuna = "her zaman ilk gel" meta'sını kırar
 ```
 
 ## 2. Toplu Alım İndirimi
@@ -269,7 +280,8 @@ KAÇAK TİCARET:
     Simsar düşük: %40 yakalanma
     Simsar yüksek: %3 yakalanma
   → Yakalanırsan: mal müsadere + para cezası + "Kem Göz" riski
-  → Yakalanmazsan: DEVASA kâr (yasak mal 3-5x normal fiyat)
+    + 2 tur hapis (liman dışına çıkamama) + büyük para cezası (200 altın)
+  → Yakalanmazsan: DEVASA kâr (yasak mal 2-3x normal fiyat)
 
 AMBARGO EVENT'İ:
   → Savaş event'i ambargo tetikler
@@ -296,6 +308,13 @@ COMMENDA NASIL ÇALIŞIR:
      → Otomatik söylenti: "[isim] ortağının parasını çaldı"
      → Yatırımcı tüm yatırımını kaybeder
      → Tüccar kısa vadede zenginleşir ama "Akrep" ünü yaklaşır
+
+İHANET ZAMANA BAĞLI GÜÇLENME:
+  → İlk ihanet: hafif söylenti (3 turda kaybolur)
+  → İkinci ihanet: çok güçlü söylenti (6+ tur)
+  → Üçüncü ihanet: kalıcı "Akrep" ünü
+  → "Akrep" ünü commenda teklifini tamamen engellemez —
+    ama çok kötü şartlarda gelir (yüksek faiz, düşük kâr payı)
 
 COMMENDA'YI İLGİNÇ YAPAN:
   → Tüccar, yatırımcının parasıyla DAHA BÜYÜK ticaret yapabilir
@@ -417,7 +436,7 @@ EN DEĞERLI KAYNAK MAL DEĞİL, BİLGİDİR:
 
   AMBARGO FIRSATÇILIĞI:
   → Savaş event'inde ambargo ilan edilince yasak malı stokla
-  → Kaçak olarak sat → 3-5x kâr
+  → Kaçak olarak sat → 2-3x kâr
   → Yakalanma riski + söylenti riski
 ```
 
