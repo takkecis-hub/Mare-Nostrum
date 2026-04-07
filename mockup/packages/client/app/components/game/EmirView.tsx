@@ -102,7 +102,7 @@ export default function EmirView() {
                 key={type}
                 className={`choice-card ${order.routeType === type ? 'choice-card-selected' : ''}`}
                 onClick={() => setOrder({ routeType: type })}
-                style={{ '--card-accent': info.color } as React.CSSProperties}
+                style={{ borderLeftColor: order.routeType === type ? info.color : undefined }}
               >
                 <span className="choice-icon">{info.icon}</span>
                 <strong>{info.label}</strong>

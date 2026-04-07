@@ -25,12 +25,16 @@ export default function GameShell() {
 
   /* ── Bootstrap on mount ──────────────────────────── */
   useEffect(() => {
-    bootstrap().then(() => {
-      const state = useGameStore.getState();
-      if (state.gameState) {
-        setSelectedPortId(state.gameState.player.currentPortId);
-      }
-    });
+    bootstrap()
+      .then(() => {
+        const state = useGameStore.getState();
+        if (state.gameState) {
+          setSelectedPortId(state.gameState.player.currentPortId);
+        }
+      })
+      .catch(() => {
+        /* bootstrap sets error state internally */
+      });
     connect();
     return () => disconnect();
   }, [bootstrap, connect, disconnect, setSelectedPortId]);

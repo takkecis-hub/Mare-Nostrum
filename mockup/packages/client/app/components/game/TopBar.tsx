@@ -4,6 +4,8 @@ import { useGameStore } from '../../stores/useGameStore';
 import { useSocketStore } from '../../stores/useSocketStore';
 import Badge from '../ui/Badge';
 
+const CONNECTED_STATUSES = ['bağlı', 'ping/pong hazır'];
+
 export default function TopBar() {
   const gameState = useGameStore((s) => s.gameState);
   const socketStatus = useSocketStore((s) => s.status);
@@ -33,7 +35,7 @@ export default function TopBar() {
         <span className="top-bar-item ship-name">
           ⛵ {player.ship.type}
         </span>
-        <span className={`top-bar-item socket-status ${socketStatus === 'bağlı' || socketStatus === 'ping/pong hazır' ? 'connected' : ''}`}>
+        <span className={`top-bar-item socket-status ${CONNECTED_STATUSES.includes(socketStatus) ? 'connected' : ''}`}>
           ● {socketStatus}
         </span>
       </div>

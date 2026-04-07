@@ -4,6 +4,12 @@ import { useGameStore } from '../../stores/useGameStore';
 import { EXPERIENCE_LABELS, REPAIR_COST_PER_POINT } from '../../../../shared/src/constants/index.js';
 import ProgressBar from '../ui/ProgressBar';
 
+const SHIP_ICONS: Record<string, string> = {
+  feluka: '⛵',
+  karaka: '🚢',
+  kadirga: '⚔️🚣',
+};
+
 export default function Tersane() {
   const gameState = useGameStore((s) => s.gameState);
   const repairShip = useGameStore((s) => s.repairShip);
@@ -24,9 +30,7 @@ export default function Tersane() {
       {/* ── Ship identity ──────────────────────────────── */}
       <div className="ship-display">
         <div className="ship-silhouette">
-          {ship.type === 'feluka' && '⛵'}
-          {ship.type === 'karaka' && '🚢'}
-          {ship.type === 'kadirga' && '⚔️🚣'}
+          {SHIP_ICONS[ship.type] ?? '⛵'}
         </div>
         <div className="ship-identity">
           <h3>{ship.type.charAt(0).toUpperCase() + ship.type.slice(1)}</h3>
