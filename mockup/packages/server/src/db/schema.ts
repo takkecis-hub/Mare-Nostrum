@@ -104,7 +104,7 @@ export const rumors = pgTable('rumors', {
   id: uuid('id').defaultRandom().primaryKey(),
   gameId: uuid('game_id').notNull().references(() => games.id, { onDelete: 'cascade' }),
   text: text('text').notNull(),
-  aboutPlayerId: uuid('about_player_id').references(() => players.id),
+  aboutPlayerId: uuid('about_player_id').references(() => players.id, { onDelete: 'set null' }),
   aboutType: varchar('about_type', { length: 30 }).notNull(),
   originPort: varchar('origin_port', { length: 50 }).notNull(),
   currentPorts: jsonb('current_ports').notNull().default([]),

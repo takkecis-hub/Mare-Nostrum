@@ -1,4 +1,5 @@
 import type { Route, Rumor } from '../../shared/src/types/index.js';
+import { DEFAULT_PLAYER_ID } from '../../shared/src/constants/index.js';
 
 const MAX_RUMOR_SPREAD_PORTS = 2;
 
@@ -25,7 +26,7 @@ function buildRumorText(action: string): string {
   }
 }
 
-export function createRumor(action: string, currentPort: string, playerId = 'player-1'): Rumor {
+export function createRumor(action: string, currentPort: string, playerId = DEFAULT_PLAYER_ID): Rumor {
   return {
     id: `${action}-${Date.now()}`,
     aboutPlayerId: playerId,
