@@ -21,6 +21,8 @@
 
 6. **Zincirin sonu ÜN verir.** Her zincirin finali özel bir ün veya mevcut bir ünü güçlendirir.
 
+7. **Multiplayer'da görev zinciri YOK.** Multiplayer'ın dramasını zaten oyuncular üretiyor — yapay görev zinciri gereksiz karmaşıklık ekler. Singleplayer'a özel görev sistemi, multiplayer'da devre dışıdır. Bu karar bilinçli olarak alınmıştır: multiplayer'da her oyuncunun "kişisel hikaye"si diğer oyuncularla olan etkileşimlerinden doğar.
+
 ## Görev İpucu Formatı
 
 Görev ipuçları kahvehanede özel sembolle görünür:
@@ -39,6 +41,16 @@ Görev ipuçları kahvehanede özel sembolle görünür:
 ```
 
 **⚓ sembolü** = kişisel görev ipucu. Oyuncu tıklarsa görev ilerler. Tıklamazsa bir sonraki turda tekrar çıkar (3 tur boyunca). 3 turda ilgilenmezse ipucu kaybolur — ama görev ölmez, birkaç tur sonra farklı bir ipucuyla geri gelir.
+
+## Görev NPC'leri vs Normal NPC'ler
+
+Görev zincirleri hem özel NPC'ler hem mevcut NPC'leri kullanır. Etkileşim kuralları:
+
+1. **Görev özel NPC'leri** (Korsan Reis Hamid, Antikacı Yakup, Nuri Usta): Sadece görev sırasında aktif, görev dışında kaybolur. Oyuncu görev aşamasındayken LLM prompt'una dahil edilir.
+
+2. **Mevcut NPC'ler** (Yorgos, Fatma, Raşid, Don Enrique): Görev zincirindeki rolleri OPSİYONEL YARDIM olarak kalır — görev ilerlemesi için ZORUNLU değildir. NPC'ler kendi motivasyonlarıyla zaten bağımsız hareket etmeye devam eder.
+
+3. **LLM bağlam yönetimi:** Görev aktifken, LLM prompt'una ek bağlam eklenir: "Bu NPC şu anda görev zincirinin X aşamasında — davranışını buna göre ayarla." Bu, NPC'nin görev dışı davranışıyla çelişmemesini sağlar.
 
 ---
 
@@ -656,155 +668,142 @@ SİSTEMİ ÇÖKERTTIYSEN:
 ---
 
 # KÖKEN 4: SAF MERAK
-## "Dünyanın Ucundaki Fener"
+## "Akdeniz'in Yedi Sırrı"
 
 ### Tema ve Ruh
 
-Diğer üç köken kişisel drama üzerine kurulu. Bu köken farklı: oyuncu saf merakla denize çıkmış. Hazine aramıyor, intikam istemiyor, şeref kurtarmıyor. Sadece görmek, bilmek, keşfetmek istiyor. Bu zincir, Akdeniz'i bir OKUL olarak kullanıyor — her aşamada oyuncu yeni bir şey keşfeder ve tarihsel trivia zincirin MERKEZİNDE.
+Oyuncu saf merakla denize açılmış — ne hazine arıyor, ne intikam alıyor, ne aile şerefi kurtarıyor. Sadece dünyanın ucunu görmek, bilinmeyeni keşfetmek, Akdeniz'in sırlarını çözmek istiyor. Zincir, 7 farklı limanda 7 farklı sır keşfetme etrafında kurulu. Her sır bir ☽ trivia'ya bağlı, her biri farklı deneyim havuzunu test eder.
 
-**Tarihsel ilham:** Ibn Battuta (14. yy gezgin, 120.000 km yolculuk), Benjamin de Tudela (12. yy Yahudi gezgin), Marco Polo, ve Akdeniz'in keşfedilmemiş köşeleri.
+**Tarihsel ilham:** İbn Battuta'nın 30 yıllık seyahati, Piri Reis'in haritaları, ve ortaçağ Akdeniz'inin "terra incognita" merakı.
 
-### Aşama 1: İlk Ufuk (Tur 3-6)
+### Zincir Yapısı — 7 Sır
 
+Her sır bağımsız olarak keşfedilebilir (sıra yok). Her biri farklı bir limanda tetiklenir ve farklı bir deneyim havuzunu test eder.
+
+### Sır 1: Kayıp Kütüphane (İskenderiye) — Terazi Testi
 ```
-⚓ "Kahvehanede yaşlı bir gezgin, haritasını açıyor:
-   'Ben 40 yıl boyunca bu denizi gezdim. Her limanı gördüm.
-   Her dili öğrendim. Her yemeği tattım. Ve hâlâ bilmediğim
-   şeyler var. Sana bir şey söyleyeyim mi?
-   Bu denizin 7 sırrı var. 7'sini de bulan adam...
-   Efsane olur.'"
-```
+⚓ "İskenderiye kahvehanesinde yaşlı bir âlim:
+   'Büyük Kütüphane yandığında her şey kaybolmadı.
+   Bazı yazmaları gizleyen bir tüccar vardı.
+   Torunları hâlâ satıyor — ama nerede olduklarını
+   sadece doğru fiyatı bilen bulur.'"
 
-**7 Sır Sistemi:** Bu zincir 7 mini-görevden oluşuyor (diğer zincirlerin 5 aşamasına karşılık). Her sır farklı bir limanda, farklı bir deneyim gerektiriyor. Sıralar SERBEST — istediğin sırada bulabilirsin.
-
-### 7 Sır
-
-```
-SIR 1: "Meltemin Şarkısı" — DENİZ SIRRI
-  Liman: Girit
-  İpucu: "Giritli balıkçılar gece denizde garip bir ses duyduklarını
-          söylüyor. Meltem belirli bir yönden estiğinde, kayalıklar
-          şarkı söylüyormuş."
-  Görev: Girit'ten Pusula niyetiyle çık, güneybatı rotasında "keşif"
-  Meltem kontrolü: %30+ → sesi duyarsın
-  Bulgu: Kayalıklar arasında doğal bir rüzgâr tüneli. Ses buradan.
-         Antik Yunanlılar buna "Siren'lerin Şarkısı" dermiş.
-
-  ☽ BILIYOR MUYDUN?
-  Antik Yunan'da "Siren" deniz canavarı değil, kuş-kadın meleziydi.
-  Homeros'un Odysseia'sında Odysseus, Sirenlerin şarkısını duymak
-  için kendini direğe bağlattı. Mürettebatın kulaklarını mumla
-  tıkadı. Gerçekte "Siren sesleri" muhtemelen rüzgârın kayalık
-  geçitlerde çıkardığı doğal rezonans sesiydi.
-
-SIR 2: "Terazinin Sıfır Noktası" — TİCARET SIRRI
-  Liman: İstanbul (Kapalıçarşı)
-  İpucu: "Kapalıçarşı'da eski bir terazi var. Altından yapılmış.
-          Üzerinde ne Arapça ne Latince ne Yunanca — bilnmeyen
-          bir dilde yazı var."
-  Görev: İstanbul'da Kahve Falı seç, "eski terazi" hakkında sor
-  Terazi kontrolü: %25+ → antikacı seni teraziye götürür
-  Bulgu: Terazi Fenike yapımı, MÖ 1000 civarı. Yazı Fenike alfabesi.
-         Akdeniz ticaretinin en eski aracı.
-
-  ☽ BILIYOR MUYDUN?
-  Fenikeliler sadece alfabe değil, standart ağırlık ve ölçü
-  sistemini de yaydı. "Shekel" (ağırlık birimi) Fenike kökenli.
-  Fenike tüccarları İngiltere'ye kadar gidip kalay aldı —
-  MÖ 1000'de Akdeniz dışına çıkan ilk denizciler.
-
-SIR 3: "Mürekkebin Hatırladığı" — DİPLOMASİ SIRRI
-  Liman: İskenderiye (Büyük Kütüphane kalıntıları)
-  İpucu: "İskenderiye'de yaşlı bir âlim, eski papirüsler üzerinde
-          çalışıyor. Büyük Kütüphane'den kalan son parçalar
-          onun elindeymiş."
-  Görev: İskenderiye'de şehir yöneticisiyle görüş, âlime erişim iste
-  Mürekkep kontrolü: %35+ → âlim seni kabul eder
-  Bulgu: Papirüste antik bir ticaret anlaşması — MÖ 3. yy,
-         Ptolemaios hanedanı ile Kartaca arası. Diplomasinin yazılı hali.
-
-  ☽ BILIYOR MUYDUN?
-  İskenderiye Kütüphanesi'nin nasıl yok olduğu hâlâ tartışmalı.
-  Sezar'ın yangını, Hristiyan fanatikler, Müslüman fethi —
-  üçü de suçlanmış ama muhtemelen yüzyıllar boyunca yavaş yavaş
-  ihmal edildi. 400.000-700.000 papirüs rulosu barındırdığı
-  tahmin ediliyor — insanlık tarihinin en büyük bilgi kaybı.
-
-SIR 4: "Simsarın Anahtarı" — GİZEM SIRRI
-  Liman: Ragusa
-  İpucu: "Ragusa'nın surlarının altında gizli bir tünel sistemi
-          varmış. Şehrin kuruluşundan beri var. İçeride ne olduğunu
-          kimse bilmiyor — veya bilenler söylemiyor."
-  Görev: Ragusa'da İzi Sürmek aksiyonu, "tünel" hakkında araştır
-  Simsar kontrolü: %40+ → bir gece tünele girersin
-  Bulgu: Tüneller, Ragusa'nın yüzyıllardır kullandığı GİZLİ
-         TİCARET YOLU. Surların altından denize açılıyor.
-         Ambargo dönemlerinde bile ticaret devam ediyormuş.
-
-  ☽ BILIYOR MUYDUN?
-  Ragusa (Dubrovnik) gerçekten gizli tünellere sahip. Şehrin
-  su kemerleri ve kanalizasyon sistemi, kuşatma sırasında
-  kaçış ve gizli ikmal için de kullanılırdı. 1667 depreminde
-  tünellerin bir kısmı çöktü ama bir kısmı hâlâ duruyor.
-
-SIR 5: "Kadırganın Ruhu" — SAVAŞ SIRRI
-  Liman: Malta veya Venedik Arsenal
-  İpucu: "Tersanede gemi yapan bir usta, kadırgaların içine
-          gizli mesajlar kazıdığını söylüyor. 'Gemi ruhu'
-          diye bir gelenek varmış."
-  Görev: Tersaneye git, ustaya sor
-  Meltem kontrolü: %20+ → usta seni geminin iç kısmına götürür
-  Bulgu: Kadırgaların omurgasına dua, lanet ve isim kazınırmış.
-         Bir kadırganın omurgasında 200 yıllık bir savaş tarihi
-         yazılı — her savaşın tarihi, her kaptanın adı.
-
-  ☽ BILIYOR MUYDUN?
-  Venedik Arsenal'inde gemi inşası sırasında her gemi bir
-  "madrina" (vaftiz annesi) tarafından kutsanırdı. Geminin
-  pruvasına bir altın sikke gömülürdü — "deniz tanrılarına
-  rüşvet." Bu gelenek Roma döneminden kalma ve günümüzde bile
-  gemi inşaatında sikke geleneği devam ediyor.
-
-SIR 6: "Ateşin Hafızası" — KAYIP BİLGİ
-  Liman: Girit veya İstanbul
-  İpucu: "Bir simyacı, Rum Ateşi'nin formülünü yeniden keşfettiğini
-          iddia ediyor. Saçma bir iddia — ama ya doğruysa?"
-  Görev: Simyacıyı bul (LLM diyalog — yarı deli, yarı dahi)
-  Mürekkep veya Simsar kontrolü: simyacıyı ikna et veya izle
-  Bulgu: Formül muhtemelen yanlış ama simyacının laboratuvarında
-         Bizans dönemine ait şifreli bir el yazması var.
-         El yazması, Rum Ateşi değil ama CAMCILIK sırlarını içeriyor.
-
-  ☽ BILIYOR MUYDUN?
-  Rum Ateşi (Greek Fire) muhtemelen ham petrol bazlı bir silah.
-  Suyla söndürülemezdi — su ile temas edince daha çok yanardı.
-  Bizans bu silahı 7. yüzyıldan 12. yüzyıla kadar kullandı.
-  Formül o kadar gizli tutuldu ki imparatorlar bile tam
-  bilmiyordu — sadece "kalafonçu" (ateşçi) lonca üyeleri bilirdi.
-
-SIR 7: "Efsane'nin Kaynağı" — SON SIR
-  Liman: herhangi — ama ancak diğer 6 sırrı bulduktan sonra açılır
-  İpucu: "6 sırrı buldun. Yaşlı gezgin haklıymış — bu denizin
-          gizleri var. Ama 7. sır farklı. 7. sırrı deniz değil,
-          SEN yaratıyorsun."
-  Görev: yok — otomatik
-  Bulgu: 7. sır sensin. Senin hikayen. 6 sırrı bulan adam,
-         Akdeniz'in yaşayan efsanesi oldun.
-
-  ☽ FINAL TRIVIA:
-  "Akdeniz, Arapça'da 'Bahr al-Abyad al-Mutawassit' — Ortadaki
-   Beyaz Deniz. Türkçe'de 'Akdeniz' — Beyaz Deniz. Latince'de
-   'Mare Nostrum' — Bizim Deniz. Her millet ona kendi adını verdi
-   ama hepsi aynı şeyi kastetdi: bu deniz BİZİM.
-   Ve şimdi bu deniz SENİN hikayen."
+GÖREV: İskenderiye pazarında gizli bir antika tüccarı bul.
+  → Terazi %30+: fiyat ipuçlarını takip ederek tüccarı bulursun
+  → Terazi altı: kahvehanede 2 tur daha bilgi topla, sonra bul
+ÖDÜL: Eski bir harita parçası + ☽ İskenderiye Kütüphanesi trivia
 ```
 
-### Final Ödülü
+### Sır 2: Rum Ateşi Formülü (Girit) — Meltem Testi
+```
+⚓ "Giritli yaşlı kadın: 'Bizanslıların Rum ateşi...
+   formülü kayıp dediler. Ama denizin altında,
+   eski bir Bizans tersanesinin kalıntılarında
+   bir şey saklı. Fırtınadan sonra deniz çekilince görünür.'"
 
-7 sırrı tamamlayan oyuncu:
-- **"Gezgin" özel ünü** (sadece bu zincirle kazanılır) — tüm limanlarda otomatik Tanıdık Yüz
-- Büyük söylenti: "Bu adam Akdeniz'in 7 sırrını bulmuş" → Efsane'ye büyük katkı
-- Kahvehanede artık HER ZAMAN 1 ekstra fısıltı duyar (kalıcı bonus)
+GÖREV: Girit açıklarında fırtına sonrası dalış yap.
+  → Meltem %30+: fırtına zamanlamasını doğru okursun, batık tersaneyi bulursun
+  → Meltem altı: %40 şans, başarısızsa 2 tur sonra tekrar dene
+ÖDÜL: Rum ateşi parşömeni (koleksiyon) + ☽ Rum Ateşi trivia
+```
+
+### Sır 3: Çifte Haraç Diplomasisi (Ragusa) — Mürekkep Testi
+```
+⚓ "Ragusalı tüccar: 'Bizim şehrin asıl sırrı
+   haraç defterinde. İki efendiye nasıl hizmet edilir,
+   orada yazıyor. Ama defteri görmek için
+   belediye reisinin güvenini kazanman lazım.'"
+
+GÖREV: Ragusa belediye reisiyle görüş, güvenini kazan.
+  → Mürekkep %30+: reisle 3 mesajda güven kur, defteri gör
+  → Mürekkep altı: önce Ragusa'da 3 tur ticaret yap (güven inşa et)
+ÖDÜL: Diplomasi sırrı (tüm nötr limanlarda +5% ilişki bonusu) + ☽ Ragusa trivia
+```
+
+### Sır 4: Korsanın Hazine Haritası (Cezayir) — Simsar Testi
+```
+⚓ "Cezayir kahvehanesinde sarhoş bir korsan:
+   'Barbaros'un gizli bir deposu vardı. Hiç bulunamadı.
+   Ama ben... ben yeri biliyorum. Ama sana söylemem.
+   Bana yardım edersen... belki.'"
+
+GÖREV: Korsanın güvenini kazan veya bilgiyi çal.
+  → Simsar %30+: korsanın deposunu gizlice takip et, yeri bul
+  → Simsar altı: korsana 100 altın rüşvet ver veya 3 turda arkadaş ol
+ÖDÜL: Barbaros'un deposu (200 altın değerinde ganimet) + ☽ Barbaros trivia
+```
+
+### Sır 5: Kartaca'nın Laneti (Tunus) — Meltem + Terazi Testi
+```
+⚓ "Tunuslu tarihçi: 'Roma'nın tuz ektiği yer...
+   tam olarak nerede? Kimse bilmiyor. Ama bir balıkçı
+   kıyıda garip kalıntılar gördüğünü söyledi.'"
+
+GÖREV: Tunus kıyısında eski Kartaca kalıntılarını bul.
+  → Meltem %25+ VE Terazi %25+: kıyı keşfi + kalıntıları değerlendir
+  → Altı: yerel balıkçılarla 2 tur bilgi topla
+ÖDÜL: Kartaca eseri (koleksiyon) + ☽ Kartaca trivia
+```
+
+### Sır 6: Şövalyelerin Sırrı (Malta) — Mürekkep + Meltem Testi
+```
+⚓ "Malta şövalyesi: 'Kudüs'ten getirdiğimiz
+   bir emanet var. Kimse bilmiyor ne olduğunu.
+   Ama Büyük Üstad'ın güvenini kazanırsan görebilirsin.'"
+
+GÖREV: Malta Şövalyeleri'nin güvenini kazan.
+  → Mürekkep %25+ VE Meltem %25+: diplomatik yaklaşım + denizci saygısı
+  → Altı: Malta'da 3 korsan avı görevini tamamla
+ÖDÜL: Şövalye emaneti (koleksiyon) + ☽ Hospitalier trivia
+```
+
+### Sır 7: Alfabe'nin Doğuşu (Beyrut) — Mürekkep + Simsar Testi
+```
+⚓ "Beyrut'lu kâtip: 'Fenikelilerin ilk alfabesi...
+   orijinal tablet hâlâ burada bir yerlerde.
+   Ama bulmak için hem dili bilmen hem de
+   doğru insanları tanıman lazım.'"
+
+GÖREV: Fenike tabletini bul.
+  → Mürekkep %25+ VE Simsar %25+: yerel ağları kullan + bilgi topla
+  → Altı: Beyrut'ta 3 tur araştırma yap
+ÖDÜL: Fenike tableti (koleksiyon) + ☽ Fenike Alfabesi trivia
+```
+
+### Final: Akdeniz Atlası (7 Sır Tamamlandığında)
+
+```
+⚓ "Yedi sırrı keşfettin. Akdeniz'in hikayesi
+   parça parça senin elinde birleşti. Artık sen
+   sadece bir gezgin değilsin — sen bir KAŞİF'sin."
+
+ÖDÜL:
+  → "KAŞİF" özel ünü (sadece bu zincirden kazanılır)
+  → Kaşif ünü: tüm limanların açlık durumunu haritada görme
+    (Terazi çok yüksek etkisi, ün olarak)
+  → Pusula niyetiyle seyahat ettiğinde ekstra Simsar +1 deneyim
+  → 7 ☽ trivia'nın tamamı "Akdeniz Atlası" koleksiyonu olarak
+    oyuncu profilinde görünür
+
+☽ BILIYOR MUYDUN?
+İbn Battuta, 1325'te Fas'tan yola çıkıp 30 yılda 120.000 km yol
+kat etti — Marco Polo'dan üç kat fazla. Akdeniz'den Çin'e,
+Afrika'dan Hindistan'a. Döndüğünde Sultan'ın emriyle seyahatnamesini
+yazdırdı: "Rihla" (Yolculuk). Bugün dünyanın en büyük ortaçağ
+seyahat kaynağı.
+```
+
+### Saf Merak Zincirinin Özellikleri
+
+```
+DİĞER ZİNCİRLERDEN FARKI:
+  → Lineer değil: 7 sır herhangi bir sırada keşfedilebilir
+  → Her sır bağımsız: birini kaçırsan diğerleri etkilenmez
+  → Pusula niyetini doğrudan ödüllendirir
+  → Her deneyim havuzunu test eder (uzmanlaşma değil, çeşitlilik)
+  → En az dramatik ama en eğitici zincir
+  → Trivia merkezli: tarihsel bilgi oyunun dokusu
+```
 
 ---
 
