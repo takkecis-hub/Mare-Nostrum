@@ -2,16 +2,34 @@ import type { Route, Rumor } from '../../shared/src/types/index.js';
 
 const MAX_RUMOR_SPREAD_PORTS = 2;
 
-export function createRumor(action: string, currentPort: string): Rumor {
+// Decay rate per sourceAction: memorable events linger, covert ones fade fast.
+const RUMOR_DECAY: Record<string, number> = {
+  kara_bayrak: 10,
+  duman: 20,
+  kervan: 15,
+  pusula: 15,
+};
+
+function buildRumorText(action: string): string {
+  switch (action) {
+    case 'kara_bayrak':
+      return 'Kaptanın adı denizde kılıç kadar hızlı yayılıyor. Limanlar ondan söz ediyor, tüccarlar yolunu değiştiriyor.';
+    case 'duman':
+      return 'Bir gemi sessiz geçti; kim gördü, kim emin değil. Kaçakçılık kokusu limanda hâlâ asılı.';
+    case 'kervan':
+      return 'Yeni bir seferin kokusu kahve dumanına karıştı. Kervan yolları bu isimle bereketleniyor.';
+    case 'pusula':
+      return 'Deniz haritaları el değiştiriyor, bilge bir rehberin izi sürülüyor. Pusula doğruyu gösteriyor derler.';
+    default:
+      return 'Limanlarda fısıltılar dolaşıyor; kimse tam olarak ne olduğunu bilmiyor.';
+  }
+}
+
+export function createRumor(action: string, currentPort: string, playerId = 'player-1'): Rumor {
   return {
     id: `${action}-${Date.now()}`,
-    aboutPlayerId: 'player-1',
-    text:
-      action === 'kara_bayrak'
-        ? 'Kaptanın adı denizde kılıç kadar hızlı yayılıyor.'
-        : action === 'duman'
-          ? 'Bir gemi sessiz geçti; kim gördü, kim emin değil.'
-          : 'Yeni bir seferin kokusu kahve dumanına karıştı.',
+    aboutPlayerId: playerId,
+    text: buildRumorText(action),
     tone: action === 'kara_bayrak' ? 'olumsuz' : 'notr',
     currentPorts: [currentPort],
     strength: 100,
@@ -31,10 +49,12 @@ export function spreadRumors(rumors: Rumor[], routes: Route[]) {
           .forEach((route) => nextPorts.add(route.from === portId ? route.to : route.from));
       });
 
+      const decay = RUMOR_DECAY[rumor.sourceAction] ?? 15;
+
       return {
         ...rumor,
         age: rumor.age + 1,
-        strength: Math.max(rumor.strength - 15, 0),
+        strength: Math.max(rumor.strength - decay, 0),
         currentPorts: Array.from(nextPorts),
       };
     })
