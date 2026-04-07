@@ -1,7 +1,7 @@
 # MARE NOSTRUM — Singleplayer Görev Zincirleri
 ## Dört Köken Hikayesinin Tam Senaryosu
 
-> 🔧 WIP — Aktif çalışma dokümanı. Master referans: `MARE_NOSTRUM_MASTER_v3.md`
+> 🔧 WIP — Aktif çalışma dokümanı. Master referans: `mare_nostrum_master_v3.md`
 
 ---
 
