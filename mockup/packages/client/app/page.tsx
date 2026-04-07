@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 import type { RouteType, Intent, Tactic, Port, Route, Good, CargoItem, GameState, BootstrapPayload, TurnResolution } from '../../shared/src/types/index.js';
+import { EXPERIENCE_LABELS, GOOD_PURCHASE_COST, REPAIR_COST_PER_POINT } from '../../shared/src/constants/index.js';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 const routeColors: Record<RouteType, string> = {
@@ -105,34 +106,51 @@ export default function Page() {
     });
   }
 
-  function buyCurrentGood() {
+  async function buyCurrentGood() {
     if (!payload || !currentPort) return;
     const goodsEntry = payload.goods.find((good) => good.id === currentPort.produces.good);
     if (!goodsEntry) return;
 
     const cargoCount = payload.gameState.player.cargo.reduce((total, item) => total + item.quantity, 0);
-    if (cargoCount >= payload.gameState.player.ship.cargoCapacity || payload.gameState.player.gold < 40) return;
+    if (cargoCount >= payload.gameState.player.ship.cargoCapacity || payload.gameState.player.gold < GOOD_PURCHASE_COST) return;
 
-    setPayload({
-      ...payload,
-      gameState: {
-        ...payload.gameState,
-        player: {
-          ...payload.gameState.player,
-          gold: payload.gameState.player.gold - 40,
-          cargo: [
-            ...payload.gameState.player.cargo,
-            {
-              goodId: goodsEntry.id,
-              name: goodsEntry.name,
-              quantity: 1,
-              originPort: currentPort.id,
-              purchasePrice: 40,
-            },
-          ],
-        },
-      },
+    const response = await fetch(`${API_URL}/api/buy-good`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state: payload.gameState, goodId: goodsEntry.id }),
     });
+
+    if (!response.ok) return;
+    const data = await response.json();
+    setPayload({ ...payload, gameState: data.state });
+  }
+
+  async function dropCargo(cargoIndex: number) {
+    if (!payload) return;
+
+    const response = await fetch(`${API_URL}/api/load-cargo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state: payload.gameState, cargoIndex, action: 'drop' }),
+    });
+
+    if (!response.ok) return;
+    const data = await response.json();
+    setPayload({ ...payload, gameState: data.state });
+  }
+
+  async function repairShipAction() {
+    if (!payload) return;
+
+    const response = await fetch(`${API_URL}/api/repair-ship`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state: payload.gameState }),
+    });
+
+    if (!response.ok) return;
+    const data = await response.json();
+    setPayload({ ...payload, gameState: data.state });
   }
 
   async function resolveCurrentTurn() {
@@ -271,22 +289,59 @@ export default function Page() {
         <article className="card">
           <div className="section-head">
             <h2>Pazar</h2>
-            <button onClick={buyCurrentGood}>Liman malını al (-40)</button>
+            <button onClick={buyCurrentGood} disabled={payload.gameState.player.gold < GOOD_PURCHASE_COST}>{`Liman malını al (-${GOOD_PURCHASE_COST})`}</button>
           </div>
           <p className="note">
             {currentPort?.name} üretimi: <strong>{currentPort?.produces.good}</strong>
           </p>
-          <p className="note">
-            Bu mockup, menşe mal satın alımını ve ticaret turunda otomatik satışı doğrular.
-          </p>
+          {payload.gameState.player.cargo.length > 0 ? (
+            <div className="stack" style={{ marginTop: 12 }}>
+              <p className="note" style={{ marginBottom: 4 }}>Kargo ({payload.gameState.player.cargo.length}/{payload.gameState.player.ship.cargoCapacity}):</p>
+              {payload.gameState.player.cargo.map((item, idx) => (
+                <div key={`${item.goodId}-${idx}`} className="cargo-row">
+                  <span>{item.name} <span className="muted">({item.originPort})</span></span>
+                  <button className="small" onClick={() => dropCargo(idx)}>At</button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="note" style={{ marginTop: 12 }}>Kargo boş.</p>
+          )}
         </article>
 
         <article className="card">
           <div className="section-head">
-            <h2>Müzakere + Tersane</h2>
+            <h2>Tersane</h2>
+            <button
+              onClick={repairShipAction}
+              disabled={payload.gameState.player.ship.durability >= 100 || payload.gameState.player.gold < REPAIR_COST_PER_POINT}
+            >
+              Gemiyi tamir et
+            </button>
           </div>
-          <p className="note">NPC mesajlaşma Faz 1 placeholder'ı: “Fatma, İskenderiye'de baharatın sıcak olduğunu söylüyor.”</p>
-          <p className="note">Tamir özeti: Gemi dayanıklılığı şu an {payload.gameState.player.ship.durability}.</p>
+          <div className="durability-bar">
+            <div
+              className="durability-fill"
+              style={{ width: `${payload.gameState.player.ship.durability}%` }}
+            />
+            <span className="durability-label">{payload.gameState.player.ship.durability}/100</span>
+          </div>
+          <ul className="detail-list small" style={{ marginTop: 12 }}>
+            <li><span>Gemi</span><strong>{payload.gameState.player.ship.type}</strong></li>
+            <li><span>Güç</span><strong>{payload.gameState.player.ship.power}</strong></li>
+            <li><span>Kapasite</span><strong>{payload.gameState.player.ship.cargoCapacity}</strong></li>
+          </ul>
+          <div className="section-head" style={{ marginTop: 16 }}>
+            <h3>Deneyim</h3>
+          </div>
+          <div className="exp-grid">
+            {(Object.keys(EXPERIENCE_LABELS) as Array<keyof typeof EXPERIENCE_LABELS>).map((key) => (
+              <div key={key} className="exp-item">
+                <span>{EXPERIENCE_LABELS[key]}</span>
+                <strong>{payload.gameState.player.experience[key]}</strong>
+              </div>
+            ))}
+          </div>
         </article>
       </section>
 
