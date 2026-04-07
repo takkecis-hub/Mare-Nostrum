@@ -1,0 +1,263 @@
+[
+  {
+    "id": "barselona_marsilya",
+    "from": "barselona",
+    "to": "marsilya",
+    "type": "kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 2
+  },
+  {
+    "id": "barselona_tunus",
+    "from": "barselona",
+    "to": "tunus",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "barselona_cezayir",
+    "from": "barselona",
+    "to": "cezayir",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "marsilya_cenova",
+    "from": "marsilya",
+    "to": "cenova",
+    "type": "tramontana",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 1
+  },
+  {
+    "id": "cenova_venedik",
+    "from": "cenova",
+    "to": "venedik",
+    "type": "kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 2
+  },
+  {
+    "id": "cenova_palermo",
+    "from": "cenova",
+    "to": "palermo",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "venedik_ragusa",
+    "from": "venedik",
+    "to": "ragusa",
+    "type": "tramontana",
+    "isChokepoint": "otranto",
+    "encounterChance": 0.75,
+    "turnsRequired": 1
+  },
+  {
+    "id": "palermo_ragusa",
+    "from": "palermo",
+    "to": "ragusa",
+    "type": "kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 2
+  },
+  {
+    "id": "palermo_malta",
+    "from": "palermo",
+    "to": "malta",
+    "type": "kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.2,
+    "turnsRequired": 2
+  },
+  {
+    "id": "palermo_girit",
+    "from": "palermo",
+    "to": "girit",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "palermo_tunus",
+    "from": "palermo",
+    "to": "tunus",
+    "type": "tramontana",
+    "isChokepoint": "sicilya",
+    "encounterChance": 0.8,
+    "turnsRequired": 1
+  },
+  {
+    "id": "malta_tunus",
+    "from": "malta",
+    "to": "tunus",
+    "type": "tramontana",
+    "isChokepoint": "sicilya",
+    "encounterChance": 0.75,
+    "turnsRequired": 1
+  },
+  {
+    "id": "girit_istanbul",
+    "from": "girit",
+    "to": "istanbul",
+    "type": "tramontana",
+    "isChokepoint": "ege",
+    "encounterChance": 0.8,
+    "turnsRequired": 1
+  },
+  {
+    "id": "venedik_istanbul",
+    "from": "venedik",
+    "to": "istanbul",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.4,
+    "turnsRequired": 1
+  },
+  {
+    "id": "ragusa_istanbul",
+    "from": "ragusa",
+    "to": "istanbul",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "ragusa_girit",
+    "from": "ragusa",
+    "to": "girit",
+    "type": "tramontana",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 1
+  },
+  {
+    "id": "girit_kibris",
+    "from": "girit",
+    "to": "kibris",
+    "type": "tramontana",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 1
+  },
+  {
+    "id": "girit_iskenderiye",
+    "from": "girit",
+    "to": "iskenderiye",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "kibris_beyrut",
+    "from": "kibris",
+    "to": "beyrut",
+    "type": "kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.2,
+    "turnsRequired": 2
+  },
+  {
+    "id": "kibris_iskenderiye",
+    "from": "kibris",
+    "to": "iskenderiye",
+    "type": "tramontana",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 1
+  },
+  {
+    "id": "istanbul_beyrut",
+    "from": "istanbul",
+    "to": "beyrut",
+    "type": "uzun_kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.2,
+    "turnsRequired": 3
+  },
+  {
+    "id": "beyrut_iskenderiye",
+    "from": "beyrut",
+    "to": "iskenderiye",
+    "type": "kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.2,
+    "turnsRequired": 2
+  },
+  {
+    "id": "iskenderiye_trablus",
+    "from": "iskenderiye",
+    "to": "trablus",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "trablus_tunus",
+    "from": "trablus",
+    "to": "tunus",
+    "type": "tramontana",
+    "isChokepoint": null,
+    "encounterChance": 0.25,
+    "turnsRequired": 1
+  },
+  {
+    "id": "trablus_cezayir",
+    "from": "trablus",
+    "to": "cezayir",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "tunus_cezayir",
+    "from": "tunus",
+    "to": "cezayir",
+    "type": "kabotaj",
+    "isChokepoint": null,
+    "encounterChance": 0.2,
+    "turnsRequired": 2
+  },
+  {
+    "id": "malta_girit",
+    "from": "malta",
+    "to": "girit",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.35,
+    "turnsRequired": 1
+  },
+  {
+    "id": "cenova_tunus",
+    "from": "cenova",
+    "to": "tunus",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.4,
+    "turnsRequired": 1
+  },
+  {
+    "id": "malta_cezayir",
+    "from": "malta",
+    "to": "cezayir",
+    "type": "fortuna",
+    "isChokepoint": null,
+    "encounterChance": 0.4,
+    "turnsRequired": 1
+  }
+]

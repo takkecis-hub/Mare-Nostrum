@@ -1,0 +1,380 @@
+[
+  {
+    "id": "barselona",
+    "name": "Barselona",
+    "displayName": "Aragon'un Pençesi",
+    "region": "bati",
+    "controller": "aragon",
+    "produces": {
+      "good": "katalan_demiri",
+      "category": "savas",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "dogu_ipegi",
+      "category": "luks",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "askeri_tersane"
+    ],
+    "trivia": [
+      "Reconquista iklimi ticareti kadar savaşı da besler."
+    ],
+    "x": 90,
+    "y": 220
+  },
+  {
+    "id": "marsilya",
+    "name": "Marsilya",
+    "displayName": "Provence'ın Kapısı",
+    "region": "bati",
+    "controller": "fransa",
+    "produces": {
+      "good": "provence_sarabi",
+      "category": "yemek",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "misir_baharatlari",
+      "category": "luks",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "luxury_demand"
+    ],
+    "trivia": [
+      "Fransız sarayı Doğu lüks mallarına açtır."
+    ],
+    "x": 130,
+    "y": 120
+  },
+  {
+    "id": "cenova",
+    "name": "Cenova",
+    "displayName": "La Superba",
+    "region": "bati",
+    "controller": "cenova",
+    "produces": {
+      "good": "ligurya_mercan",
+      "category": "luks",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "sicilya_bugdayi",
+      "category": "yemek",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "bankacilik"
+    ],
+    "trivia": [
+      "Kredi fırsatıyla birlikte faiz baskısı da gelir."
+    ],
+    "x": 250,
+    "y": 120
+  },
+  {
+    "id": "venedik",
+    "name": "Venedik",
+    "displayName": "La Serenissima",
+    "region": "orta",
+    "controller": "venedik",
+    "produces": {
+      "good": "murano_cami",
+      "category": "luks",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "lubnan_sediri",
+      "category": "savas",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "arsenal_indirim",
+      "cam_tekeli"
+    ],
+    "trivia": [
+      "Arsenal, Akdeniz'in en hızlı gemi üretim merkezidir."
+    ],
+    "x": 430,
+    "y": 120
+  },
+  {
+    "id": "palermo",
+    "name": "Palermo",
+    "displayName": "Üç Dinin Kavşağı",
+    "region": "orta",
+    "controller": "sicilya",
+    "produces": {
+      "good": "sicilya_bugdayi",
+      "category": "yemek",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "katalan_demiri",
+      "category": "savas",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "tahil_ambari"
+    ],
+    "trivia": [
+      "Sicilya, Doğu-Batı ticaretinin ekmek sepetidir."
+    ],
+    "x": 280,
+    "y": 240
+  },
+  {
+    "id": "ragusa",
+    "name": "Ragusa",
+    "displayName": "Küçük Ama Kurnaz",
+    "region": "orta",
+    "controller": "ragusa",
+    "produces": {
+      "good": "ragusa_tuzu",
+      "category": "yemek",
+      "basePrice": "normal"
+    },
+    "desires": {
+      "good": "misir_baharatlari",
+      "category": "luks",
+      "basePrice": "normal"
+    },
+    "special": [
+      "notr_liman",
+      "ekstra_fisilti"
+    ],
+    "trivia": [
+      "Ragusa bilgi alıp satmanın limanıdır."
+    ],
+    "x": 470,
+    "y": 220
+  },
+  {
+    "id": "istanbul",
+    "name": "İstanbul",
+    "displayName": "Dünyanın Eşiği",
+    "region": "dogu",
+    "controller": "osmanli",
+    "produces": {
+      "good": "dogu_ipegi",
+      "category": "luks",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "lubnan_sediri",
+      "category": "savas",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "mega_pazar"
+    ],
+    "trivia": [
+      "Doğu ile Batı burada birbirine hesap verir."
+    ],
+    "x": 660,
+    "y": 190
+  },
+  {
+    "id": "girit",
+    "name": "Girit",
+    "displayName": "Ortadaki Ada",
+    "region": "dogu",
+    "controller": "venedik",
+    "produces": {
+      "good": "girit_zeytinyagi",
+      "category": "yemek",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "girit_barutu",
+      "category": "savas",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "kavsak"
+    ],
+    "trivia": [
+      "Girit, rotaların ve pusuların ortasında yatar."
+    ],
+    "x": 520,
+    "y": 300
+  },
+  {
+    "id": "kibris",
+    "name": "Kıbrıs",
+    "displayName": "Haçlı Mirası",
+    "region": "dogu",
+    "controller": "kibris",
+    "produces": {
+      "good": "kibris_tuzu",
+      "category": "yemek",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "murano_cami",
+      "category": "luks",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "transit_merkezi"
+    ],
+    "trivia": [
+      "Levant'a açılan son güvenli duraklardan biridir."
+    ],
+    "x": 660,
+    "y": 330
+  },
+  {
+    "id": "beyrut",
+    "name": "Beyrut",
+    "displayName": "Levant'ın Vitrini",
+    "region": "dogu",
+    "controller": "memluk",
+    "produces": {
+      "good": "sam_ipegi",
+      "category": "luks",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "osmanli_silahi",
+      "category": "savas",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "kara_ticareti"
+    ],
+    "trivia": [
+      "Kara İpek Yolu burada denize kavuşur."
+    ],
+    "x": 760,
+    "y": 300
+  },
+  {
+    "id": "iskenderiye",
+    "name": "İskenderiye",
+    "displayName": "Baharat Tahtı",
+    "region": "guney",
+    "controller": "memluk",
+    "produces": {
+      "good": "misir_baharatlari",
+      "category": "luks",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "lubnan_sediri",
+      "category": "savas",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "baharat_baskenti"
+    ],
+    "trivia": [
+      "En kârlı lüks mallar en çok göz önündeki mallardır."
+    ],
+    "x": 690,
+    "y": 430
+  },
+  {
+    "id": "trablus",
+    "name": "Trablus",
+    "displayName": "Çöl Kapısı",
+    "region": "guney",
+    "controller": "trablus",
+    "produces": {
+      "good": "sahra_altini",
+      "category": "luks",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "nil_tahili",
+      "category": "yemek",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "nadir_mal_bonusu"
+    ],
+    "trivia": [
+      "Buraya ulaşmak zor, dönmek daha da zordur."
+    ],
+    "x": 500,
+    "y": 430
+  },
+  {
+    "id": "tunus",
+    "name": "Tunus",
+    "displayName": "Afrika'nın Roma'sı",
+    "region": "guney",
+    "controller": "hafsid",
+    "produces": {
+      "good": "tunus_zeytinyagi",
+      "category": "yemek",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "murano_cami",
+      "category": "luks",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "sicilya_darbogazi"
+    ],
+    "trivia": [
+      "Sicilya Boğazı'nın güney kapısı ticareti kadar savaşı da çeker."
+    ],
+    "x": 230,
+    "y": 350
+  },
+  {
+    "id": "cezayir",
+    "name": "Cezayir",
+    "displayName": "Korsanlar Yuvası",
+    "region": "guney",
+    "controller": "cezayir",
+    "produces": {
+      "good": "osmanli_silahi",
+      "category": "savas",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "provence_sarabi",
+      "category": "yemek",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "korsan_limani"
+    ],
+    "trivia": [
+      "Burada ganimet pazarı hukuk kadar hızlı çalışır."
+    ],
+    "x": 120,
+    "y": 400
+  },
+  {
+    "id": "malta",
+    "name": "Malta",
+    "displayName": "Kalkan ve Kılıç",
+    "region": "orta",
+    "controller": "malta",
+    "produces": {
+      "good": "malta_celigi",
+      "category": "savas",
+      "basePrice": "ucuz"
+    },
+    "desires": {
+      "good": "sicilya_bugdayi",
+      "category": "yemek",
+      "basePrice": "pahali"
+    },
+    "special": [
+      "savascı_liman",
+      "tamir_indirimi"
+    ],
+    "trivia": [
+      "Şövalyeler küçük adayı dev bir karakola çevirmiştir."
+    ],
+    "x": 340,
+    "y": 360
+  }
+]
