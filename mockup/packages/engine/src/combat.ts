@@ -10,7 +10,12 @@ const counters: Record<Tactic, Tactic | null> = {
 export function calculatePower(ship: Ship, tactic: Tactic, experience: HiddenExperience) {
   const base = ship.power + ship.durability / 50;
   const meltemBonus = experience.meltem > experience.terazi ? 0.5 : 0;
-  const tacticBonus = tactic === 'pruva' && ship.type === 'kadirga' ? 1 : tactic === 'manevra' && ship.type === 'feluka' ? 1 : 0;
+  let tacticBonus = 0;
+  if (tactic === 'pruva' && ship.type === 'kadirga') {
+    tacticBonus = 1;
+  } else if (tactic === 'manevra' && ship.type === 'feluka') {
+    tacticBonus = 1;
+  }
   return Number((base + meltemBonus + tacticBonus).toFixed(2));
 }
 

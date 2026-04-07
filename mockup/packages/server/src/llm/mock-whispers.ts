@@ -4,7 +4,9 @@ import type { HiddenExperience } from '../../../shared/src/types/index.js';
 const whisperPool = whisperPoolJson as Record<string, string[]>;
 
 function dominantKey(experience: HiddenExperience) {
-  const entries = Object.entries(experience).sort((left, right) => Number(right[1]) - Number(left[1]));
+  const entries = Object.entries(experience).sort(
+    (firstEntry, secondEntry) => Number(secondEntry[1]) - Number(firstEntry[1]),
+  );
   return entries[0]?.[0] ?? 'terazi';
 }
 
