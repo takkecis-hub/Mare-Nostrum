@@ -422,36 +422,42 @@ export default function MapView({
             opacity={dimmed ? 0.3 : 1}
           >
             {/* Major port pulsing outer ring */}
-            {isMajor && !isCurrent && (
-              <circle
-                cx={port.x}
-                cy={port.y}
-                r={baseR + 8}
-                fill="none"
-                stroke={catColor}
-                strokeWidth={1}
-                opacity={0.15}
-              >
-                <animate attributeName="r" values={`${baseR + 6};${baseR + 11};${baseR + 6}`} dur="3s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.15;0.06;0.15" dur="3s" repeatCount="indefinite" />
-              </circle>
-            )}
+            {isMajor && !isCurrent && (() => {
+              const rVals = `${baseR + 6};${baseR + 11};${baseR + 6}`;
+              return (
+                <circle
+                  cx={port.x}
+                  cy={port.y}
+                  r={baseR + 8}
+                  fill="none"
+                  stroke={catColor}
+                  strokeWidth={1}
+                  opacity={0.15}
+                >
+                  <animate attributeName="r" values={rVals} dur="3s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.15;0.06;0.15" dur="3s" repeatCount="indefinite" />
+                </circle>
+              );
+            })()}
 
             {/* Current port glow */}
-            {isCurrent && (
-              <circle
-                cx={port.x}
-                cy={port.y}
-                r={r + 8}
-                fill="none"
-                stroke="var(--accent)"
-                strokeWidth={2}
-                opacity={0.4}
-              >
-                <animate attributeName="r" values={`${r + 6};${r + 12};${r + 6}`} dur="2s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite" />
-              </circle>
-            )}
+            {isCurrent && (() => {
+              const rVals = `${r + 6};${r + 12};${r + 6}`;
+              return (
+                <circle
+                  cx={port.x}
+                  cy={port.y}
+                  r={r + 8}
+                  fill="none"
+                  stroke="var(--accent)"
+                  strokeWidth={2}
+                  opacity={0.4}
+                >
+                  <animate attributeName="r" values={rVals} dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite" />
+                </circle>
+              );
+            })()}
 
             {/* Inner glow */}
             <circle cx={port.x} cy={port.y} r={r * 0.5} fill={catColor} opacity={0.35} />
