@@ -7,6 +7,11 @@ import type { GameState, Good, Order, Port, Route, Tactic, TurnResolution } from
 
 const TURNS_PER_SEASON = 4;
 
+function nextSeason(currentTurn: number) {
+  const nextTurn = currentTurn + 1;
+  return Math.floor((nextTurn - 1) / TURNS_PER_SEASON) % 2 === 0 ? 'yaz' : 'kis';
+}
+
 export function resolveTurn(input: {
   state: GameState;
   order: Order;
@@ -90,7 +95,7 @@ export function resolveTurn(input: {
   return {
     nextState: {
       turn: state.turn + 1,
-      season: state.turn % TURNS_PER_SEASON === 0 ? 'kis' : 'yaz',
+      season: nextSeason(state.turn),
       player,
       activeRumors: rumors,
       lastWhispers: whispers,

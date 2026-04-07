@@ -3,7 +3,7 @@ import type { HiddenExperience } from '../../../shared/src/types/index.js';
 
 const whisperPool = whisperPoolJson as Record<string, string[]>;
 
-function dominantKey(experience: HiddenExperience) {
+function getDominantExperienceKey(experience: HiddenExperience) {
   const entries = Object.entries(experience).sort(
     ([, firstValue], [, secondValue]) => Number(secondValue) - Number(firstValue),
   );
@@ -12,7 +12,7 @@ function dominantKey(experience: HiddenExperience) {
 
 export function getMockWhispers(portId: string, experience: HiddenExperience) {
   const whispers = whisperPool[portId as keyof typeof whisperPool] ?? whisperPool.default;
-  const focus = dominantKey(experience);
+  const focus = getDominantExperienceKey(experience);
 
   return whispers.map((line: string, index: number) => {
     if (index === 0) {

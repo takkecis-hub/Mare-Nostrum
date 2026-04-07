@@ -1,5 +1,7 @@
 import type { Route, Rumor } from '../../shared/src/types/index.js';
 
+const MAX_RUMOR_SPREAD_PORTS = 2;
+
 export function createRumor(action: string, currentPort: string): Rumor {
   return {
     id: `${action}-${Date.now()}`,
@@ -25,7 +27,7 @@ export function spreadRumors(rumors: Rumor[], routes: Route[]) {
       rumor.currentPorts.forEach((portId) => {
         routes
           .filter((route) => route.from === portId || route.to === portId)
-          .slice(0, 2)
+          .slice(0, MAX_RUMOR_SPREAD_PORTS)
           .forEach((route) => nextPorts.add(route.from === portId ? route.to : route.from));
       });
 
