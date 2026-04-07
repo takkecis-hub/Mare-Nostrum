@@ -8,6 +8,7 @@ import goodsJson from '../../../data/goods.json' with { type: 'json' };
 import { DEFAULT_PLAYER_ID, DEFAULT_PLAYER_NAME } from '../../shared/src/constants/index.js';
 import type { BootstrapPayload, CargoItem, GameState, Good, Order, Port, Route, Tactic } from '../../shared/src/types/index.js';
 import { resolveTurn } from '../../engine/src/turn-resolver.js';
+import { repairShip, repairCost } from '../../engine/src/shipyard.js';
 import { getMockWhispers } from './llm/mock-whispers.js';
 
 const ports = portsJson as Port[];
@@ -182,6 +183,68 @@ app.post('/api/load-cargo', (req, res) => {
   const player = { ...state.player, cargo: newCargo };
   const updatedState: GameState = { ...state, player };
   res.json({ state: updatedState });
+});
+
+app.get('/api/repair-cost', (req, res) => {
+  const portId = typeof req.query?.portId === 'string' ? req.query.portId : undefined;
+
+  if (!portId) {
+    res.status(400).json({ error: 'portId zorunlu' });
+    return;
+  }
+
+  const port = ports.find((p) => p.id === portId);
+  if (!port) {
+    res.status(400).json({ error: 'Liman bulunamadı' });
+    return;
+  }
+
+  // Use a default ship for cost preview when no state is available
+  const cost = repairCost(
+    { type: 'karaka', cargoCapacity: 5, power: 2, durability: 60 },
+    port.special,
+  );
+  res.json({ hasTersane: port.special.includes('tersane'), costPerPoint: cost > 0 ? Math.ceil(cost / 40) : 3 });
+});
+
+app.post('/api/repair-ship', (req, res) => {
+  const state = req.body?.state as GameState | undefined;
+
+  if (!state) {
+    res.status(400).json({ error: 'state zorunlu' });
+    return;
+  }
+
+  const currentPort = ports.find((p) => p.id === state.player.currentPortId);
+  if (!currentPort) {
+    res.status(400).json({ error: 'Liman bulunamadı' });
+    return;
+  }
+
+  if (state.player.ship.durability >= 100) {
+    res.status(400).json({ error: 'Gemi zaten tam dayanıklılıkta' });
+    return;
+  }
+
+  const result = repairShip(state.player.ship, state.player.gold, currentPort.special);
+
+  if (result.goldSpent === 0) {
+    res.status(400).json({ error: 'Tamir için yeterli altın yok' });
+    return;
+  }
+
+  const player = {
+    ...state.player,
+    ship: result.repairedShip,
+    gold: state.player.gold - result.goldSpent,
+  };
+
+  const updatedState: GameState = { ...state, player };
+  res.json({
+    state: updatedState,
+    goldSpent: result.goldSpent,
+    durabilityRestored: result.durabilityRestored,
+  });
 });
 
 const httpServer = createServer(app);
