@@ -316,7 +316,7 @@ Ancak Fortuna alternatifleri %20 fırtına riski + 1 tur = darboğazdan geçmekl
 - **Altın Parmak:** Son 5 turda en az 2 ticaret. Yoksa kaybedersin.
 - **Demir Pruva:** Son 5 turda en az 1 savaş. Yoksa kaybedersin.
 - **İpek Dil:** Son 5 turda en az 2 diplomatik etkileşim. Yoksa kaybedersin.
-- **Hayalet Pala:** Hakkında 2+ negatif söylenti birikirseyakalanırsan kaybedersin.
+- **Hayalet Pala:** Hakkında 2+ negatif söylenti birikirse veya yakalanırsan kaybedersin.
 - **Akrep:** Kaybetmez (kalıcı damga).
 
 ### 8.3 — "Efsanevi Başarımlar" Listesi Dengesiz
