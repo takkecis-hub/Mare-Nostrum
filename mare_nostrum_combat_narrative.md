@@ -1,4 +1,4 @@
-> 🔧 **WIP / ÇALIŞMA DOKÜMANI** — Bu doküman modüler bir çalışma parçasıdır. Güncel konsolide versiyon için → `MARE_NOSTRUM_MASTER_v3.md` dosyasına bakınız.
+> 🔧 **WIP / ÇALIŞMA DOKÜMANI** — Bu doküman modüler bir çalışma parçasıdır. Güncel konsolide versiyon için → `mare_nostrum_master_v3.md` dosyasına bakınız.
 
 ---
 

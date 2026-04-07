@@ -1,7 +1,7 @@
 # MARE NOSTRUM — İmplementasyon Planı
 ## Tasarımdan Ürüne Yol Haritası
 
-> ✅ AKTİF DOKÜMAN — Master referans: `MARE_NOSTRUM_MASTER_v3.md`
+> ✅ AKTİF DOKÜMAN — Master referans: `mare_nostrum_master_v3.md`
 
 ---
 
