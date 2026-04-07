@@ -5,6 +5,8 @@ import { createRumor, spreadRumors } from './rumor.js';
 import { isOrderReachable } from '../../shared/src/validators/index.js';
 import type { GameState, Good, Order, Port, Route, Tactic, TurnResolution } from '../../shared/src/types/index.js';
 
+const TURNS_PER_SEASON = 4;
+
 export function resolveTurn(input: {
   state: GameState;
   order: Order;
@@ -88,7 +90,7 @@ export function resolveTurn(input: {
   return {
     nextState: {
       turn: state.turn + 1,
-      season: state.turn % 4 === 0 ? 'kis' : 'yaz',
+      season: state.turn % TURNS_PER_SEASON === 0 ? 'kis' : 'yaz',
       player,
       activeRumors: rumors,
       lastWhispers: whispers,

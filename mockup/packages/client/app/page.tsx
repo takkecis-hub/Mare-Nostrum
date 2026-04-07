@@ -89,6 +89,18 @@ const routeColors: Record<RouteType, string> = {
   uzun_kabotaj: '#c4b5fd',
 };
 
+function routeDasharray(routeType: RouteType) {
+  if (routeType === 'kabotaj') {
+    return '6 6';
+  }
+
+  if (routeType === 'uzun_kabotaj') {
+    return '12 6';
+  }
+
+  return undefined;
+}
+
 export default function Page() {
   const [payload, setPayload] = useState<BootstrapPayload | null>(null);
   const [selectedPortId, setSelectedPortId] = useState('venedik');
@@ -134,6 +146,7 @@ export default function Page() {
     () => payload?.ports.find((port) => port.id === payload.gameState.player.currentPortId) ?? null,
     [payload],
   );
+  const latestRumor = payload?.gameState.activeRumors.at(-1);
 
   const reachableRoutes = useMemo(() => {
     if (!payload || !currentPort) return [];
@@ -269,7 +282,7 @@ export default function Page() {
                   y2={to.y}
                   stroke={routeColors[route.type]}
                   strokeWidth={route.isChokepoint ? 5 : 3}
-                  strokeDasharray={route.type === 'kabotaj' ? '6 6' : route.type === 'uzun_kabotaj' ? '12 6' : undefined}
+                  strokeDasharray={routeDasharray(route.type)}
                 />
               );
             })}
@@ -407,8 +420,8 @@ export default function Page() {
             {turnLog.length ? turnLog.map((entry) => (
               <p key={`${entry.label}-${entry.detail}`} className="log-item"><strong>{entry.label}:</strong> {entry.detail}</p>
             )) : <p className="note">Henüz çözümleme yapılmadı.</p>}
-            {payload.gameState.activeRumors.length > 0 && (
-              <p className="note">Aktif söylenti: {payload.gameState.activeRumors[payload.gameState.activeRumors.length - 1].text}</p>
+            {latestRumor && (
+              <p className="note">Aktif söylenti: {latestRumor.text}</p>
             )}
           </div>
         </article>

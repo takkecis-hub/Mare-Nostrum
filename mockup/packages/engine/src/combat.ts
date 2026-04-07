@@ -16,7 +16,7 @@ export function calculatePower(ship: Ship, tactic: Tactic, experience: HiddenExp
   } else if (tactic === 'manevra' && ship.type === 'feluka') {
     tacticBonus = 1;
   }
-  return Number((base + meltemBonus + tacticBonus).toFixed(2));
+  return Math.round((base + meltemBonus + tacticBonus) * 100) / 100;
 }
 
 export function resolveCombat(options: {
