@@ -1,0 +1,22 @@
+{
+  "venedik": [
+    "Murano ustaları bu hafta camı ucuza bırakıyor; ama kereste pazarı gergin.",
+    "Ragusa'ya giden kaptanlar Otranto'da çok göz olduğunu söylüyor.",
+    "Fondaco dei Turchi'de İskenderiye baharatının yine yükselişte olduğu konuşuluyor."
+  ],
+  "iskenderiye": [
+    "Baharat depoları dolu, ama ilk tüccar hâlâ en tatlı fiyatı koparır.",
+    "Memlük memurları kaçakçılara bugünlerde merhamet göstermiyor.",
+    "Girit üstünden gelenler fırtınaya rağmen iyi kârla dönmüş."
+  ],
+  "girit": [
+    "Ege Kapısı'nda sessiz geçen kadar görünmez olan azdır.",
+    "Ada şarapları bol, ama barut kasaları boşalmaya başladı.",
+    "İstanbul'a giden rota, hikâye toplamak isteyenleri de korsanları da çağırıyor."
+  ],
+  "default": [
+    "Bu limanda herkes fiyat biliyor sanır; kazanan sadece sabırlı olan olur.",
+    "Kahve dumanı yükseldikçe gerçeğin fiyatı düşer.",
+    "Bir limanın açlığı, başka bir kaptanın şöhreti olur."
+  ]
+}

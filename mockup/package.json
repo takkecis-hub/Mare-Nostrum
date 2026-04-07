@@ -1,0 +1,14 @@
+{
+  "name": "mare-nostrum-mockup",
+  "private": true,
+  "packageManager": "pnpm@10.7.1",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @mare-nostrum/server dev\" \"pnpm --filter @mare-nostrum/client dev\"",
+    "build": "pnpm -r --if-present build",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

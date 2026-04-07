@@ -1,0 +1,107 @@
+[
+  {
+    "id": "murano_cami",
+    "name": "Murano Camı",
+    "category": "luks",
+    "originPort": "venedik",
+    "priceIndicator": 2
+  },
+  {
+    "id": "misir_baharatlari",
+    "name": "Mısır Baharatları",
+    "category": "luks",
+    "originPort": "iskenderiye",
+    "priceIndicator": 1
+  },
+  {
+    "id": "sicilya_bugdayi",
+    "name": "Sicilya Buğdayı",
+    "category": "yemek",
+    "originPort": "palermo",
+    "priceIndicator": 2
+  },
+  {
+    "id": "girit_zeytinyagi",
+    "name": "Girit Zeytinyağı",
+    "category": "yemek",
+    "originPort": "girit",
+    "priceIndicator": 2
+  },
+  {
+    "id": "katalan_demiri",
+    "name": "Katalan Demiri",
+    "category": "savas",
+    "originPort": "barselona",
+    "priceIndicator": 2
+  },
+  {
+    "id": "dogu_ipegi",
+    "name": "Doğu İpeği",
+    "category": "luks",
+    "originPort": "istanbul",
+    "priceIndicator": 1
+  },
+  {
+    "id": "sahra_altini",
+    "name": "Sahra Altını",
+    "category": "luks",
+    "originPort": "trablus",
+    "priceIndicator": 1
+  },
+  {
+    "id": "sam_ipegi",
+    "name": "Şam İpeği",
+    "category": "luks",
+    "originPort": "beyrut",
+    "priceIndicator": 2
+  },
+  {
+    "id": "kibris_tuzu",
+    "name": "Kıbrıs Tuzu",
+    "category": "yemek",
+    "originPort": "kibris",
+    "priceIndicator": 2
+  },
+  {
+    "id": "ligurya_mercan",
+    "name": "Ligurya Mercanı",
+    "category": "luks",
+    "originPort": "cenova",
+    "priceIndicator": 2
+  },
+  {
+    "id": "provence_sarabi",
+    "name": "Provence Şarabı",
+    "category": "yemek",
+    "originPort": "marsilya",
+    "priceIndicator": 2
+  },
+  {
+    "id": "tunus_zeytinyagi",
+    "name": "Tunus Zeytinyağı",
+    "category": "yemek",
+    "originPort": "tunus",
+    "priceIndicator": 2
+  },
+  {
+    "id": "osmanli_silahi",
+    "name": "Osmanlı Silahı",
+    "category": "savas",
+    "originPort": "cezayir",
+    "priceIndicator": 2
+  },
+  {
+    "id": "malta_celigi",
+    "name": "Malta Çeliği",
+    "category": "savas",
+    "originPort": "malta",
+    "priceIndicator": 2
+  },
+  {
+    "id": "nil_tahili",
+    "name": "Nil Tahılı",
+    "category": "yemek",
+    "originPort": "iskenderiye",
+    "priceIndicator": 2
+  }
+]
