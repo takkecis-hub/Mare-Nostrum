@@ -90,4 +90,34 @@ describe('spreadRumors', () => {
     // istanbul is 'to' in r1 (venedik→istanbul), so venedik should be reachable
     expect(result[0].currentPorts).toContain('venedik');
   });
+
+  it('decays kara_bayrak rumors by 10 per spread (lingers longer)', () => {
+    const rumor = createRumor('kara_bayrak', 'venedik');
+    const result = spreadRumors([rumor], sampleRoutes);
+    expect(result[0].strength).toBe(90); // 100 - 10
+  });
+
+  it('decays duman rumors by 20 per spread (fades fast)', () => {
+    const rumor = createRumor('duman', 'venedik');
+    const result = spreadRumors([rumor], sampleRoutes);
+    expect(result[0].strength).toBe(80); // 100 - 20
+  });
+
+  it('uses fallback decay of 15 for unknown sourceAction', () => {
+    const rumor = createRumor('unknown_action', 'venedik');
+    const result = spreadRumors([rumor], sampleRoutes);
+    expect(result[0].strength).toBe(85); // 100 - 15
+  });
+});
+
+describe('createRumor with custom playerId', () => {
+  it('uses the provided playerId instead of the default', () => {
+    const rumor = createRumor('kervan', 'venedik', 'player-42');
+    expect(rumor.aboutPlayerId).toBe('player-42');
+  });
+
+  it('falls back to default player id when none is provided', () => {
+    const rumor = createRumor('kervan', 'venedik');
+    expect(rumor.aboutPlayerId).toBe('player-1');
+  });
 });

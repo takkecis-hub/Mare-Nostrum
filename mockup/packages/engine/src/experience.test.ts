@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { HiddenExperience } from '../../shared/src/types/index.js';
-import { applyExperienceGain, determineRenown, dominantExperienceLabel } from './experience.js';
+import {
+  applyExperienceGain,
+  determineRenown,
+  dominantExperienceLabel,
+  meetsExperienceThreshold,
+  getThresholdGates,
+  getRenownDescription,
+} from './experience.js';
 
 const baseExperience: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 1 };
 
@@ -97,5 +104,87 @@ describe('dominantExperienceLabel', () => {
   it('returns simsar when simsar is highest', () => {
     const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 9 };
     expect(dominantExperienceLabel(exp)).toBe('simsar');
+  });
+});
+
+describe('meetsExperienceThreshold', () => {
+  it('returns true when skill ratio meets the threshold exactly', () => {
+    // terazi = 7, total = 10 → ratio = 0.7 ≥ 0.35
+    const exp: HiddenExperience = { meltem: 1, terazi: 7, murekkep: 1, simsar: 1 };
+    expect(meetsExperienceThreshold(exp, 'terazi', 0.35)).toBe(true);
+  });
+
+  it('returns false when skill ratio is below the threshold', () => {
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 1 };
+    expect(meetsExperienceThreshold(exp, 'meltem', 0.5)).toBe(false);
+  });
+
+  it('returns true when threshold is 0 (always passes)', () => {
+    const exp: HiddenExperience = { meltem: 0, terazi: 0, murekkep: 0, simsar: 0 };
+    expect(meetsExperienceThreshold(exp, 'simsar', 0)).toBe(true);
+  });
+
+  it('works for all four skill keys', () => {
+    const exp: HiddenExperience = { meltem: 10, terazi: 10, murekkep: 10, simsar: 10 };
+    for (const skill of ['meltem', 'terazi', 'murekkep', 'simsar'] as const) {
+      expect(meetsExperienceThreshold(exp, skill, 0.25)).toBe(true);
+    }
+  });
+});
+
+describe('getThresholdGates', () => {
+  it('returns all true when every skill is at least 25%', () => {
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 1 };
+    const gates = getThresholdGates(exp);
+    expect(gates.meltem).toBe(true);
+    expect(gates.terazi).toBe(true);
+    expect(gates.murekkep).toBe(true);
+    expect(gates.simsar).toBe(true);
+  });
+
+  it('returns false for skills below 25%', () => {
+    // simsar = 0 → ratio 0 < 0.25
+    const exp: HiddenExperience = { meltem: 10, terazi: 10, murekkep: 10, simsar: 0 };
+    const gates = getThresholdGates(exp);
+    expect(gates.simsar).toBe(false);
+  });
+
+  it('opens gate when skill just meets 25%', () => {
+    // meltem = 1, total = 4 → ratio = 0.25 exactly
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 1 };
+    const gates = getThresholdGates(exp);
+    expect(gates.meltem).toBe(true);
+  });
+});
+
+describe('getRenownDescription', () => {
+  it('returns empty string for empty renown list', () => {
+    expect(getRenownDescription([])).toBe('');
+  });
+
+  it('includes trade description for Altın Parmak', () => {
+    const desc = getRenownDescription(['Altın Parmak']);
+    expect(desc).toContain('tüccar');
+  });
+
+  it('includes combat description for Demir Pruva', () => {
+    const desc = getRenownDescription(['Demir Pruva']);
+    expect(desc.toLowerCase()).toContain('deniz');
+  });
+
+  it('includes diplomat description for İpek Dil', () => {
+    const desc = getRenownDescription(['İpek Dil']);
+    expect(desc).toContain('Diplomatik');
+  });
+
+  it('includes smuggler description for Hayalet Pala', () => {
+    const desc = getRenownDescription(['Hayalet Pala']);
+    expect(desc).toContain('kaçakçı');
+  });
+
+  it('concatenates multiple renown descriptions', () => {
+    const desc = getRenownDescription(['Altın Parmak', 'Demir Pruva']);
+    expect(desc).toContain('tüccar');
+    expect(desc.toLowerCase()).toContain('deniz');
   });
 });
