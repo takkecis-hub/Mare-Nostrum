@@ -40,6 +40,8 @@ export function calculatePower(
     tacticBonus = 1;
   } else if (tactic === 'manevra' && ship.type === 'feluka') {
     tacticBonus = 1;
+  } else if (tactic === 'ates' && ship.type === 'karaka') {
+    tacticBonus = 1;
   }
   return Math.round((base + meltemBonus + tacticBonus + dieRoll) * 100) / 100;
 }

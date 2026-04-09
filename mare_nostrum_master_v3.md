@@ -243,7 +243,7 @@ Savaş başlamadan HER İKİ TARAF gizlice taktik seçer:
 
 **Taş-kağıt-makas:** Pruva > Ateş > Manevra > Pruva. Kazanan taktik +2 bonus.
 
-**Gemi sinerjileri:** Feluka → Manevra'da +1 ekstra. Kadırga → Pruva'da +1 ekstra.
+**Gemi sinerjileri:** Feluka → Manevra'da +1 ekstra. Kadırga → Pruva'da +1 ekstra. Karaka → Ateş'te +1 ekstra (ağır yük koruması).
 
 **Güç formülü:** Gemi değeri + Ün bonusu + Taktik bonusu + Zar (Meltem'e göre 1-6 veya 2-6 — üst sınır 2-6, 3-6 kaldırıldı).
 
@@ -314,7 +314,14 @@ Bazı mallar bazı limanlarda yasak. Kaçakçılık: yakalanma Simsar'a bağlı 
 
 ## 6.7 Sezon Etkisi
 
-Yaz: trafik yoğun, yemek ucuz, lüks pahalı. Kış: fırtına riski, yemek pahalı, kışın denize çıkan aç pazarlarda vurgun vurur.
+> **Uygulandı:** `seasonMultiplier()` ve `turn-resolver.ts` — satış sırasında mevsim çarpanı uygulanır.
+
+| Mevsim | Yemek | Lüks | Savaş |
+|--------|-------|------|-------|
+| Yaz | ×0.85 (bol) | ×1.2 (talep yüksek) | ×1.0 |
+| Kış | ×1.3 (kıt, pahalı) | ×0.85 (talep düşük) | ×1.0 |
+
+Kışın yemek taşımak kârlı ama fırtına riski yüksek. Yazın lüks taşımak kârlı ama rakip çok.
 
 ## 6.8 Commenda
 
@@ -349,7 +356,7 @@ Yatırımcı sermaye koyar + Tüccar denize çıkar. Kâr paylaşımı serbest a
 | Gemi | Hız | Kargo | Güç | Taktik Sinerjisi |
 |---|---|---|---|---|
 | **Feluka** | Hızlı | Az | 1 | Manevra'da +1 |
-| **Karaka** | Orta | Çok | 2 | Yok (tüccar gemisi) |
+| **Karaka** | Orta | Çok | 2 | Ateş'te +1 (savunma) |
 | **Kadırga** | Yavaş | Az | 3 | Pruva'da +1 |
 
 Gemi durumu: **Denize Hazır** → **Yaralı** (performans yarı, 1 tur onarım) → **Denizin Dibi** (yeni gemi satın al).

@@ -12,6 +12,7 @@ import { isOrderReachable } from '../../shared/src/validators/index.js';
 import {
   SATURATION_DECAY_INTERVAL,
   SHIPWRECK_RESPAWN_GOLD,
+  KABOTAJ_TRADE_BONUS,
 } from '../../shared/src/constants/index.js';
 import type { GameState, Good, Order, Port, Route, Tactic, TurnResolution } from '../../shared/src/types/index.js';
 
@@ -206,7 +207,8 @@ export function resolveTurn(input: {
   player.experience = applyExperienceGain(player.experience, order.intent);
 
   const saturation = { ...(state.portSaturation ?? {}) };
-  const trade = order.intent === 'kervan' ? sellCargoAtPort(player.cargo, goods, destinationPort, saturation) : undefined;
+  const routeBonus = (order.routeType === 'kabotaj' || order.routeType === 'uzun_kabotaj') ? KABOTAJ_TRADE_BONUS : 1;
+  const trade = order.intent === 'kervan' ? sellCargoAtPort(player.cargo, goods, destinationPort, saturation, { routeBonus, season: nextSeason(state.turn) }) : undefined;
   if (trade) {
     player.cargo = trade.remainingCargo;
     player.gold += trade.goldDelta;

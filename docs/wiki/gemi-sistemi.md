@@ -18,7 +18,7 @@ Oyuncunun her zaman tek bir gemisi vardır. Kendi oyun stiline göre seçer ve d
 | Gemi | Hız | Kargo | Güç | Taktik Sinerjisi | Özel |
 |------|-----|-------|-----|-----------------|------|
 | **Feluka** | Hızlı | 3 | 2 | Manevra +1 | Kaçış şampiyonu; batışta respawn gemisi |
-| **Karaka** | Orta | 5 | 2 | — | Kargo avantajı; varsayılan başlangıç gemisi |
+| **Karaka** | Orta | 5 | 2 | Ateş +1 | Kargo avantajı; savunma odaklı; varsayılan başlangıç gemisi |
 | **Kadırga** | Yavaş | Az | 3 | Pruva +1 | Savaş makinesi |
 
 ---

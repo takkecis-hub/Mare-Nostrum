@@ -35,14 +35,14 @@ describe('rollCombatDie', () => {
 
 describe('calculatePower', () => {
   it('returns base calculation without bonuses (no die)', () => {
-    // base = power + durability / 50 = 3 + 100/50 = 5, no bonuses, dieRoll=0
-    expect(calculatePower(karaka, 'ates', baseExperience)).toBe(5);
+    // base = power + durability / 50 = 3 + 100/50 = 5, tacticBonus=1 (karaka+ates), dieRoll=0
+    expect(calculatePower(karaka, 'ates', baseExperience)).toBe(6);
   });
 
   it('adds capped meltem bonus when meltem > terazi', () => {
     // meltemDominant: meltem=5, total=7, ratio=5/7≈0.714, bonus=min(1.0, 1.43)=1.0
-    // base = 5, meltemBonus = 1.0
-    expect(calculatePower(karaka, 'ates', meltemDominant)).toBe(6);
+    // base = 5, meltemBonus = 1.0, tacticBonus=1 (karaka+ates) → 7
+    expect(calculatePower(karaka, 'ates', meltemDominant)).toBe(7);
   });
 
   it('adds tactic bonus for kadirga + pruva', () => {
@@ -61,8 +61,8 @@ describe('calculatePower', () => {
   });
 
   it('adds die roll to power when provided', () => {
-    // base = 5, dieRoll = 3
-    expect(calculatePower(karaka, 'ates', baseExperience, 3)).toBe(8);
+    // base = 5, tacticBonus = 1 (karaka+ates), dieRoll = 3 → 9
+    expect(calculatePower(karaka, 'ates', baseExperience, 3)).toBe(9);
   });
 });
 
@@ -213,12 +213,14 @@ describe('resolveCombat', () => {
 describe('calculatePower – edge cases', () => {
   it('gives no meltem bonus when meltem equals terazi', () => {
     const equalExp: HiddenExperience = { meltem: 3, terazi: 3, murekkep: 1, simsar: 1 };
-    expect(calculatePower(karaka, 'ates', equalExp)).toBe(5);
+    // base=5, tacticBonus=1 (karaka+ates) → 6
+    expect(calculatePower(karaka, 'ates', equalExp)).toBe(6);
   });
 
   it('gives no meltem bonus when meltem is less than terazi', () => {
     const teraziDominant: HiddenExperience = { meltem: 1, terazi: 5, murekkep: 1, simsar: 0 };
-    expect(calculatePower(karaka, 'ates', teraziDominant)).toBe(5);
+    // base=5, tacticBonus=1 (karaka+ates) → 6
+    expect(calculatePower(karaka, 'ates', teraziDominant)).toBe(6);
   });
 
   it('stacks meltem bonus and tactic bonus for kadirga + pruva + high meltem', () => {
@@ -271,20 +273,20 @@ describe('resolveCombat – edge cases', () => {
 describe('calculatePower – additional coverage', () => {
   it('returns base power when all experience values are zero', () => {
     const zeroExp: HiddenExperience = { meltem: 0, terazi: 0, murekkep: 0, simsar: 0 };
-    // base = 3 + 100/50 = 5, total=0 → code returns meltemRatio=0 (guarded), meltemBonus=0
-    expect(calculatePower(karaka, 'ates', zeroExp)).toBe(5);
+    // base = 3 + 100/50 = 5, tacticBonus=1 (karaka+ates), total=0 → meltemBonus=0 → 6
+    expect(calculatePower(karaka, 'ates', zeroExp)).toBe(6);
   });
 
   it('computes base correctly when ship durability is 0', () => {
     const zeroDurShip: Ship = { type: 'karaka', cargoCapacity: 4, power: 3, durability: 0 };
-    // base = 3 + 0/50 = 3
-    expect(calculatePower(zeroDurShip, 'ates', baseExperience)).toBe(3);
+    // base = 3 + 0/50 = 3, tacticBonus=1 (karaka+ates) → 4
+    expect(calculatePower(zeroDurShip, 'ates', baseExperience)).toBe(4);
   });
 
   it('computes base correctly when ship durability is 1', () => {
     const lowDurShip: Ship = { type: 'karaka', cargoCapacity: 4, power: 3, durability: 1 };
-    // base = 3 + 1/50 = 3.02
-    expect(calculatePower(lowDurShip, 'ates', baseExperience)).toBe(3.02);
+    // base = 3 + 1/50 = 3.02, tacticBonus=1 (karaka+ates) → 4.02
+    expect(calculatePower(lowDurShip, 'ates', baseExperience)).toBe(4.02);
   });
 
   it('kacis tactic gives no tactic bonus regardless of ship type', () => {
@@ -295,18 +297,21 @@ describe('calculatePower – additional coverage', () => {
     expect(calculatePower(karaka, 'kacis', baseExperience)).toBe(5);
   });
 
-  it('ates tactic gives no tactic bonus for any ship type', () => {
+  it('ates tactic gives tactic bonus only for karaka', () => {
+    // karaka + ates → tacticBonus=1 → 6
+    expect(calculatePower(karaka, 'ates', baseExperience)).toBe(6);
+    // kadirga + ates → no bonus → 5
     expect(calculatePower(kadirga, 'ates', baseExperience)).toBe(5);
+    // feluka + ates → no bonus → 3.6
     expect(calculatePower(feluka, 'ates', baseExperience)).toBe(3.6);
-    expect(calculatePower(karaka, 'ates', baseExperience)).toBe(5);
   });
 
   it('applies uncapped meltem bonus when ratio is low', () => {
     // meltem=3, terazi=2, murekkep=5, simsar=5 → total=15
     // meltemRatio = 3/15 = 0.2, meltem(3)>terazi(2) → bonus = min(1.0, 0.4) = 0.4
     const lowMeltemExp: HiddenExperience = { meltem: 3, terazi: 2, murekkep: 5, simsar: 5 };
-    // base = 5, meltemBonus = 0.4, tacticBonus = 0
-    expect(calculatePower(karaka, 'ates', lowMeltemExp)).toBe(5.4);
+    // base = 5, meltemBonus = 0.4, tacticBonus = 1 (karaka+ates) → 6.4
+    expect(calculatePower(karaka, 'ates', lowMeltemExp)).toBe(6.4);
   });
 });
 
@@ -427,8 +432,9 @@ describe('resolveCombat – default enemy', () => {
       rng: fixedRng,
     });
     // Default enemy: {type:'karaka', power:2, durability:80}
-    // enemyPower = round((2 + 80/50 + 1.0 + 0 + 1) * 100) / 100 = 5.6
-    expect(result.enemyPower).toBe(5.6);
+    // enemyPower = round((2 + 80/50 + 1.0 + 1 + 1) * 100) / 100 = 6.6
+    // (karaka+ates now gives +1 tacticBonus)
+    expect(result.enemyPower).toBe(6.6);
   });
 
   it('picks enemy tactic from RNG when not provided', () => {
@@ -482,5 +488,28 @@ describe('resolveCombat – enemy tactic selection', () => {
       tactics.add(result.enemyTactic);
     }
     expect(tactics.size).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe('calculatePower – karaka ates tactic bonus', () => {
+  it('adds +1 tactic bonus for karaka with ates', () => {
+    // base = 3 + 100/50 = 5, tacticBonus=1 (karaka+ates) → 6
+    const power = calculatePower(karaka, 'ates', baseExperience);
+    expect(power).toBe(6);
+  });
+
+  it('does not add bonus for karaka with other tactics', () => {
+    expect(calculatePower(karaka, 'pruva', baseExperience)).toBe(5);
+    expect(calculatePower(karaka, 'manevra', baseExperience)).toBe(5);
+    expect(calculatePower(karaka, 'kacis', baseExperience)).toBe(5);
+  });
+
+  it('each ship has exactly one tactic bonus', () => {
+    // kadirga + pruva → +1
+    expect(calculatePower(kadirga, 'pruva', baseExperience)).toBe(6);
+    // feluka + manevra → +1
+    expect(calculatePower(feluka, 'manevra', baseExperience)).toBe(4.6);
+    // karaka + ates → +1
+    expect(calculatePower(karaka, 'ates', baseExperience)).toBe(6);
   });
 });

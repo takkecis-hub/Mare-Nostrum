@@ -84,6 +84,38 @@ Kimse getirmezse açlık her tur +1 artar. Çok oyunculu partide toparlanma da d
 
 ---
 
+## Fiyat Bant Sistemi (basePrice)
+
+> **Uygulama durumu:** Fiyat bantları `mockup/packages/shared/src/constants/index.ts` dosyasında tanımlı, alış maliyeti `purchaseCostForGood()` fonksiyonunda, satış çarpanı `basePriceMultiplier()` fonksiyonunda uygulanmaktadır.
+
+Her limanın ürettiği ve arzuladığı malın bir **fiyat bandı** (basePrice) vardır:
+
+| Bant | Alış Maliyeti | Satış Çarpanı | Örnek Mallar |
+|------|--------------|---------------|-------------|
+| **Ucuz** | 30 altın | ×0.85 | Sicilya Buğdayı, Girit Zeytinyağı |
+| **Normal** | 40 altın | ×1.0 | Katalan Demiri, Osmanlı Silahı |
+| **Pahali** | 50 altın | ×1.25 | Sahra Altını, Doğu İpeği, Murano Camı |
+
+**Stratejik etki:** Ucuz mal almak düşük risk (30 altın yatırım), ama satış potansiyeli de düşük. Pahali mal almak yüksek risk (50 altın), ama doğru limanda yüksek kâr.
+
+---
+
+## Kabotaj Ticaret Bonusu
+
+> **Uygulama durumu:** `KABOTAJ_TRADE_BONUS = 1.25` sabiti `turn-resolver.ts` üzerinden `sellCargoAtPort()` fonksiyonuna `routeBonus` olarak geçirilir.
+
+Kabotaj rotası 2 tur sürer ama satış fiyatında **%25 bonus** kazandırır:
+
+| Rota Tipi | Süre | Satış Bonusu | Risk |
+|-----------|------|-------------|------|
+| **Tramontana** | 1 tur | ×1.0 | Normal |
+| **Kabotaj** | 2 tur | ×1.25 | Düşük |
+| **Fortuna** | 1 tur | ×1.0 | Yüksek (karşılaşma) |
+
+**Stratejik etki:** "Hızlı ama normal kâr" (tramontana) vs "yavaş ama %25 ekstra" (kabotaj) vs "hızlı ama tehlikeli" (fortuna) — üçlü ikilem.
+
+---
+
 ## Fiyat Gösterimi
 
 Rakam yok. Beş nokta sistemi:
@@ -118,10 +150,14 @@ Aynı turda aynı limana aynı malı getiren oyunculardan **hızlı olan** iyi f
 
 ## Sezon Etkisi
 
-| Mevsim | Ticaret Koşulları |
-|--------|------------------|
-| **Yaz** | Trafik yoğun, yemek ucuz, lüks pahalı |
-| **Kış** | Fırtına riski yüksek, yemek pahalı, ama kışın denize çıkan "aç pazarlarda" vurgun vurur |
+> **Uygulama durumu:** Mevsim çarpanları `mockup/packages/engine/src/economy.ts` dosyasındaki `seasonMultiplier()` fonksiyonunda uygulanmıştır. `turn-resolver.ts` satış sırasında mevcut mevsimi geçirir.
+
+| Mevsim | Yemek | Lüks | Savaş |
+|--------|-------|------|-------|
+| **Yaz** | ×0.85 (bol, ucuz) | ×1.2 (talep yüksek) | ×1.0 |
+| **Kış** | ×1.3 (kıt, pahalı) | ×0.85 (talep düşük) | ×1.0 |
+
+**Stratejik etki:** Kışın yemek taşımak kârlı ama deniz tehlikeli. Yazın lüks taşımak kârlı ama rakip çok.
 
 ---
 

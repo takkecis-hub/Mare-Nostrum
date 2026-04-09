@@ -11,21 +11,21 @@
     "name": "Mısır Baharatları",
     "category": "luks",
     "originPort": "iskenderiye",
-    "priceIndicator": 1
+    "priceIndicator": 3
   },
   {
     "id": "sicilya_bugdayi",
     "name": "Sicilya Buğdayı",
     "category": "yemek",
     "originPort": "palermo",
-    "priceIndicator": 2
+    "priceIndicator": 1
   },
   {
     "id": "girit_zeytinyagi",
     "name": "Girit Zeytinyağı",
     "category": "yemek",
     "originPort": "girit",
-    "priceIndicator": 2
+    "priceIndicator": 1
   },
   {
     "id": "katalan_demiri",
@@ -39,14 +39,14 @@
     "name": "Doğu İpeği",
     "category": "luks",
     "originPort": "istanbul",
-    "priceIndicator": 1
+    "priceIndicator": 3
   },
   {
     "id": "sahra_altini",
     "name": "Sahra Altını",
     "category": "luks",
     "originPort": "trablus",
-    "priceIndicator": 1
+    "priceIndicator": 3
   },
   {
     "id": "sam_ipegi",
@@ -60,7 +60,7 @@
     "name": "Kıbrıs Tuzu",
     "category": "yemek",
     "originPort": "kibris",
-    "priceIndicator": 2
+    "priceIndicator": 1
   },
   {
     "id": "ligurya_mercan",
@@ -81,7 +81,7 @@
     "name": "Tunus Zeytinyağı",
     "category": "yemek",
     "originPort": "tunus",
-    "priceIndicator": 2
+    "priceIndicator": 1
   },
   {
     "id": "osmanli_silahi",
@@ -102,20 +102,20 @@
     "name": "Nil Tahılı",
     "category": "yemek",
     "originPort": "iskenderiye",
-    "priceIndicator": 2
+    "priceIndicator": 1
   },
   {
     "id": "lubnan_sediri",
     "name": "Lübnan Sediri",
     "category": "savas",
     "originPort": "beyrut",
-    "priceIndicator": 2
+    "priceIndicator": 3
   },
   {
     "id": "ragusa_tuzu",
     "name": "Ragusa Tuzu",
     "category": "yemek",
     "originPort": "ragusa",
-    "priceIndicator": 2
+    "priceIndicator": 1
   }
 ]

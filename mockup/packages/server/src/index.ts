@@ -9,6 +9,7 @@ import { DEFAULT_PLAYER_ID, DEFAULT_PLAYER_NAME, GOOD_PURCHASE_COST } from '../.
 import type { BootstrapPayload, CargoItem, GameState, Good, Order, Port, Route, Tactic } from '../../shared/src/types/index.js';
 import { resolveTurn } from '../../engine/src/turn-resolver.js';
 import { repairShip, repairCost } from '../../engine/src/shipyard.js';
+import { purchaseCostForGood } from '../../engine/src/economy.js';
 import { getMockWhispers } from './llm/mock-whispers.js';
 
 const ports = portsJson as Port[];
@@ -128,7 +129,9 @@ app.post('/api/buy-good', (req, res) => {
     return;
   }
 
-  if (state.player.gold < GOOD_PURCHASE_COST) {
+  const cost = purchaseCostForGood(currentPort, good);
+
+  if (state.player.gold < cost) {
     res.status(400).json({ error: 'Yetersiz altın' });
     return;
   }
@@ -143,12 +146,12 @@ app.post('/api/buy-good', (req, res) => {
     name: good.name,
     quantity: 1,
     originPort: state.player.currentPortId,
-    purchasePrice: GOOD_PURCHASE_COST,
+    purchasePrice: cost,
   };
 
   const player = {
     ...state.player,
-    gold: state.player.gold - GOOD_PURCHASE_COST,
+    gold: state.player.gold - cost,
     cargo: [...state.player.cargo, newCargoItem],
   };
 
