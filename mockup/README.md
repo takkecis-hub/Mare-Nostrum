@@ -38,7 +38,7 @@ pnpm dev
 ## Doğrulama
 
 ```bash
-pnpm test        # Vitest — 66 test (engine paketi)
+pnpm test        # Vitest — 156 test, 8 test dosyası (engine paketi)
 pnpm typecheck   # TypeScript derleyici kontrolleri (4 paket)
 pnpm build       # Üretim derlemesi
 ```
@@ -58,12 +58,14 @@ pnpm build       # Üretim derlemesi
 
 ## Mockup Kapsamı (Dikey Kesit)
 
-- 15 liman + 29 rota ile etkileşimli SVG harita
-- **Fondaco akışı:** Kahvehane (3 fısıltı), Pazar (al/sat/at), Tersane (tamir + dayanıklılık çubuğu)
+- 15 liman + 29 rota + 17 menşe mal ile etkileşimli SVG harita
+- **Fondaco akışı:** Kahvehane (3 fısıltı), Pazar (al/sat/at), Tersane (tamir + dayanıklılık çubuğu), Müzakere
 - **Emir sistemi:** Nereye / Nasıl / Niyet / Taktik
-- **Rüzgâr çözümlemesi:** Hareket, karşılaşma, savaş (Pruva/Ateş/Manevra), ticaret, söylenti yayılımı
-- **Deneyim sistemi:** Meltem / Terazi / Mürekkep / Simsar havuzları + ün belirleme
+- **Rüzgâr çözümlemesi:** Hareket (çok turlu kabotaj dahil), karşılaşma, savaş (Pruva/Ateş/Manevra), ticaret (port doyma destekli), söylenti yayılımı
+- **Deneyim sistemi:** Meltem / Terazi / Mürekkep / Simsar havuzları + oran bazlı ün belirleme + ün çürüme/çelişki takibi
+- **Skorlama:** Söylenti yayılım genişliği × 2 + ün sayısı × 15, Efsane eşiği = 100
 - **Kargo yönetimi:** Sunucu API üzerinden satın al / at
 - **Gemi tamiri:** Tersane üzerinden tam/kısmi tamir (tersane indirimi destekli)
+- **156 birim test:** Savaş, ekonomi, deneyim, söylenti, skorlama, tersane, tur çözümleme, paylaşılan formüller
 - Socket.io ping/pong bağlantı göstergesi
 - Drizzle ORM şema taslağı (12 tablo) ve JSON veri dosyaları

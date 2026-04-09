@@ -9,6 +9,8 @@
 
 > *"Akdeniz'de en tehlikeli silah kılıç değil, fısıltıdır."*
 
+> **Uygulama durumu:** Söylenti üretimi ve yayılması `mockup/packages/engine/src/rumor.ts` dosyasında uygulanmıştır. Her niyet otomatik söylenti üretir. Söylentiler rota grafı boyunca yayılır (tur başına max 2 komşu limana). Güç çürümesi eylem tipine göre farklılık gösterir (kara_bayrak: -10/tur, duman: -20/tur, kervan/pusula: -15/tur).
+
 Söylentiler hem bilgi akışını hem de sosyal saldırıyı sağlar. Her önemli eylem otomatik bir söylenti üretir — oyuncu müdahalesi gerekmez. Ama oyuncu söylentileri aktif olarak **silah olarak** da kullanabilir.
 
 ---

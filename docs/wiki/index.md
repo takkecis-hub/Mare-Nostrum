@@ -6,6 +6,8 @@
 
 Bu wiki, tüm tasarım belgelerinin sentezinden oluşan kapsamlı bir referans kaynağıdır.
 
+> **📦 Uygulama:** Oyunun çalışan TypeScript uygulaması [`mockup/`](../../mockup/) dizinindedir. 156 test, 15 liman, 29 rota, 17 menşe mal ile dikey kesit. Wiki sayfalarında `> Uygulama durumu:` notları, tasarım ile mevcut kodun farklılıklarını belirtir.
+
 ---
 
 ## 📖 İçindekiler
@@ -60,5 +62,6 @@ Oyuna yabancıysanız şu sırayla okuyun:
 4. **[Ekonomi](ekonomi.md)** + **[Çatışma Spektrumu](catisma-spektrumu.md)** — Nasıl kazanılır?
 
 Teknik geliştirme için:
-- **[Teknik Mimari](teknik-mimari.md)** — Stack ve 26 haftalık yol haritası
+- **[Teknik Mimari](teknik-mimari.md)** — Stack, monorepo yapısı, DB şeması
 - **[LLM Entegrasyonu](llm-entegrasyon.md)** — AI katmanı tasarımı
+- **[mockup/README.md](../../mockup/README.md)** — Çalışan uygulamayı başlatma

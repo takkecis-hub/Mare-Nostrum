@@ -30,23 +30,25 @@ Lüks kategorisi:
 
 ### Menşe Tablosu — 15 Liman
 
+> **Not:** Aşağıdaki tablo `mockup/data/ports.json` ve `mockup/data/goods.json` dosyalarındaki güncel veriyi yansıtır. 17 menşe mal mevcuttur (7 yemek, 6 lüks, 4 savaş).
+
 | Liman | Üretir (ucuz al) | Arzular (pahalı sat) |
 |-------|-----------------|---------------------|
 | **Barselona** | Katalan Demiri [Savaş] | Doğu İpeği [Lüks] |
-| **Marsilya** | Provence Şarabı [Yemek] | Mısır Baharatı [Lüks] |
+| **Marsilya** | Provence Şarabı [Yemek] | Mısır Baharatları [Lüks] |
 | **Cenova** | Ligurya Mercanı [Lüks] | Sicilya Buğdayı [Yemek] |
 | **Venedik** | Murano Camı [Lüks] | Lübnan Sediri [Savaş] |
-| **Palermo** | Sicilya Buğdayı [Yemek] | Murano Camı [Lüks] |
-| **Ragusa** | *(transit — üretmez)* | Her şey normal fiyat |
-| **Malta** | Şövalye Zırhı [Savaş] | Sicilya Buğdayı [Yemek] |
-| **İstanbul** | Doğu İpeği [Lüks] | Katalan Demiri [Savaş] |
-| **Girit** | Girit Zeytinyağı [Yemek] | Doğu İpeği [Lüks] |
-| **Kıbrıs** | Kıbrıs Tuzu [Yemek] | Mısır Baharatı [Lüks] |
-| **Beyrut** | Halep Sabunu [Lüks], Lübnan Sediri [Savaş] | Katalan Demiri [Savaş] |
-| **İskenderiye** | Mısır Baharatı [Lüks] | Lübnan Sediri [Savaş] |
-| **Trablus** | Sahra Altını [Lüks] | Provence Şarabı [Yemek] |
-| **Tunus** | Tunus Zeytinyağı [Yemek] | Ligurya Mercanı [Lüks] |
-| **Cezayir** | Ganimet Silahı [Savaş] | Provence Şarabı [Yemek] |
+| **Palermo** | Sicilya Buğdayı [Yemek] | Katalan Demiri [Savaş] |
+| **Ragusa** | Ragusa Tuzu [Yemek] | Ligurya Mercanı [Lüks] |
+| **Malta** | Malta Çeliği [Savaş] | Tunus Zeytinyağı [Yemek] |
+| **İstanbul** | Doğu İpeği [Lüks] | Ragusa Tuzu [Yemek] |
+| **Girit** | Girit Zeytinyağı [Yemek] | Malta Çeliği [Savaş] |
+| **Kıbrıs** | Kıbrıs Tuzu [Yemek] | Murano Camı [Lüks] |
+| **Beyrut** | Lübnan Sediri [Savaş] | Osmanlı Silahı [Savaş] |
+| **İskenderiye** | Mısır Baharatları [Lüks] | Sahra Altını [Lüks] |
+| **Trablus** | Sahra Altını [Lüks] | Kıbrıs Tuzu [Yemek] |
+| **Tunus** | Tunus Zeytinyağı [Yemek] | Girit Zeytinyağı [Yemek] |
+| **Cezayir** | Osmanlı Silahı [Savaş] | Provence Şarabı [Yemek] |
 
 **Kural:** Bir limanın ürettiği malı o limanda satmak KÖTÜ fiyat. Bir limanın arzuladığı malı satmak ÇOK İYİ fiyat.
 
@@ -55,6 +57,8 @@ Lüks kategorisi:
 ---
 
 ## Dinamik Fiyat: Açlık / Doyma Mekaniği
+
+> **Uygulama durumu:** Port doyma (saturation) sistemi `mockup/packages/engine/src/economy.ts` ve `turn-resolver.ts` dosyalarında uygulanmıştır. Her teslimat, fiyatı %15 azaltır (minimum %40). Doyma her 3 turda 1 birim çürür.
 
 ### Nasıl Çalışır
 

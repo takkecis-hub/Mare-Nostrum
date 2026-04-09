@@ -48,26 +48,40 @@ AYNI TAKTİK: Bonus yok, düz güç karşılaştırması
 
 ## Güç Formülü
 
-```
-GÜÇ = Gemi değeri + Ün bonusu + Taktik bonusu + Zar
+> **Uygulama durumu:** Aşağıdaki formül `mockup/packages/engine/src/combat.ts` dosyasındaki `calculatePower` fonksiyonunu yansıtır.
 
-Gemi:    Feluka 1 | Karaka 2 | Kadırga 3
-Ün:      Demir Pruva +1 | Deli Rüzgâr +1 | "korkak" söylentisi -1
-Taktik:  Karşı taktiği yenersen +2, diğer durumlarda 0
-Zar:     1–6 (Meltem oranına göre alt sınır değişir, max 2–6)
+```
+GÜÇ = Temel Güç + Meltem Bonusu + Taktik Bonusu + Zar (d6)
+
+Temel Güç:  Gemi gücü + Gemi dayanıklılığı ÷ 50
+  Feluka: 2 + dur/50 | Karaka: 2 + dur/50 | Kadırga: 3 + dur/50
+
+Meltem Bonusu: (Meltem > Terazi ise)
+  min(1.0, MeltemOranı × 2) — aksi halde 0
+
+Taktik Bonusu:
+  Kadırga + Pruva → +1
+  Feluka + Manevra → +1
+  Diğer kombinasyonlar → 0
+
+Zar: d6 (1–6), injectable RNG ile deterministik test edilir
 ```
 
-Büyük güç kazanır. Eşitlikte: taktik değiştirme hakkıyla 2. tur.
+**Counter sistemi:** Pruva > Ateş > Manevra > Pruva. Karşı taktiği yenersen otomatik kazanırsın (güç fark etmeksizin).
+
+**Kaçış (Kacis):** Oyuncunun gücü ≥ düşman gücü ise kaçış başarılı.
 
 ---
 
 ## Gemi-Taktik Sinerjileri
 
+> **Uygulama durumu:** Sinerji bonusları `mockup/packages/engine/src/combat.ts` dosyasındaki `calculatePower` fonksiyonunda tanımlıdır.
+
 | Gemi | Özel Sinerji |
 |------|-------------|
-| **Feluka** | Manevra'da gizli +1 ekstra (toplam +3 vs Pruva) |
-| **Karaka** | Ateş'te savunma +1 ("Ağır Yük" — kargo kalkan gibi); kaybettiğinde kargonun %50'si kurtarılabilir |
-| **Kadırga** | Pruva'da gizli +1 ekstra (toplam +3 vs Ateş) |
+| **Feluka** | Manevra'da +1 taktik bonusu |
+| **Karaka** | Taktik bonusu yok (kargo avantajı) |
+| **Kadırga** | Pruva'da +1 taktik bonusu |
 
 ---
 
@@ -112,6 +126,8 @@ Savaşa girmeden kaçmaya çalış.
 
 ## Savaş Sonucu: Taktiğe Göre Ganimet
 
+> **Uygulama durumu:** Kazanma → +20 altın + düşman gücü×2 altın loot. Kaybetme → -30 altın - güç farkı×3 altın, dayanıklılık kaybı -15 - güç farkı×2. Dayanıklılık 0'a düşerse **gemi batması**: Feluka ile respawn + 50 altın, tüm kargo kaybolur.
+
 | Kazanma Taktiği | Ganimet |
 |-----------------|---------|
 | **Pruva** | Düşman gemisini ELE GEÇİREBİLİRSİN (tüm kargo + gemiyi satma opsiyonu); ama kendi gemin hasar alabilir (%50 şans) |
@@ -128,11 +144,13 @@ Savaşa girmeden kaçmaya çalış.
 
 ## Gemi Hasar Sistemi
 
+> **Uygulama durumu:** Hasar sistemi `combat.ts`'deki sabitlerle çalışır: COMBAT_LOSS_DURABILITY=15 (temel), güç farkı×2 ekstra. Dayanıklılık 0'a düşerse gemi batması tetiklenir (SHIPWRECK_RESPAWN_GOLD=50 altın + Feluka ile respawn).
+
 | Durum | Etki | İyileştirme |
 |-------|------|-------------|
-| **Denize Hazır** | Normal performans | — |
-| **Yaralı** | Tüm performans yarı | 1 tur tersane tamiri (gemi fiyatının %25'i) |
-| **Denizin Dibi** | Gemi yok | Yeni gemi satın al |
+| **Sağlam (100)** | Normal performans | — |
+| **Hasarlı (1-99)** | Güç hesabında dur/50 → düşük bonus | Tersanede tamir (4 altın/puan, tersane %25 indirim) |
+| **Batık (0)** | Gemi yok — feluka ile respawn | Otomatik: 50 altın + Feluka + boş kargo |
 
 ---
 
