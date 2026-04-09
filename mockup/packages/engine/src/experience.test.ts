@@ -260,3 +260,164 @@ describe('determineRenown – minimum experience gate', () => {
     expect(renown).toContain('Hayalet Pala');
   });
 });
+
+// ---------------------------------------------------------------------------
+// Additional boundary, edge-case, and multi-title tests
+// ---------------------------------------------------------------------------
+
+describe('determineRenown – boundary and multi-title cases', () => {
+  it('grants Altın Parmak at exact 0.35 terazi ratio with rumors', () => {
+    // terazi = 7, total = 20 → ratio = 0.35 exactly
+    const exp: HiddenExperience = { meltem: 5, terazi: 7, murekkep: 5, simsar: 3 };
+    const renown = determineRenown(exp, 1);
+    expect(renown).toContain('Altın Parmak');
+  });
+
+  it('does not grant Altın Parmak when terazi ratio is just below 0.35', () => {
+    // terazi = 34, total = 100 → ratio = 0.34
+    const exp: HiddenExperience = { meltem: 25, terazi: 34, murekkep: 25, simsar: 16 };
+    const renown = determineRenown(exp, 1);
+    expect(renown).not.toContain('Altın Parmak');
+  });
+
+  it('grants multiple titles when both terazi and meltem >= 0.35 with rumors', () => {
+    // terazi = 35, meltem = 35, total = 100 → both ratios = 0.35
+    const exp: HiddenExperience = { meltem: 35, terazi: 35, murekkep: 15, simsar: 15 };
+    const renown = determineRenown(exp, 1);
+    expect(renown).toContain('Altın Parmak');
+    expect(renown).toContain('Demir Pruva');
+  });
+
+  it('grants Hayalet Pala at exact 0.30 boundary', () => {
+    // simsar = 30, total = 100 → ratio = 0.30 exactly
+    const exp: HiddenExperience = { meltem: 25, terazi: 25, murekkep: 20, simsar: 30 };
+    const renown = determineRenown(exp, 0);
+    expect(renown).toContain('Hayalet Pala');
+  });
+});
+
+describe('dominantExperienceLabel – edge cases', () => {
+  it('returns first key in stable sort order when all experience is zero', () => {
+    // All ratios are 0/1 = 0; stable sort preserves insertion order (meltem first)
+    const exp: HiddenExperience = { meltem: 0, terazi: 0, murekkep: 0, simsar: 0 };
+    expect(dominantExperienceLabel(exp)).toBe('meltem');
+  });
+
+  it('returns the first-in-order key when two skills are equally dominant', () => {
+    // meltem and terazi both 5/12 ≈ 0.417; stable sort keeps meltem before terazi
+    const exp: HiddenExperience = { meltem: 5, terazi: 5, murekkep: 1, simsar: 1 };
+    expect(dominantExperienceLabel(exp)).toBe('meltem');
+  });
+
+  it('returns terazi when terazi and murekkep tie for highest', () => {
+    // terazi and murekkep both 5/12; terazi precedes murekkep in insertion order
+    const exp: HiddenExperience = { meltem: 1, terazi: 5, murekkep: 5, simsar: 1 };
+    expect(dominantExperienceLabel(exp)).toBe('terazi');
+  });
+});
+
+describe('checkRenownDecay – multi-title scenarios', () => {
+  it('produces one warning and one loss for different titles in the same check', () => {
+    // Altın Parmak: gap = 10-5 = 5 → warning; Demir Pruva: gap = 10-1 = 9 → loss
+    const result = checkRenownDecay(
+      ['Altın Parmak', 'Demir Pruva'],
+      'pusula',
+      10,
+      { 'Altın Parmak': 5, 'Demir Pruva': 1 },
+    );
+    expect(result.warnings).toContain('Altın Parmak');
+    expect(result.warnings).not.toContain('Demir Pruva');
+    expect(result.losses).toContain('Demir Pruva');
+    expect(result.losses).not.toContain('Altın Parmak');
+  });
+
+  it('defaults to turn 0 when title has no lastAction entry, causing loss at turn 8', () => {
+    const result = checkRenownDecay(['Altın Parmak'], 'pusula', 8, {});
+    expect(result.losses).toContain('Altın Parmak');
+  });
+
+  it('warns Demir Pruva on contradictory duman intent even with small gap', () => {
+    const result = checkRenownDecay(['Demir Pruva'], 'duman', 2, { 'Demir Pruva': 1 });
+    expect(result.warnings).toContain('Demir Pruva');
+    expect(result.losses).toHaveLength(0);
+  });
+
+  it('warns İpek Dil on contradictory kara_bayrak intent', () => {
+    const result = checkRenownDecay(['İpek Dil'], 'kara_bayrak', 2, { 'İpek Dil': 1 });
+    expect(result.warnings).toContain('İpek Dil');
+    expect(result.losses).toHaveLength(0);
+  });
+
+  it('warns Hayalet Pala on contradictory kervan intent', () => {
+    const result = checkRenownDecay(['Hayalet Pala'], 'kervan', 2, { 'Hayalet Pala': 1 });
+    expect(result.warnings).toContain('Hayalet Pala');
+    expect(result.losses).toHaveLength(0);
+  });
+
+  it('does not warn or lose for an unrelated, non-contradictory intent', () => {
+    // pusula does not contradict Altın Parmak, and gap = 1 < 5
+    const result = checkRenownDecay(['Altın Parmak'], 'pusula', 2, { 'Altın Parmak': 1 });
+    expect(result.warnings).toHaveLength(0);
+    expect(result.losses).toHaveLength(0);
+  });
+});
+
+describe('updateRenownTracking – multi-title', () => {
+  it('updates matching title and initializes the other when intent matches one', () => {
+    // kervan matches Altın Parmak; İpek Dil is new → initialized to currentTurn
+    const result = updateRenownTracking(
+      ['Altın Parmak', 'İpek Dil'],
+      'kervan',
+      7,
+      {},
+    );
+    expect(result['Altın Parmak']).toBe(7);
+    expect(result['İpek Dil']).toBe(7);
+  });
+
+  it('does not overwrite existing tracking when intent does not match', () => {
+    // pusula matches İpek Dil but not Altın Parmak; Altın Parmak already tracked at 3
+    const result = updateRenownTracking(
+      ['Altın Parmak', 'İpek Dil'],
+      'pusula',
+      10,
+      { 'Altın Parmak': 3 },
+    );
+    expect(result['Altın Parmak']).toBe(3);
+    expect(result['İpek Dil']).toBe(10);
+  });
+
+  it('initializes all titles at once when all are new', () => {
+    const result = updateRenownTracking(
+      ['Altın Parmak', 'Demir Pruva', 'İpek Dil'],
+      'pusula',
+      5,
+      {},
+    );
+    expect(result['Altın Parmak']).toBe(5);
+    expect(result['Demir Pruva']).toBe(5);
+    expect(result['İpek Dil']).toBe(5);
+  });
+});
+
+describe('getThresholdGates – edge cases', () => {
+  it('returns all gates false when all experience is zero', () => {
+    // total = max(0,1) = 1; all ratios = 0/1 = 0 < 0.25
+    const exp: HiddenExperience = { meltem: 0, terazi: 0, murekkep: 0, simsar: 0 };
+    const gates = getThresholdGates(exp);
+    expect(gates.meltem).toBe(false);
+    expect(gates.terazi).toBe(false);
+    expect(gates.murekkep).toBe(false);
+    expect(gates.simsar).toBe(false);
+  });
+
+  it('opens only one gate when a single skill is extremely high', () => {
+    // meltem = 100, others = 0; meltem ratio = 1.0 ≥ 0.25; others = 0
+    const exp: HiddenExperience = { meltem: 100, terazi: 0, murekkep: 0, simsar: 0 };
+    const gates = getThresholdGates(exp);
+    expect(gates.meltem).toBe(true);
+    expect(gates.terazi).toBe(false);
+    expect(gates.murekkep).toBe(false);
+    expect(gates.simsar).toBe(false);
+  });
+});

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { HiddenExperience, Ship } from '../../shared/src/types/index.js';
+import {
+  COMBAT_LOSS_GOLD,
+  COMBAT_LOSS_DURABILITY,
+  COMBAT_LOOT_GOLD,
+} from '../../shared/src/constants/index.js';
 import { calculatePower, resolveCombat, rollCombatDie } from './combat.js';
 
 const baseExperience: HiddenExperience = { meltem: 1, terazi: 2, murekkep: 1, simsar: 0 };
@@ -260,6 +265,195 @@ describe('resolveCombat – edge cases', () => {
       rng: fixedRng,
     });
     expect(result.result).toBe('kazandi');
+  });
+});
+
+describe('calculatePower – additional coverage', () => {
+  it('returns base power when all experience values are zero', () => {
+    const zeroExp: HiddenExperience = { meltem: 0, terazi: 0, murekkep: 0, simsar: 0 };
+    // base = 3 + 100/50 = 5, total=0 → code returns meltemRatio=0 (guarded), meltemBonus=0
+    expect(calculatePower(karaka, 'ates', zeroExp)).toBe(5);
+  });
+
+  it('computes base correctly when ship durability is 0', () => {
+    const zeroDurShip: Ship = { type: 'karaka', cargoCapacity: 4, power: 3, durability: 0 };
+    // base = 3 + 0/50 = 3
+    expect(calculatePower(zeroDurShip, 'ates', baseExperience)).toBe(3);
+  });
+
+  it('computes base correctly when ship durability is 1', () => {
+    const lowDurShip: Ship = { type: 'karaka', cargoCapacity: 4, power: 3, durability: 1 };
+    // base = 3 + 1/50 = 3.02
+    expect(calculatePower(lowDurShip, 'ates', baseExperience)).toBe(3.02);
+  });
+
+  it('kacis tactic gives no tactic bonus regardless of ship type', () => {
+    // kadirga normally gets bonus with pruva, but not with kacis
+    expect(calculatePower(kadirga, 'kacis', baseExperience)).toBe(5);
+    // feluka normally gets bonus with manevra, but not with kacis
+    expect(calculatePower(feluka, 'kacis', baseExperience)).toBe(3.6);
+    expect(calculatePower(karaka, 'kacis', baseExperience)).toBe(5);
+  });
+
+  it('ates tactic gives no tactic bonus for any ship type', () => {
+    expect(calculatePower(kadirga, 'ates', baseExperience)).toBe(5);
+    expect(calculatePower(feluka, 'ates', baseExperience)).toBe(3.6);
+    expect(calculatePower(karaka, 'ates', baseExperience)).toBe(5);
+  });
+
+  it('applies uncapped meltem bonus when ratio is low', () => {
+    // meltem=3, terazi=2, murekkep=5, simsar=5 → total=15
+    // meltemRatio = 3/15 = 0.2, meltem(3)>terazi(2) → bonus = min(1.0, 0.4) = 0.4
+    const lowMeltemExp: HiddenExperience = { meltem: 3, terazi: 2, murekkep: 5, simsar: 5 };
+    // base = 5, meltemBonus = 0.4, tacticBonus = 0
+    expect(calculatePower(karaka, 'ates', lowMeltemExp)).toBe(5.4);
+  });
+});
+
+describe('resolveCombat – goldDelta/durabilityDelta details', () => {
+  it('on win: goldDelta equals COMBAT_LOOT_GOLD + floor(enemyPower * 2)', () => {
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      enemyTactic: 'ates',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kazandi');
+    expect(result.goldDelta).toBe(COMBAT_LOOT_GOLD + Math.floor(result.enemyPower * 2));
+  });
+
+  it('on win: durabilityDelta is 0', () => {
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      enemyTactic: 'ates',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kazandi');
+    expect(result.durabilityDelta).toBe(0);
+  });
+
+  it('on win: shipwrecked is false', () => {
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      enemyTactic: 'ates',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kazandi');
+    expect(result.shipwrecked).toBe(false);
+  });
+
+  it('on escape: goldDelta, durabilityDelta are 0 and shipwrecked is false', () => {
+    const result = resolveCombat({
+      playerShip: kadirga,
+      playerExperience: meltemDominant,
+      playerTactic: 'kacis',
+      enemyTactic: 'ates',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kacti');
+    expect(result.goldDelta).toBe(0);
+    expect(result.durabilityDelta).toBe(0);
+    expect(result.shipwrecked).toBe(false);
+  });
+
+  it('on loss: goldDelta matches -(COMBAT_LOSS_GOLD + floor(powerDiff * 3))', () => {
+    const strongEnemy: Ship = { type: 'kadirga', cargoCapacity: 2, power: 6, durability: 100 };
+    const result = resolveCombat({
+      playerShip: feluka,
+      playerExperience: baseExperience,
+      playerTactic: 'ates',
+      enemyShip: strongEnemy,
+      enemyTactic: 'pruva',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kaybetti');
+    const powerDiff = Math.max(0, result.enemyPower - result.playerPower);
+    expect(result.goldDelta).toBe(-(COMBAT_LOSS_GOLD + Math.floor(powerDiff * 3)));
+  });
+
+  it('on loss: durabilityDelta matches -(COMBAT_LOSS_DURABILITY + floor(powerDiff * 2))', () => {
+    const strongEnemy: Ship = { type: 'kadirga', cargoCapacity: 2, power: 6, durability: 100 };
+    const result = resolveCombat({
+      playerShip: feluka,
+      playerExperience: baseExperience,
+      playerTactic: 'ates',
+      enemyShip: strongEnemy,
+      enemyTactic: 'pruva',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kaybetti');
+    const powerDiff = Math.max(0, result.enemyPower - result.playerPower);
+    expect(result.durabilityDelta).toBe(-(COMBAT_LOSS_DURABILITY + Math.floor(powerDiff * 2)));
+  });
+
+  it('manevraIntel is false for pruva counter win', () => {
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      enemyTactic: 'ates',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kazandi');
+    expect(result.manevraIntel).toBe(false);
+  });
+
+  it('manevraIntel is false for ates counter win', () => {
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'ates',
+      enemyShip: karaka,
+      enemyTactic: 'manevra',
+      rng: fixedRng,
+    });
+    expect(result.result).toBe('kazandi');
+    expect(result.manevraIntel).toBe(false);
+  });
+});
+
+describe('resolveCombat – default enemy', () => {
+  it('uses default enemy (karaka, power 2, durability 80) when enemyShip not provided', () => {
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      enemyTactic: 'ates',
+      rng: fixedRng,
+    });
+    // Default enemy: {type:'karaka', power:2, durability:80}
+    // enemyPower = round((2 + 80/50 + 1.0 + 0 + 1) * 100) / 100 = 5.6
+    expect(result.enemyPower).toBe(5.6);
+  });
+
+  it('picks enemy tactic from RNG when not provided', () => {
+    // With fixedRng (always 0), pickEnemyTactic picks index 0 → 'pruva'
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      rng: fixedRng,
+    });
+    expect(result.enemyTactic).toBe('pruva');
+  });
+
+  it('custom enemyShip overrides the default', () => {
+    const customEnemy: Ship = { type: 'feluka', cargoCapacity: 3, power: 1, durability: 50 };
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      enemyShip: customEnemy,
+      rng: fixedRng,
+    });
+    // Custom enemy: base=1+50/50=2, meltemBonus=1.0, die=1 (fixedRng) → 4.0
+    // Default would be 5.6, confirming override
+    expect(result.enemyPower).toBe(4);
   });
 });
 

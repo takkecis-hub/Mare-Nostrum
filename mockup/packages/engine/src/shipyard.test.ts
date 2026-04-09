@@ -89,3 +89,68 @@ describe('effectiveCostPerPoint', () => {
     expect(effectiveCostPerPoint(['depo', 'tersane'])).toBe(3);
   });
 });
+
+describe('repairShip – edge cases', () => {
+  it('durability=0: needs 100 points, full repair costs 400', () => {
+    const wrecked: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 0 };
+    const result = repairShip(wrecked, 500, []);
+    expect(result.repairedShip.durability).toBe(100);
+    expect(result.goldSpent).toBe(400);
+    expect(result.durabilityRestored).toBe(100);
+  });
+
+  it('durability=1: needs 99 points, costs 99*4=396', () => {
+    const almostWrecked: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 1 };
+    const result = repairShip(almostWrecked, 500, []);
+    expect(result.repairedShip.durability).toBe(100);
+    expect(result.goldSpent).toBe(396);
+    expect(result.durabilityRestored).toBe(99);
+  });
+
+  it('durability=99: needs 1 point, costs 4', () => {
+    const almostFull: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 99 };
+    const result = repairShip(almostFull, 100, []);
+    expect(result.repairedShip.durability).toBe(100);
+    expect(result.goldSpent).toBe(4);
+    expect(result.durabilityRestored).toBe(1);
+  });
+
+  it('exactly enough gold to fully repair (no remainder)', () => {
+    // damagedKaraka: durability=60, needs 40 points, costs 40*4=160
+    const result = repairShip(damagedKaraka, 160, []);
+    expect(result.repairedShip.durability).toBe(100);
+    expect(result.goldSpent).toBe(160);
+    expect(result.durabilityRestored).toBe(40);
+  });
+
+  it('gold=1 with cost_per_point=4: cannot afford any points → no repair', () => {
+    const result = repairShip(damagedKaraka, 1, []);
+    expect(result.repairedShip.durability).toBe(60);
+    expect(result.goldSpent).toBe(0);
+    expect(result.durabilityRestored).toBe(0);
+  });
+
+  it('does not mutate portSpecials array', () => {
+    const specials = ['tersane', 'depo'];
+    const originalSpecials = [...specials];
+    repairShip(damagedKaraka, 200, specials);
+    expect(specials).toEqual(originalSpecials);
+  });
+});
+
+describe('repairCost – edge cases', () => {
+  it('durability above 100 returns 0 since pointsNeeded <= 0', () => {
+    const overRepaired: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 110 };
+    expect(repairCost(overRepaired, [])).toBe(0);
+  });
+
+  it('durability=50 costs 50 * 4 = 200', () => {
+    const halfDamaged: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 50 };
+    expect(repairCost(halfDamaged, [])).toBe(200);
+  });
+
+  it('durability=50 with tersane costs 50 * 3 = 150', () => {
+    const halfDamaged: Ship = { type: 'karaka', cargoCapacity: 5, power: 2, durability: 50 };
+    expect(repairCost(halfDamaged, ['tersane'])).toBe(150);
+  });
+});
