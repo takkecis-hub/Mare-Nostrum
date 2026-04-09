@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "sourceHierarchy": [
+    {
+      "tier": 1,
+      "path": "mare_nostrum_master_v3.md",
+      "role": "design_authority"
+    },
+    {
+      "tier": 2,
+      "path": "mockup/data/*.json",
+      "role": "implementation_data"
+    },
+    {
+      "tier": 2,
+      "path": "mockup/packages/*",
+      "role": "implementation_logic"
+    },
+    {
+      "tier": 3,
+      "path": "docs/wiki/*.md",
+      "role": "secondary_documentation"
+    },
+    {
+      "tier": 3,
+      "path": "mare_nostrum_*.md",
+      "role": "secondary_documentation"
+    }
+  ],
+  "fileDeclarations": [
+    {
+      "path": "mockup/data/ports.json",
+      "category": "factual_world_data",
+      "risk": "high",
+      "authority": "implementation",
+      "notes": "Port ids, coordinates, controllers, trade roles, specials, and legacy trivia strings."
+    },
+    {
+      "path": "mockup/data/routes.json",
+      "category": "derived_game_data",
+      "risk": "high",
+      "authority": "implementation",
+      "notes": "Gameplay routes with historical anchors, chokepoints, encounter risk, and turn lengths."
+    },
+    {
+      "path": "mockup/data/goods.json",
+      "category": "derived_game_data",
+      "risk": "high",
+      "authority": "implementation",
+      "notes": "Origin goods catalog tied to ports and gameplay categories."
+    },
+    {
+      "path": "mockup/data/port-geo.json",
+      "category": "factual_world_data",
+      "risk": "high",
+      "authority": "implementation",
+      "notes": "Real-world latitude and longitude reference set for map projection."
+    },
+    {
+      "path": "mockup/data/coastlines.json",
+      "category": "derived_game_data",
+      "risk": "medium",
+      "authority": "implementation",
+      "notes": "SVG coastline paths derived for map rendering rather than exact cartography."
+    },
+    {
+      "path": "mockup/data/whispers.json",
+      "category": "narrative_flavor",
+      "risk": "high",
+      "authority": "implementation",
+      "notes": "Static fallback whisper bank built from vetted in-repo facts and clearly fictionalized phrasing."
+    },
+    {
+      "path": "mockup/data/trivia.json",
+      "category": "narrative_flavor",
+      "risk": "high",
+      "authority": "implementation",
+      "notes": "Static trivia bank for future grounded narrative features; every item requires provenance."
+    },
+    {
+      "path": "mockup/data/provenance.json",
+      "category": "documentation",
+      "risk": "medium",
+      "authority": "implementation",
+      "notes": "Machine-readable provenance ledger for audited data and narrative items."
+    },
+    {
+      "path": "mockup/data/grounding-manifest.json",
+      "category": "documentation",
+      "risk": "low",
+      "authority": "implementation",
+      "notes": "Machine-readable source hierarchy and data-file classification manifest."
+    },
+    {
+      "path": "docs/data-grounding/README.md",
+      "category": "documentation",
+      "risk": "low",
+      "authority": "design",
+      "notes": "Governance notes for hallucination checks and grounding workflow."
+    },
+    {
+      "path": "docs/data-grounding/file-audit-matrix.md",
+      "category": "documentation",
+      "risk": "medium",
+      "authority": "design",
+      "notes": "Human-readable audit matrix for file-level risk triage."
+    },
+    {
+      "path": "docs/data-grounding/contradiction-register.md",
+      "category": "documentation",
+      "risk": "medium",
+      "authority": "design",
+      "notes": "Tracked doc/data/code contradictions to resolve."
+    },
+    {
+      "path": "docs/data-grounding/provenance-ledger.md",
+      "category": "documentation",
+      "risk": "medium",
+      "authority": "design",
+      "notes": "Human-readable summary of provenance rules and current status."
+    },
+    {
+      "path": "docs/data-grounding/remediation-backlog.md",
+      "category": "documentation",
+      "risk": "medium",
+      "authority": "design",
+      "notes": "Ordered remediation backlog for grounding work."
+    }
+  ]
+}

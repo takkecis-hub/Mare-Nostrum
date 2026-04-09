@@ -1,0 +1,302 @@
+{
+  "barselona": [
+    {
+      "id": "barselona-trivia-1",
+      "portId": "barselona",
+      "text": "Reconquista iklimi ticareti kadar savaşı da besler.",
+      "provenanceRef": "trivia:barselona:1"
+    },
+    {
+      "id": "barselona-trivia-2",
+      "portId": "barselona",
+      "text": "Barselona, Marsilya, Tunus, Cezayir bağlantıları sayesinde Batı Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:barselona:2"
+    },
+    {
+      "id": "barselona-trivia-3",
+      "portId": "barselona",
+      "text": "Mevcut mockup verisinde Barselona, Katalan Demiri ile anılır ve Doğu İpeği için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:barselona:3"
+    }
+  ],
+  "marsilya": [
+    {
+      "id": "marsilya-trivia-1",
+      "portId": "marsilya",
+      "text": "Fransız sarayı Doğu lüks mallarına açtır.",
+      "provenanceRef": "trivia:marsilya:1"
+    },
+    {
+      "id": "marsilya-trivia-2",
+      "portId": "marsilya",
+      "text": "Marsilya, Barselona, Cenova bağlantıları sayesinde Batı Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:marsilya:2"
+    },
+    {
+      "id": "marsilya-trivia-3",
+      "portId": "marsilya",
+      "text": "Mevcut mockup verisinde Marsilya, Provence Şarabı ile anılır ve Mısır Baharatları için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:marsilya:3"
+    }
+  ],
+  "cenova": [
+    {
+      "id": "cenova-trivia-1",
+      "portId": "cenova",
+      "text": "Kredi fırsatıyla birlikte faiz baskısı da gelir.",
+      "provenanceRef": "trivia:cenova:1"
+    },
+    {
+      "id": "cenova-trivia-2",
+      "portId": "cenova",
+      "text": "Cenova, Marsilya, Venedik, Palermo bağlantıları sayesinde Batı Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:cenova:2"
+    },
+    {
+      "id": "cenova-trivia-3",
+      "portId": "cenova",
+      "text": "Mevcut mockup verisinde Cenova, Ligurya Mercanı ile anılır ve Sicilya Buğdayı için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:cenova:3"
+    }
+  ],
+  "venedik": [
+    {
+      "id": "venedik-trivia-1",
+      "portId": "venedik",
+      "text": "Arsenal, Akdeniz'in en hızlı gemi üretim merkezidir.",
+      "provenanceRef": "trivia:venedik:1"
+    },
+    {
+      "id": "venedik-trivia-2",
+      "portId": "venedik",
+      "text": "Venedik, Otranto hattına yakınlığı nedeniyle haber ve risk akışında öne çıkar.",
+      "provenanceRef": "trivia:venedik:2"
+    },
+    {
+      "id": "venedik-trivia-3",
+      "portId": "venedik",
+      "text": "Mevcut mockup verisinde Venedik, Murano Camı ile anılır ve Lübnan Sediri için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:venedik:3"
+    }
+  ],
+  "palermo": [
+    {
+      "id": "palermo-trivia-1",
+      "portId": "palermo",
+      "text": "Sicilya, Doğu-Batı ticaretinin ekmek sepetidir.",
+      "provenanceRef": "trivia:palermo:1"
+    },
+    {
+      "id": "palermo-trivia-2",
+      "portId": "palermo",
+      "text": "Palermo, Sicilya hattına yakınlığı nedeniyle haber ve risk akışında öne çıkar.",
+      "provenanceRef": "trivia:palermo:2"
+    },
+    {
+      "id": "palermo-trivia-3",
+      "portId": "palermo",
+      "text": "Mevcut mockup verisinde Palermo, Sicilya Buğdayı ile anılır ve Katalan Demiri için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:palermo:3"
+    }
+  ],
+  "ragusa": [
+    {
+      "id": "ragusa-trivia-1",
+      "portId": "ragusa",
+      "text": "Ragusa bilgi alıp satmanın limanıdır.",
+      "provenanceRef": "trivia:ragusa:1"
+    },
+    {
+      "id": "ragusa-trivia-2",
+      "portId": "ragusa",
+      "text": "Ragusa, Otranto hattına yakınlığı nedeniyle haber ve risk akışında öne çıkar.",
+      "provenanceRef": "trivia:ragusa:2"
+    },
+    {
+      "id": "ragusa-trivia-3",
+      "portId": "ragusa",
+      "text": "Mevcut mockup verisinde Ragusa, Ragusa Tuzu ile anılır ve Ligurya Mercanı için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:ragusa:3"
+    }
+  ],
+  "istanbul": [
+    {
+      "id": "istanbul-trivia-1",
+      "portId": "istanbul",
+      "text": "Doğu ile Batı burada birbirine hesap verir.",
+      "provenanceRef": "trivia:istanbul:1"
+    },
+    {
+      "id": "istanbul-trivia-2",
+      "portId": "istanbul",
+      "text": "İstanbul, Ege hattına yakınlığı nedeniyle haber ve risk akışında öne çıkar.",
+      "provenanceRef": "trivia:istanbul:2"
+    },
+    {
+      "id": "istanbul-trivia-3",
+      "portId": "istanbul",
+      "text": "Mevcut mockup verisinde İstanbul, Doğu İpeği ile anılır ve Ragusa Tuzu için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:istanbul:3"
+    }
+  ],
+  "girit": [
+    {
+      "id": "girit-trivia-1",
+      "portId": "girit",
+      "text": "Girit, rotaların ve pusuların ortasında yatar.",
+      "provenanceRef": "trivia:girit:1"
+    },
+    {
+      "id": "girit-trivia-2",
+      "portId": "girit",
+      "text": "Girit, Ege hattına yakınlığı nedeniyle haber ve risk akışında öne çıkar.",
+      "provenanceRef": "trivia:girit:2"
+    },
+    {
+      "id": "girit-trivia-3",
+      "portId": "girit",
+      "text": "Mevcut mockup verisinde Girit, Girit Zeytinyağı ile anılır ve Malta Çeliği için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:girit:3"
+    }
+  ],
+  "kibris": [
+    {
+      "id": "kibris-trivia-1",
+      "portId": "kibris",
+      "text": "Levant'a açılan son güvenli duraklardan biridir.",
+      "provenanceRef": "trivia:kibris:1"
+    },
+    {
+      "id": "kibris-trivia-2",
+      "portId": "kibris",
+      "text": "Kıbrıs, Girit, Beyrut, İskenderiye bağlantıları sayesinde Doğu Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:kibris:2"
+    },
+    {
+      "id": "kibris-trivia-3",
+      "portId": "kibris",
+      "text": "Mevcut mockup verisinde Kıbrıs, Kıbrıs Tuzu ile anılır ve Murano Camı için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:kibris:3"
+    }
+  ],
+  "beyrut": [
+    {
+      "id": "beyrut-trivia-1",
+      "portId": "beyrut",
+      "text": "Kara İpek Yolu burada denize kavuşur.",
+      "provenanceRef": "trivia:beyrut:1"
+    },
+    {
+      "id": "beyrut-trivia-2",
+      "portId": "beyrut",
+      "text": "Beyrut, Kıbrıs, İstanbul, İskenderiye bağlantıları sayesinde Doğu Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:beyrut:2"
+    },
+    {
+      "id": "beyrut-trivia-3",
+      "portId": "beyrut",
+      "text": "Mevcut mockup verisinde Beyrut, Lübnan Sediri ile anılır ve Osmanlı Silahı için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:beyrut:3"
+    }
+  ],
+  "iskenderiye": [
+    {
+      "id": "iskenderiye-trivia-1",
+      "portId": "iskenderiye",
+      "text": "En kârlı lüks mallar en çok göz önündeki mallardır.",
+      "provenanceRef": "trivia:iskenderiye:1"
+    },
+    {
+      "id": "iskenderiye-trivia-2",
+      "portId": "iskenderiye",
+      "text": "İskenderiye, Girit, Kıbrıs, Beyrut bağlantıları sayesinde Güney Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:iskenderiye:2"
+    },
+    {
+      "id": "iskenderiye-trivia-3",
+      "portId": "iskenderiye",
+      "text": "Mevcut mockup verisinde İskenderiye, Mısır Baharatları ile anılır ve Sahra Altını için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:iskenderiye:3"
+    }
+  ],
+  "trablus": [
+    {
+      "id": "trablus-trivia-1",
+      "portId": "trablus",
+      "text": "Buraya ulaşmak zor, dönmek daha da zordur.",
+      "provenanceRef": "trivia:trablus:1"
+    },
+    {
+      "id": "trablus-trivia-2",
+      "portId": "trablus",
+      "text": "Trablus, İskenderiye, Tunus, Cezayir bağlantıları sayesinde Güney Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:trablus:2"
+    },
+    {
+      "id": "trablus-trivia-3",
+      "portId": "trablus",
+      "text": "Mevcut mockup verisinde Trablus, Sahra Altını ile anılır ve Kıbrıs Tuzu için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:trablus:3"
+    }
+  ],
+  "tunus": [
+    {
+      "id": "tunus-trivia-1",
+      "portId": "tunus",
+      "text": "Sicilya Boğazı'nın güney kapısı ticareti kadar savaşı da çeker.",
+      "provenanceRef": "trivia:tunus:1"
+    },
+    {
+      "id": "tunus-trivia-2",
+      "portId": "tunus",
+      "text": "Tunus, Sicilya hattına yakınlığı nedeniyle haber ve risk akışında öne çıkar.",
+      "provenanceRef": "trivia:tunus:2"
+    },
+    {
+      "id": "tunus-trivia-3",
+      "portId": "tunus",
+      "text": "Mevcut mockup verisinde Tunus, Tunus Zeytinyağı ile anılır ve Girit Zeytinyağı için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:tunus:3"
+    }
+  ],
+  "cezayir": [
+    {
+      "id": "cezayir-trivia-1",
+      "portId": "cezayir",
+      "text": "Burada ganimet pazarı hukuk kadar hızlı çalışır.",
+      "provenanceRef": "trivia:cezayir:1"
+    },
+    {
+      "id": "cezayir-trivia-2",
+      "portId": "cezayir",
+      "text": "Cezayir, Barselona, Trablus, Tunus bağlantıları sayesinde Güney Akdeniz içinde doğal bir aktarım durağı gibi davranır.",
+      "provenanceRef": "trivia:cezayir:2"
+    },
+    {
+      "id": "cezayir-trivia-3",
+      "portId": "cezayir",
+      "text": "Mevcut mockup verisinde Cezayir, Osmanlı Silahı ile anılır ve Provence Şarabı için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:cezayir:3"
+    }
+  ],
+  "malta": [
+    {
+      "id": "malta-trivia-1",
+      "portId": "malta",
+      "text": "Şövalyeler küçük adayı dev bir karakola çevirmiştir.",
+      "provenanceRef": "trivia:malta:1"
+    },
+    {
+      "id": "malta-trivia-2",
+      "portId": "malta",
+      "text": "Malta, Sicilya hattına yakınlığı nedeniyle haber ve risk akışında öne çıkar.",
+      "provenanceRef": "trivia:malta:2"
+    },
+    {
+      "id": "malta-trivia-3",
+      "portId": "malta",
+      "text": "Mevcut mockup verisinde Malta, Malta Çeliği ile anılır ve Tunus Zeytinyağı için yüksek iştah gösteren bir pazar olarak modellenir.",
+      "provenanceRef": "trivia:malta:3"
+    }
+  ]
+}

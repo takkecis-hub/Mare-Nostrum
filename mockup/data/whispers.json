@@ -1,82 +1,994 @@
 {
-  "venedik": [
-    "Murano ustaları bu hafta camı ucuza bırakıyor; ama kereste pazarı gergin.",
-    "Ragusa'ya giden kaptanlar Otranto'da çok göz olduğunu söylüyor.",
-    "Fondaco dei Turchi'de İskenderiye baharatının yine yükselişte olduğu konuşuluyor."
-  ],
-  "iskenderiye": [
-    "Baharat depoları dolu, ama ilk tüccar hâlâ en tatlı fiyatı koparır.",
-    "Memlük memurları kaçakçılara bugünlerde merhamet göstermiyor.",
-    "Girit üstünden gelenler fırtınaya rağmen iyi kârla dönmüş."
-  ],
-  "girit": [
-    "Ege Kapısı'nda sessiz geçen kadar görünmez olan azdır.",
-    "Ada şarapları bol, ama barut kasaları boşalmaya başladı.",
-    "İstanbul'a giden rota, hikâye toplamak isteyenleri de korsanları da çağırıyor."
-  ],
-  "istanbul": [
-    "Kapalıçarşı'da ipek fiyatları düşüşte; Doğu'dan büyük kervan bekleniyor.",
-    "Boğaz'da geceleri şüpheli yelkenler görülüyor, dikkatli ol.",
-    "Padişah'ın sarayından yeni bir ferman çıktığı söyleniyor; tüccarlar tedirgin."
-  ],
   "barselona": [
-    "Katalan demircileri sipariş almakta zorlanıyor; demir stokları azalıyor.",
-    "Batı Akdeniz'de korsan baskınları artmış; Marsilya yolu tehlikeli.",
-    "Aragon tacirlerinden biri doğudan altın getirmiş; herkes peşinde."
+    {
+      "id": "barselona-economy-1",
+      "category": "economy",
+      "text": "Katalan Demiri yükü bugün Barselona rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:barselona:economy-1"
+    },
+    {
+      "id": "barselona-economy-2",
+      "category": "economy",
+      "text": "Doğu İpeği getirenlerin Barselona hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:barselona:economy-2"
+    },
+    {
+      "id": "barselona-economy-3",
+      "category": "economy",
+      "text": "Aragon tarafının kâtipleri, Katalan Demiri ile Doğu İpeği arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:barselona:economy-3"
+    },
+    {
+      "id": "barselona-economy-4",
+      "category": "economy",
+      "text": "Marsilya tarafından gelen yükler arttığında Barselona pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:barselona:economy-4"
+    },
+    {
+      "id": "barselona-security-1",
+      "category": "security",
+      "text": "Marsilya yolunda kabotaj kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:barselona:security-1"
+    },
+    {
+      "id": "barselona-security-2",
+      "category": "security",
+      "text": "Marsilya ile Tunus arasında dönen haberler, Barselona açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:barselona:security-2"
+    },
+    {
+      "id": "barselona-security-3",
+      "category": "security",
+      "text": "Askeri tersane yüzünden Barselona limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:barselona:security-3"
+    },
+    {
+      "id": "barselona-politics-1",
+      "category": "politics",
+      "text": "Barselona kahvehanelerinde Aragon memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:barselona:politics-1"
+    },
+    {
+      "id": "barselona-politics-2",
+      "category": "politics",
+      "text": "Aragon'un Pençesi adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:barselona:politics-2"
+    },
+    {
+      "id": "barselona-social-1",
+      "category": "social",
+      "text": "Reconquista iklimi ticareti kadar savaşı da besler.",
+      "provenanceRef": "whisper:barselona:social-1"
+    }
   ],
   "marsilya": [
-    "Provence bağlarında bu yıl hasat bereketli; şarap fiyatları düşebilir.",
-    "Cenova'dan gelen tüccarlar limanda kalabalık oluşturmuş; rekabet kızışıyor.",
-    "Doğu'dan gelen ipek kervanlarının haberi kahvelerde dönüyor."
+    {
+      "id": "marsilya-economy-1",
+      "category": "economy",
+      "text": "Provence Şarabı yükü bugün Marsilya rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:marsilya:economy-1"
+    },
+    {
+      "id": "marsilya-economy-2",
+      "category": "economy",
+      "text": "Mısır Baharatları getirenlerin Marsilya hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:marsilya:economy-2"
+    },
+    {
+      "id": "marsilya-economy-3",
+      "category": "economy",
+      "text": "Fransa tarafının kâtipleri, Provence Şarabı ile Mısır Baharatları arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:marsilya:economy-3"
+    },
+    {
+      "id": "marsilya-economy-4",
+      "category": "economy",
+      "text": "Barselona tarafından gelen yükler arttığında Marsilya pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:marsilya:economy-4"
+    },
+    {
+      "id": "marsilya-security-1",
+      "category": "security",
+      "text": "Barselona yolunda kabotaj kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:marsilya:security-1"
+    },
+    {
+      "id": "marsilya-security-2",
+      "category": "security",
+      "text": "Barselona ile Cenova arasında dönen haberler, Marsilya açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:marsilya:security-2"
+    },
+    {
+      "id": "marsilya-security-3",
+      "category": "security",
+      "text": "Lüks talep yüzünden Marsilya limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:marsilya:security-3"
+    },
+    {
+      "id": "marsilya-politics-1",
+      "category": "politics",
+      "text": "Marsilya kahvehanelerinde Fransa memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:marsilya:politics-1"
+    },
+    {
+      "id": "marsilya-politics-2",
+      "category": "politics",
+      "text": "Provence'ın Kapısı adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:marsilya:politics-2"
+    },
+    {
+      "id": "marsilya-social-1",
+      "category": "social",
+      "text": "Fransız sarayı Doğu lüks mallarına açtır.",
+      "provenanceRef": "whisper:marsilya:social-1"
+    }
   ],
   "cenova": [
-    "Cenovalı bankacılar yeni kredi koşulları sunuyor; borçlanmak kolaylaşmış.",
-    "Ligurya mercanı için alıcılar sıraya girmiş; fiyat yükseliyor.",
-    "Sicilya buğdayı getiren gemiler rağbet görüyor; halk ekmek bekliyor."
+    {
+      "id": "cenova-economy-1",
+      "category": "economy",
+      "text": "Ligurya Mercanı yükü bugün Cenova rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:cenova:economy-1"
+    },
+    {
+      "id": "cenova-economy-2",
+      "category": "economy",
+      "text": "Sicilya Buğdayı getirenlerin Cenova hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:cenova:economy-2"
+    },
+    {
+      "id": "cenova-economy-3",
+      "category": "economy",
+      "text": "Cenova tarafının kâtipleri, Ligurya Mercanı ile Sicilya Buğdayı arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:cenova:economy-3"
+    },
+    {
+      "id": "cenova-economy-4",
+      "category": "economy",
+      "text": "Marsilya tarafından gelen yükler arttığında Cenova pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:cenova:economy-4"
+    },
+    {
+      "id": "cenova-security-1",
+      "category": "security",
+      "text": "Marsilya yolunda tramontana kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:cenova:security-1"
+    },
+    {
+      "id": "cenova-security-2",
+      "category": "security",
+      "text": "Marsilya ile Venedik arasında dönen haberler, Cenova açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:cenova:security-2"
+    },
+    {
+      "id": "cenova-security-3",
+      "category": "security",
+      "text": "Bankacilik yüzünden Cenova limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:cenova:security-3"
+    },
+    {
+      "id": "cenova-politics-1",
+      "category": "politics",
+      "text": "Cenova kahvehanelerinde Cenova memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:cenova:politics-1"
+    },
+    {
+      "id": "cenova-politics-2",
+      "category": "politics",
+      "text": "La Superba adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:cenova:politics-2"
+    },
+    {
+      "id": "cenova-social-1",
+      "category": "social",
+      "text": "Kredi fırsatıyla birlikte faiz baskısı da gelir.",
+      "provenanceRef": "whisper:cenova:social-1"
+    }
+  ],
+  "venedik": [
+    {
+      "id": "venedik-economy-1",
+      "category": "economy",
+      "text": "Murano Camı yükü bugün Venedik rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:venedik:economy-1"
+    },
+    {
+      "id": "venedik-economy-2",
+      "category": "economy",
+      "text": "Lübnan Sediri getirenlerin Venedik hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:venedik:economy-2"
+    },
+    {
+      "id": "venedik-economy-3",
+      "category": "economy",
+      "text": "Venedik tarafının kâtipleri, Murano Camı ile Lübnan Sediri arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:venedik:economy-3"
+    },
+    {
+      "id": "venedik-economy-4",
+      "category": "economy",
+      "text": "Cenova tarafından gelen yükler arttığında Venedik pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:venedik:economy-4"
+    },
+    {
+      "id": "venedik-security-1",
+      "category": "security",
+      "text": "Cenova yolunda kabotaj kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:venedik:security-1"
+    },
+    {
+      "id": "venedik-security-2",
+      "category": "security",
+      "text": "Cenova ile Ragusa arasında dönen haberler, Venedik açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:venedik:security-2"
+    },
+    {
+      "id": "venedik-security-3",
+      "category": "security",
+      "text": "Otranto hattından dönenler bu hafta daha çok göz ve daha az merhamet gördüklerini söylüyor.",
+      "provenanceRef": "whisper:venedik:security-3"
+    },
+    {
+      "id": "venedik-security-4",
+      "category": "security",
+      "text": "Arsenal indirim yüzünden Venedik limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:venedik:security-4"
+    },
+    {
+      "id": "venedik-politics-1",
+      "category": "politics",
+      "text": "Venedik kahvehanelerinde Venedik memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:venedik:politics-1"
+    },
+    {
+      "id": "venedik-politics-2",
+      "category": "politics",
+      "text": "La Serenissima adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:venedik:politics-2"
+    }
   ],
   "palermo": [
-    "Sicilya'nın buğday ambarları dolup taşıyor; fiyat baskısı var.",
-    "Malta'dan çelik getiren gemiciler iyi kazanıyormuş.",
-    "Tunus Boğazı'nda korsanlar aktif; geçiş yapacaklar dikkatli olsun."
+    {
+      "id": "palermo-economy-1",
+      "category": "economy",
+      "text": "Sicilya Buğdayı yükü bugün Palermo rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:palermo:economy-1"
+    },
+    {
+      "id": "palermo-economy-2",
+      "category": "economy",
+      "text": "Katalan Demiri getirenlerin Palermo hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:palermo:economy-2"
+    },
+    {
+      "id": "palermo-economy-3",
+      "category": "economy",
+      "text": "Sicilya tarafının kâtipleri, Sicilya Buğdayı ile Katalan Demiri arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:palermo:economy-3"
+    },
+    {
+      "id": "palermo-economy-4",
+      "category": "economy",
+      "text": "Cenova tarafından gelen yükler arttığında Palermo pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:palermo:economy-4"
+    },
+    {
+      "id": "palermo-security-1",
+      "category": "security",
+      "text": "Cenova yolunda fortuna kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:palermo:security-1"
+    },
+    {
+      "id": "palermo-security-2",
+      "category": "security",
+      "text": "Cenova ile Ragusa arasında dönen haberler, Palermo açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:palermo:security-2"
+    },
+    {
+      "id": "palermo-security-3",
+      "category": "security",
+      "text": "Sicilya hattından dönenler bu hafta daha çok göz ve daha az merhamet gördüklerini söylüyor.",
+      "provenanceRef": "whisper:palermo:security-3"
+    },
+    {
+      "id": "palermo-security-4",
+      "category": "security",
+      "text": "Tahil ambari yüzünden Palermo limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:palermo:security-4"
+    },
+    {
+      "id": "palermo-politics-1",
+      "category": "politics",
+      "text": "Palermo kahvehanelerinde Sicilya memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:palermo:politics-1"
+    },
+    {
+      "id": "palermo-politics-2",
+      "category": "politics",
+      "text": "Üç Dinin Kavşağı adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:palermo:politics-2"
+    }
   ],
   "ragusa": [
-    "Ragusa'nın nötr konumu herkesi çekiyor; liman her zaman kalabalık.",
-    "Tuz ticareti durgun; İstanbul'dan talep bekleniyormuş.",
-    "Otranto'dan geçen gemilerin çoğu burada mola veriyor; haberler taze."
+    {
+      "id": "ragusa-economy-1",
+      "category": "economy",
+      "text": "Ragusa Tuzu yükü bugün Ragusa rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:ragusa:economy-1"
+    },
+    {
+      "id": "ragusa-economy-2",
+      "category": "economy",
+      "text": "Ligurya Mercanı getirenlerin Ragusa hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:ragusa:economy-2"
+    },
+    {
+      "id": "ragusa-economy-3",
+      "category": "economy",
+      "text": "Ragusa tarafının kâtipleri, Ragusa Tuzu ile Ligurya Mercanı arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:ragusa:economy-3"
+    },
+    {
+      "id": "ragusa-economy-4",
+      "category": "economy",
+      "text": "Venedik tarafından gelen yükler arttığında Ragusa pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:ragusa:economy-4"
+    },
+    {
+      "id": "ragusa-security-1",
+      "category": "security",
+      "text": "Venedik yolunda tramontana kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:ragusa:security-1"
+    },
+    {
+      "id": "ragusa-security-2",
+      "category": "security",
+      "text": "Venedik ile Palermo arasında dönen haberler, Ragusa açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:ragusa:security-2"
+    },
+    {
+      "id": "ragusa-security-3",
+      "category": "security",
+      "text": "Otranto hattından dönenler bu hafta daha çok göz ve daha az merhamet gördüklerini söylüyor.",
+      "provenanceRef": "whisper:ragusa:security-3"
+    },
+    {
+      "id": "ragusa-security-4",
+      "category": "security",
+      "text": "Notr liman yüzünden Ragusa limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:ragusa:security-4"
+    },
+    {
+      "id": "ragusa-politics-1",
+      "category": "politics",
+      "text": "Ragusa kahvehanelerinde Ragusa memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:ragusa:politics-1"
+    },
+    {
+      "id": "ragusa-politics-2",
+      "category": "politics",
+      "text": "Küçük Ama Kurnaz adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:ragusa:politics-2"
+    }
+  ],
+  "istanbul": [
+    {
+      "id": "istanbul-economy-1",
+      "category": "economy",
+      "text": "Doğu İpeği yükü bugün İstanbul rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:istanbul:economy-1"
+    },
+    {
+      "id": "istanbul-economy-2",
+      "category": "economy",
+      "text": "Ragusa Tuzu getirenlerin İstanbul hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:istanbul:economy-2"
+    },
+    {
+      "id": "istanbul-economy-3",
+      "category": "economy",
+      "text": "Osmanlı tarafının kâtipleri, Doğu İpeği ile Ragusa Tuzu arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:istanbul:economy-3"
+    },
+    {
+      "id": "istanbul-economy-4",
+      "category": "economy",
+      "text": "Girit tarafından gelen yükler arttığında İstanbul pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:istanbul:economy-4"
+    },
+    {
+      "id": "istanbul-security-1",
+      "category": "security",
+      "text": "Girit yolunda tramontana kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:istanbul:security-1"
+    },
+    {
+      "id": "istanbul-security-2",
+      "category": "security",
+      "text": "Girit ile Venedik arasında dönen haberler, İstanbul açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:istanbul:security-2"
+    },
+    {
+      "id": "istanbul-security-3",
+      "category": "security",
+      "text": "Ege hattından dönenler bu hafta daha çok göz ve daha az merhamet gördüklerini söylüyor.",
+      "provenanceRef": "whisper:istanbul:security-3"
+    },
+    {
+      "id": "istanbul-security-4",
+      "category": "security",
+      "text": "Mega pazar yüzünden İstanbul limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:istanbul:security-4"
+    },
+    {
+      "id": "istanbul-politics-1",
+      "category": "politics",
+      "text": "İstanbul kahvehanelerinde Osmanlı memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:istanbul:politics-1"
+    },
+    {
+      "id": "istanbul-politics-2",
+      "category": "politics",
+      "text": "Dünyanın Eşiği adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:istanbul:politics-2"
+    }
+  ],
+  "girit": [
+    {
+      "id": "girit-economy-1",
+      "category": "economy",
+      "text": "Girit Zeytinyağı yükü bugün Girit rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:girit:economy-1"
+    },
+    {
+      "id": "girit-economy-2",
+      "category": "economy",
+      "text": "Malta Çeliği getirenlerin Girit hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:girit:economy-2"
+    },
+    {
+      "id": "girit-economy-3",
+      "category": "economy",
+      "text": "Venedik tarafının kâtipleri, Girit Zeytinyağı ile Malta Çeliği arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:girit:economy-3"
+    },
+    {
+      "id": "girit-economy-4",
+      "category": "economy",
+      "text": "Palermo tarafından gelen yükler arttığında Girit pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:girit:economy-4"
+    },
+    {
+      "id": "girit-security-1",
+      "category": "security",
+      "text": "Palermo yolunda fortuna kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:girit:security-1"
+    },
+    {
+      "id": "girit-security-2",
+      "category": "security",
+      "text": "Palermo ile İstanbul arasında dönen haberler, Girit açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:girit:security-2"
+    },
+    {
+      "id": "girit-security-3",
+      "category": "security",
+      "text": "Ege hattından dönenler bu hafta daha çok göz ve daha az merhamet gördüklerini söylüyor.",
+      "provenanceRef": "whisper:girit:security-3"
+    },
+    {
+      "id": "girit-security-4",
+      "category": "security",
+      "text": "Kavsak yüzünden Girit limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:girit:security-4"
+    },
+    {
+      "id": "girit-politics-1",
+      "category": "politics",
+      "text": "Girit kahvehanelerinde Venedik memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:girit:politics-1"
+    },
+    {
+      "id": "girit-politics-2",
+      "category": "politics",
+      "text": "Ortadaki Ada adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:girit:politics-2"
+    }
   ],
   "kibris": [
-    "Kıbrıs tuzu Doğu limanlarında her zaman alıcı buluyor.",
-    "Venedik'ten cam getiren gemiler limanda rağbet görüyor.",
-    "Ada etrafındaki sular sakin; ama batıdan fırtına haberleri geliyor."
+    {
+      "id": "kibris-economy-1",
+      "category": "economy",
+      "text": "Kıbrıs Tuzu yükü bugün Kıbrıs rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:kibris:economy-1"
+    },
+    {
+      "id": "kibris-economy-2",
+      "category": "economy",
+      "text": "Murano Camı getirenlerin Kıbrıs hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:kibris:economy-2"
+    },
+    {
+      "id": "kibris-economy-3",
+      "category": "economy",
+      "text": "Kıbrıs tarafının kâtipleri, Kıbrıs Tuzu ile Murano Camı arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:kibris:economy-3"
+    },
+    {
+      "id": "kibris-economy-4",
+      "category": "economy",
+      "text": "Girit tarafından gelen yükler arttığında Kıbrıs pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:kibris:economy-4"
+    },
+    {
+      "id": "kibris-security-1",
+      "category": "security",
+      "text": "Girit yolunda tramontana kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:kibris:security-1"
+    },
+    {
+      "id": "kibris-security-2",
+      "category": "security",
+      "text": "Girit ile Beyrut arasında dönen haberler, Kıbrıs açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:kibris:security-2"
+    },
+    {
+      "id": "kibris-security-3",
+      "category": "security",
+      "text": "Transit merkezi yüzünden Kıbrıs limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:kibris:security-3"
+    },
+    {
+      "id": "kibris-politics-1",
+      "category": "politics",
+      "text": "Kıbrıs kahvehanelerinde Kıbrıs memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:kibris:politics-1"
+    },
+    {
+      "id": "kibris-politics-2",
+      "category": "politics",
+      "text": "Haçlı Mirası adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:kibris:politics-2"
+    },
+    {
+      "id": "kibris-social-1",
+      "category": "social",
+      "text": "Levant'a açılan son güvenli duraklardan biridir.",
+      "provenanceRef": "whisper:kibris:social-1"
+    }
   ],
   "beyrut": [
-    "Lübnan'ın sediri gemi ustalarının göz bebeği; fiyatlar yükseliyor.",
-    "Kara ticaret yollarından Şam ipeği hâlâ geliyor, ama miktarlar azaldı.",
-    "Osmanlı silahı arayan komutanlar Cezayir'e yöneliyor."
+    {
+      "id": "beyrut-economy-1",
+      "category": "economy",
+      "text": "Lübnan Sediri yükü bugün Beyrut rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:beyrut:economy-1"
+    },
+    {
+      "id": "beyrut-economy-2",
+      "category": "economy",
+      "text": "Osmanlı Silahı getirenlerin Beyrut hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:beyrut:economy-2"
+    },
+    {
+      "id": "beyrut-economy-3",
+      "category": "economy",
+      "text": "Memluk tarafının kâtipleri, Lübnan Sediri ile Osmanlı Silahı arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:beyrut:economy-3"
+    },
+    {
+      "id": "beyrut-economy-4",
+      "category": "economy",
+      "text": "Kıbrıs tarafından gelen yükler arttığında Beyrut pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:beyrut:economy-4"
+    },
+    {
+      "id": "beyrut-security-1",
+      "category": "security",
+      "text": "Kıbrıs yolunda kabotaj kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:beyrut:security-1"
+    },
+    {
+      "id": "beyrut-security-2",
+      "category": "security",
+      "text": "Kıbrıs ile İstanbul arasında dönen haberler, Beyrut açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:beyrut:security-2"
+    },
+    {
+      "id": "beyrut-security-3",
+      "category": "security",
+      "text": "Kara ticareti yüzünden Beyrut limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:beyrut:security-3"
+    },
+    {
+      "id": "beyrut-politics-1",
+      "category": "politics",
+      "text": "Beyrut kahvehanelerinde Memluk memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:beyrut:politics-1"
+    },
+    {
+      "id": "beyrut-politics-2",
+      "category": "politics",
+      "text": "Levant'ın Vitrini adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:beyrut:politics-2"
+    },
+    {
+      "id": "beyrut-social-1",
+      "category": "social",
+      "text": "Kara İpek Yolu burada denize kavuşur.",
+      "provenanceRef": "whisper:beyrut:social-1"
+    }
+  ],
+  "iskenderiye": [
+    {
+      "id": "iskenderiye-economy-1",
+      "category": "economy",
+      "text": "Mısır Baharatları yükü bugün İskenderiye rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:iskenderiye:economy-1"
+    },
+    {
+      "id": "iskenderiye-economy-2",
+      "category": "economy",
+      "text": "Sahra Altını getirenlerin İskenderiye hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:iskenderiye:economy-2"
+    },
+    {
+      "id": "iskenderiye-economy-3",
+      "category": "economy",
+      "text": "Memluk tarafının kâtipleri, Mısır Baharatları ile Sahra Altını arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:iskenderiye:economy-3"
+    },
+    {
+      "id": "iskenderiye-economy-4",
+      "category": "economy",
+      "text": "Girit tarafından gelen yükler arttığında İskenderiye pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:iskenderiye:economy-4"
+    },
+    {
+      "id": "iskenderiye-security-1",
+      "category": "security",
+      "text": "Girit yolunda fortuna kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:iskenderiye:security-1"
+    },
+    {
+      "id": "iskenderiye-security-2",
+      "category": "security",
+      "text": "Girit ile Kıbrıs arasında dönen haberler, İskenderiye açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:iskenderiye:security-2"
+    },
+    {
+      "id": "iskenderiye-security-3",
+      "category": "security",
+      "text": "Baharat başkenti yüzünden İskenderiye limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:iskenderiye:security-3"
+    },
+    {
+      "id": "iskenderiye-politics-1",
+      "category": "politics",
+      "text": "İskenderiye kahvehanelerinde Memluk memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:iskenderiye:politics-1"
+    },
+    {
+      "id": "iskenderiye-politics-2",
+      "category": "politics",
+      "text": "Baharat Tahtı adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:iskenderiye:politics-2"
+    },
+    {
+      "id": "iskenderiye-social-1",
+      "category": "social",
+      "text": "En kârlı lüks mallar en çok göz önündeki mallardır.",
+      "provenanceRef": "whisper:iskenderiye:social-1"
+    }
   ],
   "trablus": [
-    "Sahra altını kervanları gecikmiş; fiyatlar uçuşa geçti.",
-    "Tuz ve tahıl getiren gemilere kapılar açık; halk muhtaç.",
-    "Bu uzak limana gelen az olur; ama gelenler iyi kazanır."
+    {
+      "id": "trablus-economy-1",
+      "category": "economy",
+      "text": "Sahra Altını yükü bugün Trablus rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:trablus:economy-1"
+    },
+    {
+      "id": "trablus-economy-2",
+      "category": "economy",
+      "text": "Kıbrıs Tuzu getirenlerin Trablus hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:trablus:economy-2"
+    },
+    {
+      "id": "trablus-economy-3",
+      "category": "economy",
+      "text": "Trablus tarafının kâtipleri, Sahra Altını ile Kıbrıs Tuzu arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:trablus:economy-3"
+    },
+    {
+      "id": "trablus-economy-4",
+      "category": "economy",
+      "text": "İskenderiye tarafından gelen yükler arttığında Trablus pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:trablus:economy-4"
+    },
+    {
+      "id": "trablus-security-1",
+      "category": "security",
+      "text": "İskenderiye yolunda fortuna kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:trablus:security-1"
+    },
+    {
+      "id": "trablus-security-2",
+      "category": "security",
+      "text": "İskenderiye ile Tunus arasında dönen haberler, Trablus açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:trablus:security-2"
+    },
+    {
+      "id": "trablus-security-3",
+      "category": "security",
+      "text": "Nadir mal bonusu yüzünden Trablus limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:trablus:security-3"
+    },
+    {
+      "id": "trablus-politics-1",
+      "category": "politics",
+      "text": "Trablus kahvehanelerinde Trablus memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:trablus:politics-1"
+    },
+    {
+      "id": "trablus-politics-2",
+      "category": "politics",
+      "text": "Çöl Kapısı adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:trablus:politics-2"
+    },
+    {
+      "id": "trablus-social-1",
+      "category": "social",
+      "text": "Buraya ulaşmak zor, dönmek daha da zordur.",
+      "provenanceRef": "whisper:trablus:social-1"
+    }
   ],
   "tunus": [
-    "Tunus zeytinyağı mahsulü bu yıl bol; ihracat yükseliyor.",
-    "Sicilya Boğazı'ndan geçiş riskli; ama kısa yol isteyenler için cazip.",
-    "Girit'ten gelen zeytinyağı ile rekabet kızışmış."
+    {
+      "id": "tunus-economy-1",
+      "category": "economy",
+      "text": "Tunus Zeytinyağı yükü bugün Tunus rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:tunus:economy-1"
+    },
+    {
+      "id": "tunus-economy-2",
+      "category": "economy",
+      "text": "Girit Zeytinyağı getirenlerin Tunus hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:tunus:economy-2"
+    },
+    {
+      "id": "tunus-economy-3",
+      "category": "economy",
+      "text": "Hafsid tarafının kâtipleri, Tunus Zeytinyağı ile Girit Zeytinyağı arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:tunus:economy-3"
+    },
+    {
+      "id": "tunus-economy-4",
+      "category": "economy",
+      "text": "Barselona tarafından gelen yükler arttığında Tunus pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:tunus:economy-4"
+    },
+    {
+      "id": "tunus-security-1",
+      "category": "security",
+      "text": "Barselona yolunda fortuna kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:tunus:security-1"
+    },
+    {
+      "id": "tunus-security-2",
+      "category": "security",
+      "text": "Barselona ile Palermo arasında dönen haberler, Tunus açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:tunus:security-2"
+    },
+    {
+      "id": "tunus-security-3",
+      "category": "security",
+      "text": "Sicilya hattından dönenler bu hafta daha çok göz ve daha az merhamet gördüklerini söylüyor.",
+      "provenanceRef": "whisper:tunus:security-3"
+    },
+    {
+      "id": "tunus-security-4",
+      "category": "security",
+      "text": "Sicilya darboğazı yüzünden Tunus limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:tunus:security-4"
+    },
+    {
+      "id": "tunus-politics-1",
+      "category": "politics",
+      "text": "Tunus kahvehanelerinde Hafsid memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:tunus:politics-1"
+    },
+    {
+      "id": "tunus-politics-2",
+      "category": "politics",
+      "text": "Afrika'nın Roma'sı adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:tunus:politics-2"
+    }
   ],
   "cezayir": [
-    "Korsan limanında silah pazarı canlı; Osmanlı'dan yeni parti gelmiş.",
-    "Provence şarabı getirenlere iyi fiyat veriliyor; meyhane sahipleri açgözlü.",
-    "Bu limanda güçlü olan kazanır; diplomatlar burada pek tutulmaz."
+    {
+      "id": "cezayir-economy-1",
+      "category": "economy",
+      "text": "Osmanlı Silahı yükü bugün Cezayir rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:cezayir:economy-1"
+    },
+    {
+      "id": "cezayir-economy-2",
+      "category": "economy",
+      "text": "Provence Şarabı getirenlerin Cezayir hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:cezayir:economy-2"
+    },
+    {
+      "id": "cezayir-economy-3",
+      "category": "economy",
+      "text": "Cezayir tarafının kâtipleri, Osmanlı Silahı ile Provence Şarabı arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:cezayir:economy-3"
+    },
+    {
+      "id": "cezayir-economy-4",
+      "category": "economy",
+      "text": "Barselona tarafından gelen yükler arttığında Cezayir pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:cezayir:economy-4"
+    },
+    {
+      "id": "cezayir-security-1",
+      "category": "security",
+      "text": "Barselona yolunda fortuna kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:cezayir:security-1"
+    },
+    {
+      "id": "cezayir-security-2",
+      "category": "security",
+      "text": "Barselona ile Trablus arasında dönen haberler, Cezayir açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:cezayir:security-2"
+    },
+    {
+      "id": "cezayir-security-3",
+      "category": "security",
+      "text": "Korsan limanı yüzünden Cezayir limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:cezayir:security-3"
+    },
+    {
+      "id": "cezayir-politics-1",
+      "category": "politics",
+      "text": "Cezayir kahvehanelerinde Cezayir memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:cezayir:politics-1"
+    },
+    {
+      "id": "cezayir-politics-2",
+      "category": "politics",
+      "text": "Korsanlar Yuvası adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:cezayir:politics-2"
+    },
+    {
+      "id": "cezayir-social-1",
+      "category": "social",
+      "text": "Burada ganimet pazarı hukuk kadar hızlı çalışır.",
+      "provenanceRef": "whisper:cezayir:social-1"
+    }
   ],
   "malta": [
-    "Malta şövalyeleri çelik dövmeye devam ediyor; kalite yüksek.",
-    "Tunus'tan zeytinyağı getiren gemiler iyi karşılanıyor.",
-    "Adanın izole konumu fiyatları yükseltiyor; getiren kazanır."
+    {
+      "id": "malta-economy-1",
+      "category": "economy",
+      "text": "Malta Çeliği yükü bugün Malta rıhtımında bol konuşuluyor; erken gelen tüccar daha yumuşak pazarlık bulur.",
+      "provenanceRef": "whisper:malta:economy-1"
+    },
+    {
+      "id": "malta-economy-2",
+      "category": "economy",
+      "text": "Tunus Zeytinyağı getirenlerin Malta hanlarında eli boş dönmeyeceği söyleniyor.",
+      "provenanceRef": "whisper:malta:economy-2"
+    },
+    {
+      "id": "malta-economy-3",
+      "category": "economy",
+      "text": "Malta tarafının kâtipleri, Malta Çeliği ile Tunus Zeytinyağı arasında dönen hesabı dikkatle tutuyor.",
+      "provenanceRef": "whisper:malta:economy-3"
+    },
+    {
+      "id": "malta-economy-4",
+      "category": "economy",
+      "text": "Palermo tarafından gelen yükler arttığında Malta pazarında dil sertleşiyor; sabırlı tüccar daha iyi fiyat kapıyor.",
+      "provenanceRef": "whisper:malta:economy-4"
+    },
+    {
+      "id": "malta-security-1",
+      "category": "security",
+      "text": "Palermo yolunda kabotaj kullanan kaptanlar riskin kâğıttakinden ağır hissedildiğini anlatıyor.",
+      "provenanceRef": "whisper:malta:security-1"
+    },
+    {
+      "id": "malta-security-2",
+      "category": "security",
+      "text": "Palermo ile Tunus arasında dönen haberler, Malta açıklarında denizin sakin görünse de boş olmadığını fısıldıyor.",
+      "provenanceRef": "whisper:malta:security-2"
+    },
+    {
+      "id": "malta-security-3",
+      "category": "security",
+      "text": "Sicilya hattından dönenler bu hafta daha çok göz ve daha az merhamet gördüklerini söylüyor.",
+      "provenanceRef": "whisper:malta:security-3"
+    },
+    {
+      "id": "malta-security-4",
+      "category": "security",
+      "text": "Savaşçı liman yüzünden Malta limanında hem nöbet hem söylenti eksik olmuyor.",
+      "provenanceRef": "whisper:malta:security-4"
+    },
+    {
+      "id": "malta-politics-1",
+      "category": "politics",
+      "text": "Malta kahvehanelerinde Malta memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "provenanceRef": "whisper:malta:politics-1"
+    },
+    {
+      "id": "malta-politics-2",
+      "category": "politics",
+      "text": "Kalkan ve Kılıç adı burada boşuna yaşamıyor; himaye kadar itibar da alınıp satılıyor.",
+      "provenanceRef": "whisper:malta:politics-2"
+    }
   ],
   "default": [
-    "Bu limanda herkes fiyat biliyor sanır; kazanan sadece sabırlı olan olur.",
-    "Kahve dumanı yükseldikçe gerçeğin fiyatı düşer.",
-    "Bir limanın açlığı, başka bir kaptanın şöhreti olur."
+    {
+      "id": "default-economy-1",
+      "category": "economy",
+      "text": "Bir limanın açlığı başka bir kaptanın serveti olur; fiyatı ilk duyan değil son tartan kazanır.",
+      "provenanceRef": "whisper:default:economy-1"
+    },
+    {
+      "id": "default-economy-2",
+      "category": "economy",
+      "text": "Aynı malı herkes getirirse han sahipleri gülümser, tüccarlar susar.",
+      "provenanceRef": "whisper:default:economy-2"
+    },
+    {
+      "id": "default-economy-3",
+      "category": "economy",
+      "text": "Pazarın dili sabah ayrı, akşam ayrıdır; acele eden altını masada bırakır.",
+      "provenanceRef": "whisper:default:economy-3"
+    },
+    {
+      "id": "default-security-1",
+      "category": "security",
+      "text": "Sakin suya en çok tecrübesiz kaptan aldanır; açık deniz her zaman bir şey saklar.",
+      "provenanceRef": "whisper:default:security-1"
+    },
+    {
+      "id": "default-security-2",
+      "category": "security",
+      "text": "Kısa rota her zaman güvenli değildir; bazı geçitler mesafeden çok cesaret ister.",
+      "provenanceRef": "whisper:default:security-2"
+    },
+    {
+      "id": "default-security-3",
+      "category": "security",
+      "text": "Gece vardiyasında görülen tek yelken, sabahın ilk söylentisi olur.",
+      "provenanceRef": "whisper:default:security-3"
+    },
+    {
+      "id": "default-politics-1",
+      "category": "politics",
+      "text": "Limanın vergisi değişmeden nöbeti değişmez; ikisini de önce kahvehane duyar.",
+      "provenanceRef": "whisper:default:politics-1"
+    },
+    {
+      "id": "default-politics-2",
+      "category": "politics",
+      "text": "Bir şehrin mührü sertleştiğinde tüccarın dili de daha temkinli döner.",
+      "provenanceRef": "whisper:default:politics-2"
+    },
+    {
+      "id": "default-social-1",
+      "category": "social",
+      "text": "Kahve dumanı yükseldikçe gerçeğin payı azalır; ama yönünü bilen yine yol bulur.",
+      "provenanceRef": "whisper:default:social-1"
+    },
+    {
+      "id": "default-social-2",
+      "category": "social",
+      "text": "Limanlar önce malı, sonra adı tartar; sabır ikisinde de işe yarar.",
+      "provenanceRef": "whisper:default:social-2"
+    }
   ]
 }

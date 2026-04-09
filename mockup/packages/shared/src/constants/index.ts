@@ -221,3 +221,19 @@ export const LLM_CACHE_TTL_TURNS = 3;
 /** Daily LLM spend ceiling in cents (e.g. 5000 = $50.00). */
 export const LLM_DAILY_BUDGET_CENTS = 5000;
 
+// --- Data grounding ---
+
+/** Minimum encounter chance treated as "elevated" for chokepoint routes. */
+export const CHOKEPOINT_ELEVATED_ENCOUNTER_CHANCE = 0.35;
+/** Minimum size of each static whisper bank; runtime still selects only 3 lines. */
+export const STATIC_WHISPER_POOL_MIN_LINES = 10;
+/**
+ * Required fallback whisper categories.
+ * Social lines are optional because runtime always prioritizes economy/security/politics,
+ * and only uses social when the experience focus calls for it.
+ */
+export const REQUIRED_WHISPER_CATEGORIES = ['economy', 'security', 'politics'] as const;
+/** Minimum trivia entries expected per port in the static trivia catalog. */
+export const STATIC_TRIVIA_MIN_LINES = 3;
+/** Canonical design authority path for grounding validation. */
+export const DESIGN_AUTHORITY_PATH = 'mare_nostrum_master_v3.md';

@@ -1,4 +1,5 @@
 import type { Order, Route } from '../types/index.js';
+export * from './data.js';
 
 export function isOrderReachable(order: Order, currentPortId: string, routes: Route[]) {
   return routes.some(

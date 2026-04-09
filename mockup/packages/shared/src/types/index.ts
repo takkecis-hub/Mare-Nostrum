@@ -5,6 +5,83 @@ export type RouteType = 'tramontana' | 'kabotaj' | 'fortuna' | 'uzun_kabotaj';
 export type Intent = 'kervan' | 'kara_bayrak' | 'pusula' | 'duman';
 export type Tactic = 'pruva' | 'ates' | 'manevra' | 'kacis';
 export type RumorTone = 'olumlu' | 'olumsuz' | 'notr';
+export type WhisperCategory = 'economy' | 'security' | 'politics' | 'social';
+export type GroundingCategory =
+  | 'factual_world_data'
+  | 'derived_game_data'
+  | 'narrative_flavor'
+  | 'implementation_logic'
+  | 'documentation';
+export type GroundingRisk = 'high' | 'medium' | 'low';
+export type GroundingAuthority = 'design' | 'implementation' | 'secondary';
+export type ProvenanceSourceType =
+  | 'design_doc'
+  | 'implementation_data'
+  | 'derived_from_game_data'
+  | 'manual_audit';
+export type ProvenanceConfidence = 'high' | 'medium' | 'low';
+export type ProvenanceDisposition = 'exact' | 'inferred' | 'fictionalized' | 'pending_verification';
+
+export interface WhisperLine {
+  id: string;
+  category: WhisperCategory;
+  text: string;
+  provenanceRef: string;
+}
+
+export interface TriviaEntry {
+  id: string;
+  portId: string;
+  text: string;
+  provenanceRef: string;
+}
+
+export type PortGeoMap = Record<string, { lat: number; lon: number }>;
+export type WhisperPool = Record<string, WhisperLine[]>;
+export type TriviaCatalog = Record<string, TriviaEntry[]>;
+
+export interface GroundingHierarchyEntry {
+  tier: number;
+  path: string;
+  role: string;
+}
+
+export interface GroundingManifestFileEntry {
+  path: string;
+  category: GroundingCategory;
+  risk: GroundingRisk;
+  authority: GroundingAuthority;
+  notes: string;
+}
+
+export interface GroundingManifest {
+  schemaVersion: number;
+  sourceHierarchy: GroundingHierarchyEntry[];
+  fileDeclarations: GroundingManifestFileEntry[];
+}
+
+export interface ProvenanceSource {
+  type: ProvenanceSourceType;
+  title: string;
+  locator: string;
+  periodCovered: string;
+  confidence: ProvenanceConfidence;
+  disposition: ProvenanceDisposition;
+}
+
+export interface ProvenanceRecord {
+  id: string;
+  subjectPath: string;
+  category: GroundingCategory;
+  summary: string;
+  sources: ProvenanceSource[];
+  notes: string;
+}
+
+export interface ProvenanceCatalog {
+  schemaVersion: number;
+  records: Record<string, ProvenanceRecord>;
+}
 
 export interface Port {
   id: string;
