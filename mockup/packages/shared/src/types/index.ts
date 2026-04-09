@@ -6,6 +6,7 @@ export type Intent = 'kervan' | 'kara_bayrak' | 'pusula' | 'duman';
 export type Tactic = 'pruva' | 'ates' | 'manevra' | 'kacis';
 export type RumorTone = 'olumlu' | 'olumsuz' | 'notr';
 export type WhisperCategory = 'economy' | 'security' | 'politics' | 'social';
+export type RumorTemplateId = 'gozdagi' | 'suclama' | 'karalama' | 'ovgu' | 'ifsa' | 'piyasa';
 export type GroundingCategory =
   | 'factual_world_data'
   | 'derived_game_data'
@@ -89,22 +90,22 @@ export interface Port {
   displayName: string;
   region: Region;
   controller: string;
-  produces: {
-    good: string;
-    category: GoodCategory;
-    basePrice: PriceBand;
-  };
-  desires: {
-    good: string;
-    category: GoodCategory;
-    basePrice: PriceBand;
-  };
+  produces: PortTradeSlot;
+  desires: PortTradeSlot;
+  bonusProduces?: PortTradeSlot[];
+  bonusDesires?: PortTradeSlot[];
   special: string[];
   trivia: string[];
   x: number;
   y: number;
   lat?: number;
   lon?: number;
+}
+
+export interface PortTradeSlot {
+  good: string;
+  category: GoodCategory;
+  basePrice: PriceBand;
 }
 
 export interface Route {
@@ -175,6 +176,12 @@ export interface PlayerState {
   transitTurnsRemaining?: number;
   /** Port the player is travelling toward while in transit. */
   transitDestination?: string;
+  /** Unique ports the player has visited so far. */
+  visitedPortIds?: string[];
+  /** Recent turns when the player actively spread a rumor. */
+  rumorSpreadTurns?: number[];
+  /** Active personal quest progress. */
+  questState?: QuestState;
 }
 
 export interface Order {
@@ -211,7 +218,22 @@ export interface TurnResolution {
   combat?: CombatResult;
   trade?: {
     sold: string[];
-    stars: number;
+      stars: number;
+      goldDelta: number;
+    };
+  exploration?: {
+    trivia?: string;
+    goldBonus: number;
+    intel?: string[];
+    stealthSuccess?: boolean;
+  };
+  rumor?: {
+    text: string;
+    counterRumorTriggered: boolean;
+  };
+  contracts?: {
+    fulfilled: string[];
+    expired: string[];
     goldDelta: number;
   };
 }
@@ -224,6 +246,10 @@ export interface GameState {
   lastWhispers: string[];
   /** Tracks how many times each good has been sold at each port: "portId:goodId" → count. */
   portSaturation?: Record<string, number>;
+  /** Derived market-visibility tier from Terazi experience. */
+  priceVisibility?: PriceVisibilityTier;
+  /** Standing city contracts available in the current game. */
+  cityContracts?: CityContract[];
 }
 
 export interface BootstrapPayload {

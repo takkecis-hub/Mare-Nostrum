@@ -132,7 +132,11 @@ describe('checkQuestTrigger', () => {
   });
 
   it('checks minGold condition', () => {
-    const quest = { ...createQuestState('kayip_hazine'), currentStage: 4 };
+    const quest = {
+      ...createQuestState('kayip_hazine'),
+      currentStage: 4,
+      evidence: ['harita_parcasi_1', 'harita_parcasi_2'],
+    };
     const poorPlayer = { ...basePlayer, gold: 50 };
     expect(checkQuestTrigger(quest, 19, 'girit', poorPlayer)).toBe(false);
     expect(checkQuestTrigger(quest, 19, 'girit', basePlayer)).toBe(true);

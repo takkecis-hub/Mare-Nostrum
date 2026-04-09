@@ -1,5 +1,11 @@
 import { resolveCombat } from './combat.js';
-import { sellCargoAtPort } from './economy.js';
+import {
+  checkContractFulfillment,
+  contractBreakPenalty,
+  contractRewardGold,
+  priceVisibilityTier,
+  sellCargoAtPort,
+} from './economy.js';
 import {
   applyExperienceGain,
   determineRenown,
@@ -7,14 +13,28 @@ import {
   updateRenownTracking,
   checkRenownDecay,
 } from './experience.js';
+import { advanceQuest, checkQuestTrigger } from './quest.js';
 import { createRumor, spreadRumors } from './rumor.js';
 import { isOrderReachable } from '../../shared/src/validators/index.js';
 import {
+  PUSULA_DISCOVERY_GOLD,
+  PUSULA_FIRST_VISIT_MULTIPLIER,
   SATURATION_DECAY_INTERVAL,
   SHIPWRECK_RESPAWN_GOLD,
   KABOTAJ_TRADE_BONUS,
 } from '../../shared/src/constants/index.js';
-import type { GameState, Good, Order, Port, Route, Tactic, TurnResolution } from '../../shared/src/types/index.js';
+import { getExperienceRatios } from '../../shared/src/formulas/index.js';
+import type {
+  CityContract,
+  GameState,
+  Good,
+  Order,
+  Port,
+  Route,
+  Tactic,
+  TriviaCatalog,
+  TurnResolution,
+} from '../../shared/src/types/index.js';
 
 const TURNS_PER_SEASON = 4;
 
@@ -37,17 +57,91 @@ function decaySaturation(saturation: Record<string, number>, turn: number): Reco
   return next;
 }
 
+function updateVisitedPorts(visitedPortIds: string[] | undefined, portId: string): string[] {
+  const next = new Set(visitedPortIds ?? []);
+  next.add(portId);
+  return Array.from(next);
+}
+
+function applyCombatOutcome(player: GameState['player'], combat: NonNullable<TurnResolution['combat']>) {
+  const nextPlayer = { ...player };
+  if (combat.result === 'kazandi') {
+    nextPlayer.gold += combat.goldDelta;
+    return nextPlayer;
+  }
+
+  if (combat.result === 'kacti') {
+    return nextPlayer;
+  }
+
+  if (combat.shipwrecked) {
+    nextPlayer.gold = SHIPWRECK_RESPAWN_GOLD;
+    nextPlayer.ship = { type: 'feluka', cargoCapacity: 3, power: 2, durability: 100 };
+    nextPlayer.cargo = [];
+    return nextPlayer;
+  }
+
+  nextPlayer.gold = Math.max(0, nextPlayer.gold + combat.goldDelta);
+  nextPlayer.ship = {
+    ...nextPlayer.ship,
+    durability: Math.max(1, nextPlayer.ship.durability + combat.durabilityDelta),
+  };
+  return nextPlayer;
+}
+
+function resolveContractState(
+  contracts: CityContract[] | undefined,
+  destinationPortId: string,
+  soldGoods: Array<{ goodId: string; quantity: number }>,
+  turn: number,
+) {
+  const fulfilled: string[] = [];
+  const expired: string[] = [];
+  let goldDelta = 0;
+
+  const nextContracts = (contracts ?? []).map((contract) => {
+    if (contract.completed) return contract;
+
+    const result = checkContractFulfillment(contract, soldGoods, turn);
+    if (result.fulfilled && contract.portId === destinationPortId) {
+      fulfilled.push(contract.id);
+      goldDelta += contractRewardGold(contract);
+      return { ...contract, accepted: false, completed: true };
+    }
+
+    if (result.expired) {
+      expired.push(contract.id);
+      goldDelta -= contractBreakPenalty(contract);
+      return { ...contract, accepted: false, completed: true };
+    }
+
+    return contract;
+  });
+
+  return { nextContracts, fulfilled, expired, goldDelta };
+}
+
+function maybeAdvanceQuest(state: GameState, currentPortId: string) {
+  const questState = state.player.questState;
+  if (!questState) return null;
+  if (!checkQuestTrigger(questState, state.turn + 1, currentPortId, state.player)) return null;
+
+  return advanceQuest(questState, `${currentPortId}-turn-${state.turn + 1}`);
+}
+
 export function resolveTurn(input: {
   state: GameState;
   order: Order;
   ports: Port[];
   routes: Route[];
   goods: Good[];
+  triviaCatalog?: TriviaCatalog;
   tactic?: Tactic;
   rng?: () => number;
 }): TurnResolution {
-  const { state, order, ports, routes, goods } = input;
+  const { state, order, ports, routes, goods, triviaCatalog, rng } = input;
   const player = { ...state.player };
+  let cityContracts = [...(state.cityContracts ?? [])];
   const currentPort = ports.find((port) => port.id === player.currentPortId);
   const destinationPort = ports.find((port) => port.id === order.destinationPort);
 
@@ -62,6 +156,8 @@ export function resolveTurn(input: {
         activeRumors: spreadRumors(state.activeRumors, routes),
         lastWhispers: [`Açık denizde ${player.transitTurnsRemaining} tur daha kaldı.`],
         portSaturation: decaySaturation(state.portSaturation ?? {}, state.turn + 1),
+        priceVisibility: priceVisibilityTier(player.experience),
+        cityContracts,
       },
       log: [
         { label: 'Deniz', detail: `Açık denizde ilerliyorsunuz. Varışa ${player.transitTurnsRemaining} tur.` },
@@ -85,6 +181,7 @@ export function resolveTurn(input: {
     const whispers = [
       `${player.currentPortId} limanına vardın. ${dominant} kokan haberler geliyor.`,
     ];
+    player.visitedPortIds = updateVisitedPorts(player.visitedPortIds, player.currentPortId);
 
     return {
       nextState: {
@@ -94,6 +191,8 @@ export function resolveTurn(input: {
         activeRumors: rumors,
         lastWhispers: whispers,
         portSaturation: decaySaturation(state.portSaturation ?? {}, state.turn + 1),
+        priceVisibility: priceVisibilityTier(player.experience),
+        cityContracts,
       },
       log: [
         { label: 'Varış', detail: `${player.currentPortId} limanına ulaştınız.` },
@@ -128,6 +227,8 @@ export function resolveTurn(input: {
   ];
 
   let combat;
+  let exploration: TurnResolution['exploration'];
+  let contractsResult: TurnResolution['contracts'];
   if (order.intent === 'kara_bayrak') {
     combat = resolveCombat({
       playerShip: player.ship,
@@ -158,19 +259,80 @@ export function resolveTurn(input: {
           : 'Karşılaşma pahalıya patladı; mürettebat sarsıldı.',
       });
 
-      if (combat.shipwrecked) {
-        // Shipwreck: respawn with feluka at nearest port
-        player.gold = SHIPWRECK_RESPAWN_GOLD;
-        player.ship = { type: 'feluka', cargoCapacity: 3, power: 2, durability: 100 };
-        player.cargo = [];
-      } else {
-        player.gold = Math.max(0, player.gold + combat.goldDelta);
-        player.ship = {
-          ...player.ship,
-          durability: Math.max(1, player.ship.durability + combat.durabilityDelta),
-        };
-      }
+      Object.assign(player, applyCombatOutcome(player, combat));
     }
+  } else if (selectedRoute && selectedRoute.encounterChance > 0) {
+    const ratios = getExperienceRatios(player.experience);
+    const encounterChance =
+      order.intent === 'duman'
+        ? selectedRoute.encounterChance * Math.max(0.2, 1 - ratios.simsar)
+        : selectedRoute.encounterChance;
+    const triggeredEncounter = rng ? rng() < encounterChance : false;
+
+    if (triggeredEncounter) {
+      combat = resolveCombat({
+        playerShip: player.ship,
+        playerExperience: player.experience,
+        playerTactic: order.intent === 'duman' ? 'kacis' : input.tactic ?? 'manevra',
+        rng,
+      });
+
+      if (combat.result === 'kazandi') {
+        log.push({
+          label: 'Karşılaşma',
+          detail: order.intent === 'duman'
+            ? 'Sessiz geçiş korsanlara rağmen başarıyla tamamlandı; iz bırakmadan sıyrıldın.'
+            : 'Rotada çıkan korsan pususu dağıtıldı.',
+        });
+      } else if (combat.result === 'kacti') {
+        log.push({
+          label: 'Karşılaşma',
+          detail: 'Rotadaki tehdidi görüp yelkeni kırdın, doğrudan çatışmadan kurtuldun.',
+        });
+      } else {
+        log.push({
+          label: 'Karşılaşma',
+          detail: combat.shipwrecked
+            ? 'Yol üstünde yakalandınız; gemi parçalandı.'
+            : 'Beklenmeyen bir karşılaşma seferi sarstı.',
+        });
+      }
+      Object.assign(player, applyCombatOutcome(player, combat));
+    } else if (order.intent === 'duman') {
+      const intel = [
+        `${destinationPort.name} limanında aranan mal: ${destinationPort.desires.good}.`,
+        `${destinationPort.name} çevresinde rota tipi: ${selectedRoute.type}.`,
+      ];
+      exploration = { goldBonus: 0, intel, stealthSuccess: true };
+      log.push({
+        label: 'Duman',
+        detail: 'Simsar gölgesi altında görünmeden geçtin ve liman hakkında haber topladın.',
+      });
+    }
+  }
+
+  if (combat?.shipwrecked && order.intent !== 'kara_bayrak') {
+    return {
+      nextState: {
+        turn: state.turn + 1,
+        season: nextSeason(state.turn),
+        player: {
+          ...player,
+          transitStatus: 'at_port',
+          transitTurnsRemaining: 0,
+          transitDestination: undefined,
+        },
+        activeRumors: spreadRumors(state.activeRumors, routes),
+        lastWhispers: ['Sefer parçalandı; mürettebat kendini en yakın güvenli kıyıya zor attı.'],
+        portSaturation: decaySaturation(state.portSaturation ?? {}, state.turn + 1),
+        priceVisibility: priceVisibilityTier(player.experience),
+        cityContracts,
+      },
+      log,
+      whispers: ['Sefer parçalandı; mürettebat kendini en yakın güvenli kıyıya zor attı.'],
+      combat,
+      exploration,
+    };
   }
 
   // Start multi-turn transit if needed
@@ -181,7 +343,7 @@ export function resolveTurn(input: {
 
     player.experience = applyExperienceGain(player.experience, order.intent);
     const rumors = spreadRumors(
-      [...state.activeRumors, createRumor(order.intent, currentPort.id)],
+      [...state.activeRumors, createRumor(order.intent, currentPort.id, player.id, state.turn + 1)],
       routes,
     );
     player.renown = determineRenown(player.experience, rumors.length);
@@ -196,6 +358,8 @@ export function resolveTurn(input: {
         activeRumors: rumors,
         lastWhispers: [`${destinationPort.name} yolundasınız.`],
         portSaturation: decaySaturation(state.portSaturation ?? {}, state.turn + 1),
+        priceVisibility: priceVisibilityTier(player.experience),
+        cityContracts,
       },
       log,
       whispers: [`${destinationPort.name} yolundasınız.`],
@@ -205,6 +369,8 @@ export function resolveTurn(input: {
 
   player.currentPortId = destinationPort.id;
   player.experience = applyExperienceGain(player.experience, order.intent);
+  const isFirstVisit = !(player.visitedPortIds ?? []).includes(destinationPort.id);
+  player.visitedPortIds = updateVisitedPorts(player.visitedPortIds, destinationPort.id);
 
   const saturation = { ...(state.portSaturation ?? {}) };
   const routeBonus = (order.routeType === 'kabotaj' || order.routeType === 'uzun_kabotaj') ? KABOTAJ_TRADE_BONUS : 1;
@@ -222,10 +388,48 @@ export function resolveTurn(input: {
         ? `${trade.sold.join(', ')} satıldı. ${trade.goldDelta} altın kazandın.`
         : 'Bu limanda kârlı satış çıkmadı; malları elde tuttun.',
     });
+
+    const contractState = resolveContractState(
+      state.cityContracts,
+      destinationPort.id,
+      trade.soldGoods,
+      state.turn + 1,
+    );
+    player.gold += contractState.goldDelta;
+    contractsResult = {
+      fulfilled: contractState.fulfilled,
+      expired: contractState.expired,
+      goldDelta: contractState.goldDelta,
+    };
+    if (contractState.fulfilled.length > 0) {
+      log.push({
+        label: 'Kontrat',
+        detail: `${contractState.fulfilled.length} şehir kontratı tamamlandı, ek ödül alındı.`,
+      });
+    }
+    if (contractState.expired.length > 0) {
+      log.push({
+        label: 'Kontrat',
+        detail: `${contractState.expired.length} kontrat süresi doldu; ceza kesildi.`,
+      });
+    }
+    cityContracts = contractState.nextContracts;
+  }
+
+  if (order.intent === 'pusula') {
+    const portTrivia = triviaCatalog?.[destinationPort.id] ?? [];
+    const trivia = portTrivia.length > 0 ? portTrivia[state.turn % portTrivia.length]?.text : destinationPort.trivia[0];
+    const goldBonus = PUSULA_DISCOVERY_GOLD * (isFirstVisit ? PUSULA_FIRST_VISIT_MULTIPLIER : 1);
+    player.gold += goldBonus;
+    exploration = { ...exploration, trivia, goldBonus };
+    log.push({
+      label: 'Pusula',
+      detail: `${goldBonus} altınlık keşif mükâfatı aldın${trivia ? `: ${trivia}` : '.'}`,
+    });
   }
 
   const rumors = spreadRumors(
-    [...state.activeRumors, createRumor(order.intent, destinationPort.id)],
+    [...state.activeRumors, createRumor(order.intent, destinationPort.id, player.id, state.turn + 1)],
     routes,
   );
   player.renown = determineRenown(player.experience, rumors.length);
@@ -255,6 +459,14 @@ export function resolveTurn(input: {
   player.transitStatus = 'at_port';
   player.transitTurnsRemaining = 0;
   player.transitDestination = undefined;
+  const questProgress = maybeAdvanceQuest({ ...state, player }, destinationPort.id);
+  if (questProgress) {
+    log.push({
+      label: 'Görev',
+      detail: `${questProgress.stageTitle}: ${questProgress.stageDescription}`,
+    });
+    player.questState = questProgress.quest;
+  }
 
   const dominant = dominantExperienceLabel(player.experience);
   const whispers = [
@@ -266,14 +478,16 @@ export function resolveTurn(input: {
   log.push({ label: 'Rüzgâr', detail: `${destinationPort.name} limanına vardın.` });
 
   return {
-    nextState: {
-      turn: state.turn + 1,
-      season: nextSeason(state.turn),
-      player,
-      activeRumors: rumors,
-      lastWhispers: whispers,
-      portSaturation: decaySaturation(saturation, state.turn + 1),
-    },
+      nextState: {
+        turn: state.turn + 1,
+        season: nextSeason(state.turn),
+        player,
+        activeRumors: rumors,
+        lastWhispers: whispers,
+        portSaturation: decaySaturation(saturation, state.turn + 1),
+        priceVisibility: priceVisibilityTier(player.experience),
+        cityContracts,
+      },
     log,
     whispers,
     combat,
@@ -284,5 +498,7 @@ export function resolveTurn(input: {
           goldDelta: trade.goldDelta,
         }
       : undefined,
+    exploration,
+    contracts: contractsResult,
   };
 }

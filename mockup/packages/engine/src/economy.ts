@@ -1,4 +1,4 @@
-import type { CargoItem, Good, GoodCategory, Port, PriceBand, SmuggleResult, CityContract, PriceVisibilityTier, HiddenExperience } from '../../shared/src/types/index.js';
+import type { CargoItem, Good, GoodCategory, Port, PortTradeSlot, PriceBand, SmuggleResult, CityContract, PriceVisibilityTier, HiddenExperience } from '../../shared/src/types/index.js';
 import {
   SATURATION_PRICE_STEP,
   SATURATION_PRICE_FLOOR,
@@ -26,12 +26,24 @@ import {
 } from '../../shared/src/constants/index.js';
 import { getExperienceRatios } from '../../shared/src/formulas/index.js';
 
+function producedSlots(port: Port): PortTradeSlot[] {
+  return [port.produces, ...(port.bonusProduces ?? [])];
+}
+
+function desiredSlots(port: Port): PortTradeSlot[] {
+  return [port.desires, ...(port.bonusDesires ?? [])];
+}
+
+function findTradeSlot(slots: PortTradeSlot[], goodId: string): PortTradeSlot | undefined {
+  return slots.find((slot) => slot.good === goodId);
+}
+
 export function priceIndicatorForPort(port: Port, good: Good) {
-  if (port.produces.good === good.id) {
+  if (findTradeSlot(producedSlots(port), good.id)) {
     return 2;
   }
 
-  if (port.desires.good === good.id) {
+  if (findTradeSlot(desiredSlots(port), good.id)) {
     return 5;
   }
 
@@ -43,10 +55,8 @@ export function priceIndicatorForPort(port: Port, good: Good) {
  * basePrice band. Falls back to GOOD_PURCHASE_COST when no band matches.
  */
 export function purchaseCostForGood(port: Port, good: Good): number {
-  // Currently uses only the port's basePrice band; the good parameter is
-  // available for future per-good pricing rules (e.g. quality tiers).
-  void good;
-  return PRICE_BAND_MAP[port.produces.basePrice] ?? GOOD_PURCHASE_COST;
+  const tradeSlot = findTradeSlot(producedSlots(port), good.id) ?? port.produces;
+  return PRICE_BAND_MAP[tradeSlot.basePrice] ?? GOOD_PURCHASE_COST;
 }
 
 /**
@@ -93,7 +103,7 @@ export function saturationMultiplier(portId: string, goodId: string, saturation:
  * otherwise default to 'normal'.
  */
 function effectiveBasePrice(port: Port, good: Good): PriceBand {
-  return port.desires.good === good.id ? port.desires.basePrice : 'normal';
+  return findTradeSlot(desiredSlots(port), good.id)?.basePrice ?? 'normal';
 }
 
 export function sellCargoAtPort(
@@ -104,6 +114,7 @@ export function sellCargoAtPort(
   options: { routeBonus?: number; season?: 'yaz' | 'kis' } = {},
 ) {
   const sold: string[] = [];
+  const soldGoods: Array<{ goodId: string; quantity: number }> = [];
   let goldDelta = 0;
   let stars = 1;
   const saturationUpdates: Record<string, number> = {};
@@ -126,8 +137,9 @@ export function sellCargoAtPort(
       return true;
     }
 
-    sold.push(`${item.name} x${item.quantity}`);
-    goldDelta += saleValue;
+      sold.push(`${item.name} x${item.quantity}`);
+      soldGoods.push({ goodId: item.goodId, quantity: item.quantity });
+      goldDelta += saleValue;
     stars = Math.max(stars, Math.min(4, indicator - 1));
 
     // Track saturation increase
@@ -136,7 +148,7 @@ export function sellCargoAtPort(
     return false;
   });
 
-  return { remainingCargo, sold, goldDelta, stars, saturationUpdates };
+  return { remainingCargo, sold, soldGoods, goldDelta, stars, saturationUpdates };
 }
 
 // --- Bulk purchase discounts ---

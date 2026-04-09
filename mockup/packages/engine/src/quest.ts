@@ -40,7 +40,7 @@ const KAYIP_HAZINE_STAGES: QuestStage[] = [
     description: 'Gavdos yakınlarındaki batığı keşfedin ve hazineyi çıkarın.',
     turnRange: [19, 24],
     triggerPorts: ['girit'],
-    conditions: { minGold: 100 },
+    conditions: { minGold: 100, minEvidence: 2 },
   },
   {
     stage: 5,
@@ -79,6 +79,7 @@ const BABANIN_SEREFI_STAGES: QuestStage[] = [
     description: 'Ortakla yüzleşin: diplomatik çözüm veya kılıç.',
     turnRange: [19, 24],
     triggerPorts: ['venedik', 'cenova', 'istanbul'],
+    conditions: { minEvidence: 2 },
   },
   {
     stage: 5,
@@ -117,6 +118,7 @@ const INTIKAM_STAGES: QuestStage[] = [
     description: 'Korsanla karşı karşıya gelin. Ama gerçek düşündüğünüzden farklı.',
     turnRange: [19, 24],
     triggerPorts: ['cezayir', 'trablus'],
+    conditions: { minEvidence: 2 },
   },
   {
     stage: 5,
@@ -155,6 +157,7 @@ const SAF_MERAK_STAGES: QuestStage[] = [
     description: 'Antik bir liman kalıntısı veya batık bir medeniyet izine ulaşın.',
     turnRange: [19, 24],
     triggerPorts: ['girit', 'kibris'],
+    conditions: { minEvidence: 2 },
   },
   {
     stage: 5,
@@ -243,6 +246,9 @@ export function checkQuestTrigger(
         (item) => item.goodId === (stage.conditions!.requiredGood as string),
       );
       if (!hasGood) return false;
+    }
+    if (stage.conditions.minEvidence !== undefined && quest.evidence.length < (stage.conditions.minEvidence as number)) {
+      return false;
     }
   }
 
