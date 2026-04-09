@@ -1,5 +1,10 @@
 import type { HiddenExperience, Intent } from '../../shared/src/types/index.js';
 import { getExperienceRatios } from '../../shared/src/formulas/index.js';
+import {
+  RENOWN_WARNING_TURNS,
+  RENOWN_LOSS_TURNS,
+  RENOWN_CONTRADICTIONS,
+} from '../../shared/src/constants/index.js';
 
 export function applyExperienceGain(experience: HiddenExperience, intent: Intent) {
   const next = { ...experience };
@@ -10,6 +15,74 @@ export function applyExperienceGain(experience: HiddenExperience, intent: Intent
   if (intent === 'duman') next.simsar += 2;
 
   return next;
+}
+
+/** Map of renown titles to the intent that supports them. */
+const RENOWN_SUPPORT_INTENTS: Record<string, Intent> = {
+  'Altın Parmak': 'kervan',
+  'Demir Pruva': 'kara_bayrak',
+  'İpek Dil': 'pusula',
+  'Hayalet Pala': 'duman',
+};
+
+/**
+ * Update renownLastAction tracking when a player takes an action.
+ * Returns a fresh record with updated turn numbers.
+ */
+export function updateRenownTracking(
+  renown: string[],
+  intent: Intent,
+  currentTurn: number,
+  previous: Partial<Record<string, number>> = {},
+): Partial<Record<string, number>> {
+  const next = { ...previous };
+
+  for (const title of renown) {
+    const supportIntent = RENOWN_SUPPORT_INTENTS[title];
+    if (supportIntent === intent) {
+      next[title] = currentTurn;
+    }
+    // Initialize tracking for newly gained titles
+    if (next[title] === undefined) {
+      next[title] = currentTurn;
+    }
+  }
+
+  return next;
+}
+
+/**
+ * Check which renown titles should be lost due to inactivity or contradictory actions.
+ * Returns { warnings, losses } — titles approaching loss and titles that must be removed.
+ */
+export function checkRenownDecay(
+  renown: string[],
+  intent: Intent,
+  currentTurn: number,
+  renownLastAction: Partial<Record<string, number>>,
+): { warnings: string[]; losses: string[] } {
+  const warnings: string[] = [];
+  const losses: string[] = [];
+
+  for (const title of renown) {
+    const lastAction = renownLastAction[title] ?? 0;
+    const gap = currentTurn - lastAction;
+
+    // Check for contradictory action
+    const contradictions = RENOWN_CONTRADICTIONS[title] ?? [];
+    if (contradictions.includes(intent)) {
+      warnings.push(title);
+      continue;
+    }
+
+    if (gap >= RENOWN_LOSS_TURNS) {
+      losses.push(title);
+    } else if (gap >= RENOWN_WARNING_TURNS) {
+      warnings.push(title);
+    }
+  }
+
+  return { warnings, losses };
 }
 
 export function determineRenown(experience: HiddenExperience, activeRumorCount: number) {

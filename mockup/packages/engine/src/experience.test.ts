@@ -188,3 +188,46 @@ describe('getRenownDescription', () => {
     expect(desc.toLowerCase()).toContain('deniz');
   });
 });
+
+import { updateRenownTracking, checkRenownDecay } from './experience.js';
+
+describe('updateRenownTracking', () => {
+  it('updates turn for matching renown+intent', () => {
+    const result = updateRenownTracking(['Altın Parmak'], 'kervan', 5, {});
+    expect(result['Altın Parmak']).toBe(5);
+  });
+
+  it('initializes tracking for newly gained titles', () => {
+    const result = updateRenownTracking(['Demir Pruva'], 'pusula', 3, {});
+    expect(result['Demir Pruva']).toBe(3);
+  });
+
+  it('preserves existing tracking for unrelated intents', () => {
+    const result = updateRenownTracking(['Altın Parmak'], 'pusula', 10, { 'Altın Parmak': 2 });
+    expect(result['Altın Parmak']).toBe(2);
+  });
+});
+
+describe('checkRenownDecay', () => {
+  it('returns no warnings or losses for fresh titles', () => {
+    const result = checkRenownDecay(['Altın Parmak'], 'kervan', 3, { 'Altın Parmak': 1 });
+    expect(result.warnings).toHaveLength(0);
+    expect(result.losses).toHaveLength(0);
+  });
+
+  it('warns when gap reaches 5 turns', () => {
+    const result = checkRenownDecay(['Altın Parmak'], 'pusula', 6, { 'Altın Parmak': 1 });
+    expect(result.warnings).toContain('Altın Parmak');
+  });
+
+  it('marks loss when gap reaches 8 turns', () => {
+    const result = checkRenownDecay(['Altın Parmak'], 'pusula', 9, { 'Altın Parmak': 1 });
+    expect(result.losses).toContain('Altın Parmak');
+  });
+
+  it('warns on contradictory action', () => {
+    // Altın Parmak contradicts kara_bayrak
+    const result = checkRenownDecay(['Altın Parmak'], 'kara_bayrak', 2, { 'Altın Parmak': 1 });
+    expect(result.warnings).toContain('Altın Parmak');
+  });
+});
