@@ -46,7 +46,10 @@ export function calculatePower(
 
 const ENEMY_TACTICS: Tactic[] = ['pruva', 'ates', 'manevra'];
 
-/** Pick an enemy tactic using the injectable RNG instead of always 'ates'. */
+/**
+ * Pick an enemy tactic using the injectable RNG instead of always 'ates'.
+ * Selects uniformly from pruva, ates, and manevra (enemies never flee).
+ */
 function pickEnemyTactic(rng: () => number): Tactic {
   return ENEMY_TACTICS[Math.floor(rng() * ENEMY_TACTICS.length)];
 }

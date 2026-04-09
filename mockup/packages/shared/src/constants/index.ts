@@ -62,8 +62,8 @@ export const RENOWN_CONTRADICTIONS: Record<string, string[]> = {
 
 /**
  * Minimum total experience points before any renown title can be granted.
- * Prevents instant renown on turn 1 — designed so ~8 turns of focused play
- * are required (4 intents × +2 each = 8 per 4 turns ⇒ 16 by turn 8).
+ * Prevents instant renown on turn 1 — at +2 per turn, a focused player
+ * reaches this threshold in ~6 turns of consistent play.
  */
 export const RENOWN_MIN_TOTAL_EXPERIENCE = 12;
 
