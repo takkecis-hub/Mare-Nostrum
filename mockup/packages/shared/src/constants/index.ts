@@ -114,6 +114,102 @@ export const SCORE_PORT_VISITED = 3;
 /** Score threshold to achieve Efsane (Legend) status in a 30-turn game. */
 export const EFSANE_SCORE_THRESHOLD = 100;
 
+// --- Bulk purchase discounts ---
+
+/** Minimum quantity for the first discount tier. */
+export const BULK_DISCOUNT_TIER1_MIN = 4;
+/** Minimum quantity for the second discount tier. */
+export const BULK_DISCOUNT_TIER2_MIN = 8;
+/** Discount multiplier for tier 1 (4-7 units). */
+export const BULK_DISCOUNT_TIER1 = 0.9;
+/** Discount multiplier for tier 2 (8+ units). */
+export const BULK_DISCOUNT_TIER2 = 0.8;
+
+// --- Smuggling ---
+
+/** Base detection probability for smuggling with low Simsar (40 %). */
+export const SMUGGLING_DETECT_BASE = 0.4;
+/** Minimum detection probability for smuggling with max Simsar (3 %). */
+export const SMUGGLING_DETECT_FLOOR = 0.03;
+/** Fine in gold when caught smuggling. */
+export const SMUGGLING_FINE_GOLD = 200;
+/** Number of turns locked out of the port after smuggling capture. */
+export const SMUGGLING_LOCKOUT_TURNS = 2;
+
+// --- City contracts ---
+
+/** Default number of turns to deliver a city contract. */
+export const CONTRACT_DEFAULT_TURNS = 30;
+/** Sell-price bonus multiplier when fulfilling a city contract. */
+export const CONTRACT_PRICE_BONUS = 1.3;
+/** Gold penalty for breaking a city contract. */
+export const CONTRACT_BREAK_PENALTY = 100;
+
+// --- First arrival bonus ---
+
+/** Sell-price bonus multiplier for the first delivery of a good to a port in a turn. */
+export const FIRST_ARRIVAL_BONUS = 1.15;
+
+// --- Price visibility ---
+
+/** Terazi ratio threshold for seeing local market hunger levels. */
+export const PRICE_VISIBILITY_LOCAL = 0.2;
+/** Terazi ratio threshold for seeing connected port hunger levels. */
+export const PRICE_VISIBILITY_NETWORK = 0.35;
+/** Terazi ratio threshold for full market map (1-turn delayed). */
+export const PRICE_VISIBILITY_FULL = 0.5;
+
+// --- Conflict spectrum ---
+
+/** Base success probability for debunking a rumor (Ateşe Su). */
+export const DEBUNK_BASE_SUCCESS = 0.3;
+/** Maximum success probability for debunking (high Mürekkep). */
+export const DEBUNK_MAX_SUCCESS = 0.85;
+/** Base success probability for tracing a rumor source (İzi Sürmek). */
+export const TRACE_BASE_SUCCESS = 0.2;
+/** Maximum success probability for tracing (high Simsar). */
+export const TRACE_MAX_SUCCESS = 0.8;
+/** Counter-rumor backfire probability when experience is low. */
+export const COUNTER_RUMOR_BACKFIRE = 0.25;
+
+// --- Economic warfare (Kuşatma) ---
+
+/** Saturation increase when a player performs stock monopoly (Stok Ablukası). */
+export const KUSATMA_STOCK_SATURATION = 3;
+/** Price reduction multiplier from price sabotage (Fiyat Sabotajı). */
+export const KUSATMA_PRICE_SABOTAGE = 0.7;
+/** Turns that route scare (Rota Korkutması) increases encounter chance. */
+export const KUSATMA_ROUTE_SCARE_TURNS = 3;
+/** Encounter chance increase from route scare. */
+export const KUSATMA_ROUTE_SCARE_BONUS = 0.25;
+
+// --- Escape mechanic ---
+
+/** Base escape success probability. */
+export const ESCAPE_BASE_SUCCESS = 0.3;
+/** Feluka escape bonus (fast ship). */
+export const ESCAPE_FELUKA_BONUS = 0.25;
+/** Kadirga escape penalty (slow ship). */
+export const ESCAPE_KADIRGA_PENALTY = -0.15;
+/** Attacker bonus when escape attempt fails. */
+export const ESCAPE_FAIL_ATTACKER_BONUS = 1;
+
+// --- Tactic-specific loot ---
+
+/** Cargo capture rate for pruva (boarding) wins. */
+export const LOOT_PRUVA_CARGO_RATE = 1.0;
+/** Cargo capture rate for ates (ranged) wins. */
+export const LOOT_ATES_CARGO_RATE = 0.7;
+/** Manevra wins grant intelligence instead of cargo. */
+export const LOOT_MANEVRA_INTEL = true;
+
+// --- Quest system ---
+
+/** Number of stages in each origin quest chain. */
+export const QUEST_STAGES = 5;
+/** Number of turns per quest stage. */
+export const QUEST_STAGE_TURNS = 5;
+
 // --- LLM budget guardrails ---
 
 /** Maximum LLM API calls allowed per game session. */

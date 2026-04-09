@@ -1,4 +1,4 @@
-import type { CargoItem, Good, GoodCategory, Port, PriceBand } from '../../shared/src/types/index.js';
+import type { CargoItem, Good, GoodCategory, Port, PriceBand, SmuggleResult, CityContract, PriceVisibilityTier, HiddenExperience } from '../../shared/src/types/index.js';
 import {
   SATURATION_PRICE_STEP,
   SATURATION_PRICE_FLOOR,
@@ -9,7 +9,22 @@ import {
   SEASON_LUKS_BONUS_YAZ,
   SEASON_YEMEK_MALUS_YAZ,
   SEASON_LUKS_MALUS_KIS,
+  BULK_DISCOUNT_TIER1_MIN,
+  BULK_DISCOUNT_TIER2_MIN,
+  BULK_DISCOUNT_TIER1,
+  BULK_DISCOUNT_TIER2,
+  SMUGGLING_DETECT_BASE,
+  SMUGGLING_DETECT_FLOOR,
+  SMUGGLING_FINE_GOLD,
+  SMUGGLING_LOCKOUT_TURNS,
+  CONTRACT_PRICE_BONUS,
+  CONTRACT_BREAK_PENALTY,
+  FIRST_ARRIVAL_BONUS,
+  PRICE_VISIBILITY_LOCAL,
+  PRICE_VISIBILITY_NETWORK,
+  PRICE_VISIBILITY_FULL,
 } from '../../shared/src/constants/index.js';
+import { getExperienceRatios } from '../../shared/src/formulas/index.js';
 
 export function priceIndicatorForPort(port: Port, good: Good) {
   if (port.produces.good === good.id) {
@@ -122,4 +137,140 @@ export function sellCargoAtPort(
   });
 
   return { remainingCargo, sold, goldDelta, stars, saturationUpdates };
+}
+
+// --- Bulk purchase discounts ---
+
+/**
+ * Return the discount multiplier based on the quantity being purchased.
+ * 1-3 units: no discount (×1.0)
+ * 4-7 units: -10% (×0.9)
+ * 8+ units: -20% (×0.8)
+ */
+export function bulkDiscountMultiplier(quantity: number): number {
+  if (quantity >= BULK_DISCOUNT_TIER2_MIN) return BULK_DISCOUNT_TIER2;
+  if (quantity >= BULK_DISCOUNT_TIER1_MIN) return BULK_DISCOUNT_TIER1;
+  return 1;
+}
+
+/**
+ * Calculate the total purchase cost for a good at a port with bulk discount.
+ */
+export function purchaseCostWithDiscount(port: Port, good: Good, quantity: number): number {
+  const unitCost = purchaseCostForGood(port, good);
+  return Math.round(unitCost * quantity * bulkDiscountMultiplier(quantity));
+}
+
+// --- Smuggling system ---
+
+/**
+ * Calculate the detection probability for smuggling based on Simsar experience.
+ * High Simsar ratio → low detection probability (floor at 3%).
+ * Low Simsar → high detection (base at 40%).
+ */
+export function smugglingDetectionProbability(experience: HiddenExperience): number {
+  const ratios = getExperienceRatios(experience);
+  const simsarWeight = ratios.simsar;
+  // Linear interpolation from base (40%) to floor (3%) as simsar goes 0→0.5
+  const range = SMUGGLING_DETECT_BASE - SMUGGLING_DETECT_FLOOR;
+  const reduction = Math.min(simsarWeight / 0.5, 1) * range;
+  return Math.max(SMUGGLING_DETECT_FLOOR, SMUGGLING_DETECT_BASE - reduction);
+}
+
+/**
+ * Attempt to smuggle forbidden goods into a port.
+ * Returns the smuggling result: detection, fines, and confiscation.
+ */
+export function attemptSmuggling(
+  cargo: CargoItem[],
+  forbiddenGoodIds: string[],
+  experience: HiddenExperience,
+  rng: () => number = Math.random,
+): SmuggleResult {
+  const smuggledItems = cargo.filter((item) => forbiddenGoodIds.includes(item.goodId));
+
+  if (smuggledItems.length === 0) {
+    return { detected: false, fineGold: 0, goodsConfiscated: [], lockoutTurns: 0 };
+  }
+
+  const detectProb = smugglingDetectionProbability(experience);
+  const detected = rng() < detectProb;
+
+  if (!detected) {
+    return { detected: false, fineGold: 0, goodsConfiscated: [], lockoutTurns: 0 };
+  }
+
+  return {
+    detected: true,
+    fineGold: SMUGGLING_FINE_GOLD,
+    goodsConfiscated: smuggledItems,
+    lockoutTurns: SMUGGLING_LOCKOUT_TURNS,
+  };
+}
+
+// --- City contracts ---
+
+/**
+ * Check if a city contract has been fulfilled by the player's current cargo delivery.
+ */
+export function checkContractFulfillment(
+  contract: CityContract,
+  soldGoods: Array<{ goodId: string; quantity: number }>,
+  currentTurn: number,
+): { fulfilled: boolean; expired: boolean } {
+  if (contract.completed) return { fulfilled: false, expired: false };
+  if (currentTurn > contract.deadlineTurn) return { fulfilled: false, expired: true };
+
+  const delivered = soldGoods
+    .filter((item) => item.goodId === contract.goodId)
+    .reduce((sum, item) => sum + item.quantity, 0);
+
+  return { fulfilled: delivered >= contract.quantity, expired: false };
+}
+
+/**
+ * Calculate the reward for fulfilling a contract (bonus price).
+ */
+export function contractRewardGold(contract: CityContract): number {
+  return contract.rewardGold;
+}
+
+/**
+ * Calculate the penalty for breaking/expiring a contract.
+ */
+export function contractBreakPenalty(contract: CityContract): number {
+  return contract.breakPenalty || CONTRACT_BREAK_PENALTY;
+}
+
+/**
+ * Apply the contract bonus to a sale — used when kervan sells goods matching an active contract.
+ */
+export function contractSaleBonus(): number {
+  return CONTRACT_PRICE_BONUS;
+}
+
+// --- First arrival bonus ---
+
+/**
+ * Return the first-arrival bonus multiplier. The first player to deliver a
+ * good to a port in a turn gets a 15% price bonus.
+ */
+export function firstArrivalMultiplier(isFirstArrival: boolean): number {
+  return isFirstArrival ? FIRST_ARRIVAL_BONUS : 1;
+}
+
+// --- Price visibility ---
+
+/**
+ * Determine the player's price visibility tier based on Terazi experience.
+ * Higher Terazi ratio → more market information.
+ */
+export function priceVisibilityTier(experience: HiddenExperience): PriceVisibilityTier {
+  const ratios = getExperienceRatios(experience);
+  const teraziRatio = ratios.terazi;
+
+  if (teraziRatio >= PRICE_VISIBILITY_FULL) return 'full';
+  if (teraziRatio >= PRICE_VISIBILITY_NETWORK) return 'network';
+  if (teraziRatio >= PRICE_VISIBILITY_LOCAL) return 'local';
+  return 'none';
 }
