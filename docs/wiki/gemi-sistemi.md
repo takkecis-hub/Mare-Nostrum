@@ -13,11 +13,13 @@ Oyuncunun her zaman tek bir gemisi vardır. Kendi oyun stiline göre seçer ve d
 
 ## Karşılaştırma Tablosu
 
+> **Uygulama durumu:** Gemi değerleri `mockup/packages/shared/src/types/index.ts` (Ship tipi) ve `mockup/packages/engine/src/combat.ts` (taktik bonusları) dosyalarında tanımlıdır.
+
 | Gemi | Hız | Kargo | Güç | Taktik Sinerjisi | Özel |
 |------|-----|-------|-----|-----------------|------|
-| **Feluka** | Hızlı | Az | 1 | Manevra +1 (toplam +3 vs Pruva) | Kaçış şampiyonu |
-| **Karaka** | Orta | Çok | 2 | Ateş +1 savunma | Kargo kaybı azaltır |
-| **Kadırga** | Yavaş | Az | 3 | Pruva +1 (toplam +3 vs Ateş) | Savaş makinesi |
+| **Feluka** | Hızlı | 3 | 2 | Manevra +1 | Kaçış şampiyonu; batışta respawn gemisi |
+| **Karaka** | Orta | 5 | 2 | — | Kargo avantajı; varsayılan başlangıç gemisi |
+| **Kadırga** | Yavaş | Az | 3 | Pruva +1 | Savaş makinesi |
 
 ---
 
@@ -27,13 +29,14 @@ Oyuncunun her zaman tek bir gemisi vardır. Kendi oyun stiline göre seçer ve d
 
 **Avantajlar:**
 - Fortuna rotasında ilk gelme şansı yüksek
-- Manevra taktiğinde gizli +1 bonus (+3 vs Pruva)
+- Manevra taktiğinde +1 bonus
 - Kaçış denemesinde en başarılı gemi (Feluka > Kadırga > Karaka hız sırası)
 - Kabotaj rotası 2 tur (normal)
+- Gemi batışında respawn gemisi (güç 2, kargo 3, dayanıklılık 100)
 
 **Dezavantajlar:**
-- Kargo kapasitesi düşük — büyük ticaret yapılamaz
-- Düşük güç (1) — savaşta risk yüksek
+- Kargo kapasitesi düşük (3) — büyük ticaret yapılamaz
+- Güç: 2 — savaşta Kadırga'nın gerisinde
 
 **Uygun oyun stili:** Hızlı tüccar, korsan, bilgi toplayıcı
 
@@ -44,14 +47,13 @@ Oyuncunun her zaman tek bir gemisi vardır. Kendi oyun stiline göre seçer ve d
 > Karaka (Carrack) — geniş karınlı, ağır yüklü, saygıdeğer. Bir karaka dolusu baharat küçük bir şehrin bir yıllık bütçesidir.
 
 **Avantajlar:**
-- Yüksek kargo kapasitesi — Commenda'da ideal
-- Ateş taktiğinde savunma +1 ("Ağır Yük" — kargo kalkan gibi)
-- Savaşta kaybedildiğinde kargonun **%50'si kurtarılabilir** (büyük ambar)
-- "Kaybetsen de tamamen ezilmezsin" temasıyla tutarlı
+- Yüksek kargo kapasitesi (5) — Commenda'da ideal
+- Güç: 2 — dengeli savunma
+- Mockup'ta varsayılan başlangıç gemisi (200 altın + 1 Murano Camı)
 
 **Dezavantajlar:**
 - Fortuna rotasında son gelen olma riski yüksek
-- Orta güç (2) — aşırı güçlü düşmana karşı savunmasız
+- Taktik bonusu yok — savaşta uzmanlaşma avantajı sağlamaz
 
 **Uygun oyun stili:** Büyük tüccar, Commenda yatırımcısı
 
@@ -77,11 +79,13 @@ Oyuncunun her zaman tek bir gemisi vardır. Kendi oyun stiline göre seçer ve d
 
 ## Gemi Durumları
 
+> **Uygulama durumu:** Dayanıklılık sistemi `mockup/packages/engine/src/shipyard.ts` ve `combat.ts` dosyalarında uygulanmıştır. Tamir maliyeti: REPAIR_COST_PER_POINT=4 altın/puan, tersane indirimi TERSANE_DISCOUNT=0.75.
+
 | Durum | Etki | İyileştirme |
 |-------|------|-------------|
-| **Denize Hazır** | Normal performans | — |
-| **Yaralı** | Tüm performans yarı, hız düşer | 1 tur tersanede tamir |
-| **Denizin Dibi** | Gemi yok edildi | Yeni gemi satın al |
+| **Sağlam (100)** | Normal performans | — |
+| **Hasarlı (1-99)** | Güç hesabında durability/50 → düşük bonus | Tersanede tamir (4 altın/puan, tersane %25 indirim) |
+| **Batık (0)** | Gemi yok — Feluka ile respawn + 50 altın | Otomatik (turn-resolver) |
 
 ---
 
@@ -115,7 +119,10 @@ Karaka tamiri:
 
 ## Başlangıç Gemisi
 
-Herkes Feluka (100 altın değerinde) ve 200 altınla başlar. Kalan 100 altın ilk turda ticaret için kullanılabilir.
+> **Uygulama durumu:** Mockup sunucusunda (`server/src/index.ts`) oyuncu **Karaka** (kargo 5, güç 2, dayanıklılık 100) ve 200 altınla başlar. Kargoda 1 adet Murano Camı bulunur.
+
+**Tasarım hedefi:** Herkes Feluka (100 altın değerinde) ve 200 altınla başlar.
+**Mevcut mockup:** Karaka ile başlanır — erken ticaret testi için daha geniş kargo kapasitesi sağlanmıştır.
 
 ---
 

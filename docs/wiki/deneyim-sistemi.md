@@ -28,24 +28,32 @@ Oyuncu hiçbir zaman "Ticaret: 47" görmez. Hiçbir zaman "skill puanım arttı"
 
 ## Eylem-Havuz Eşleştirmesi
 
+> **Uygulama durumu:** Aşağıdaki tablo iki kısımdan oluşur. İlk bölüm `mockup/packages/engine/src/experience.ts` dosyasında uygulanan **aktif** eşleştirmeleri gösterir. İkinci bölüm tasarım hedefindeki gelecek eşleştirmeleri listeler.
+
+### Uygulanmış (Engine)
+
+| Niyet (Intent) | Havuz | Miktar |
+|----------------|-------|--------|
+| **Kervan** | Terazi | +2 |
+| **Kara Bayrak** | Meltem | +2 |
+| **Pusula** | Mürekkep | +1 |
+| **Duman** | Simsar | +2 |
+
+### Tasarım Hedefi (Henüz Uygulanmamış)
+
 | Eylem | Havuz | Miktar |
 |-------|-------|--------|
 | Fırtınada hayatta kaldı | Meltem | +3 |
 | Savaşa girdi | Meltem | +2 |
 | Kaçış denemesi yaptı | Meltem | +1 |
-| Mal alıp sattı | Terazi | +1 |
 | Farklı limanda ticaret yaptı | Terazi | +1 |
 | 2+ oyuncuyla mesajlaştı | Mürekkep | +1 |
 | Şehir yöneticisiyle görüştü | Mürekkep | +2 |
 | Söylenti yaydı veya çürüttü | Mürekkep | +1 |
 | Commenda veya konvoy anlaştı | Mürekkep | +1 |
 | Kaçakçılık yaptı (başarılı) | Simsar | +2 |
-| Kaçakçılık yaptı (yakalandı) | Simsar | +1 |
 | Sahte söylenti yaydı | Simsar | +1 |
 | Birinin kargosunu gözetledi | Simsar | +1 |
-| Avlanma emri verdi | Simsar | +1 |
-
-> Denize çıkmak artık otomatik Meltem vermez — deneyim **yaşanarak** kazanılır.
 
 ---
 
@@ -66,6 +74,8 @@ Oyuncu B: Meltem 30, Terazi 90, Mürekkep 50, Simsar 20
 ---
 
 ## Generalist Dezavantajı
+
+> **Uygulama durumu:** `getThresholdGates` fonksiyonu (experience.ts) %25 eşiğini kontrol eder.
 
 Oran **%25'in altında** kalan havuzlarda oyuncu belirli fırsatları **tamamen kaçırır**:
 
@@ -135,16 +145,18 @@ Aynı kahvehanede iki oyuncu farklı şeyler duyar:
 
 ## Ün Sistemi ile Entegrasyon
 
+> **Uygulama durumu:** Aşağıdaki tablonun ilk 4 ünü `mockup/packages/engine/src/experience.ts` dosyasındaki `determineRenown` fonksiyonunda uygulanmıştır. Diğerleri tasarım hedefidir.
+
 Ün kazanmak için iki koşul: **deneyim oranı + söylenti**:
 
-| Ün | Koşul |
-|----|-------|
-| Altın Parmak | Terazi %35+ VE 3+ ticaret söylentisi |
-| Demir Pruva | Meltem %35+ VE 2+ savaş söylentisi |
-| İpek Dil | Mürekkep %35+ VE 2+ diplomasi söylentisi |
-| Hayalet Pala | Simsar %30+ VE hakkında olumsuz söylenti AZ |
-| Mühürlü Söz | Mürekkep %25+ VE hiç ihanet söylentisi yok |
-| Akrep | 3+ ihanet söylentisi (havuz fark etmez) |
+| Ün | Koşul | Uygulama |
+|----|-------|----------|
+| Altın Parmak | Terazi %35+ VE ≥1 aktif söylenti | ✅ Uygulanmış |
+| Demir Pruva | Meltem %35+ VE ≥1 aktif söylenti | ✅ Uygulanmış |
+| İpek Dil | Mürekkep %35+ | ✅ Uygulanmış (söylenti gerektirmez) |
+| Hayalet Pala | Simsar %30+ | ✅ Uygulanmış (söylenti gerektirmez) |
+| Mühürlü Söz | Mürekkep %25+ VE hiç ihanet söylentisi yok | 🔧 Tasarım |
+| Akrep | 3+ ihanet söylentisi (havuz fark etmez) | 🔧 Tasarım |
 
 Detaylı → [Ün Sistemi](un-sistemi.md)
 

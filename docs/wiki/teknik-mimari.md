@@ -6,46 +6,54 @@
 
 ## Teknoloji Stack
 
+> **Uygulama durumu:** Aşağıdaki stack `mockup/` workspace'inde çalışır durumdadır.
+
 ```
 ┌─ CLIENT ─────────────────────────────────┐
-│  Next.js 14+ (App Router, SSR)            │
-│  Harita: Pixi.js (Canvas) veya SVG        │
-│  State: Zustand (hafif, TypeScript dostu) │
+│  Next.js 15 (App Router)                  │
+│  React 19                                 │
+│  Harita: Etkileşimli SVG (MapView.tsx)    │
+│  State: Zustand (3 store)                │
 │  Realtime: Socket.io-client               │
-│  UI Kit: Tailwind CSS + shadcn/ui         │
-│  Deployment: Vercel                       │
+│  Deployment: Vercel (hedef)              │
 └──────────────────────────────────────────┘
 
 ┌─ SERVER ─────────────────────────────────┐
-│  Runtime: Node.js 20+ (TypeScript)        │
-│  Framework: Express.js veya Fastify       │
-│  Realtime: Socket.io                     │
+│  Runtime: Node.js 20+ (TypeScript, ESM)   │
+│  Framework: Express 4                    │
+│  Realtime: Socket.io 4                   │
 │  API Style: REST + WebSocket hibrit       │
-│  Deployment: Railway veya Fly.io          │
+│  Deployment: Railway veya Fly.io (hedef)  │
 └──────────────────────────────────────────┘
 
 ┌─ VERİTABANI ─────────────────────────────┐
 │  Primary: PostgreSQL 16 (oyun durumu)     │
 │  Cache/Sess: Redis 7 (session, LLM cache) │
-│  ORM: Drizzle ORM (type-safe)             │
+│  ORM: Drizzle ORM (type-safe, 12 tablo)  │
 │  Migrations: Drizzle Kit                  │
 └──────────────────────────────────────────┘
 
+┌─ MOTOR ──────────────────────────────────┐
+│  Pure TypeScript — deterministik          │
+│  Injectable RNG (testlerde fixedRng)      │
+│  Vitest: 156 test, 8 test dosyası        │
+│  Modüller: combat, economy, experience,  │
+│    rumor, scoring, shipyard, turn-resolver│
+└──────────────────────────────────────────┘
+
 ┌─ LLM ────────────────────────────────────┐
-│  Primary: Claude Haiku 3.5 (hızlı, ucuz) │
-│  Fallback: OpenAI GPT-4o-mini             │
-│  Kritik: Claude Sonnet 3.5 (görev NPC)   │
-│  SDK: Vercel AI SDK (streaming, TS)       │
-│  Cache: Redis (aynı prompt → aynı yanıt) │
-│  Fallback: Statik JSON fısıltı havuzu    │
+│  Hedef: Claude API (Haiku + Sonnet)       │
+│  Mevcut: Statik JSON fısıltı havuzu      │
+│  Fallback: whispers.json (liman bazlı)   │
+│  Bütçe: 8 çağrı/oturum, 5sn timeout     │
 └──────────────────────────────────────────┘
 
 ┌─ ALTYAPI ─────────────────────────────────┐
 │  Repo: GitHub (monorepo)                  │
+│  Workspace: pnpm 10.7.1                  │
+│  Docker: PostgreSQL 16 + Redis 7          │
 │  CI/CD: GitHub Actions                    │
-│  Monitoring: Sentry (hata takip)          │
-│  Analytics: PostHog (oyuncu davranışı)    │
-│  LLM Monitor: Custom dashboard            │
+│  Modül: ESM ("type": "module")            │
 └───────────────────────────────────────────┘
 ```
 
@@ -53,81 +61,92 @@
 
 ## Monorepo Yapısı
 
+> **Not:** Aşağıdaki yapı `mockup/` workspace'indeki gerçek düzeni yansıtır.
+
 ```
-mare-nostrum/
+mockup/
 ├── packages/
-│   ├── shared/              # Ortak tipler, sabitler, formüller
-│   │   ├── types/           # GameState, Player, Port, Route, Rumor...
-│   │   ├── constants/       # 15 liman, 29 rota, 15 menşe mal, 8 ün
-│   │   ├── formulas/        # Savaş gücü, deneyim oranı, fiyat hesabı
-│   │   └── validators/      # Emir doğrulama, kargo kontrol
+│   ├── shared/              # Ortak tipler, sabitler, formüller, doğrulayıcılar
+│   │   ├── src/
+│   │   │   ├── types/       # GameState, Player, Port, Route, Rumor, Ship, Order...
+│   │   │   ├── constants/   # Tüm oyun sabitleri (savaş, ekonomi, ün, LLM bütçe)
+│   │   │   ├── formulas/    # Deneyim oranları, fiyat göstergesi (●●●○○)
+│   │   │   ├── validators/  # Emir doğrulama (isOrderReachable)
+│   │   │   └── geo/         # Mercator projeksiyonu (lat/lon → SVG)
+│   │   └── package.json
 │   │
 │   ├── engine/              # Deterministik oyun motoru (LLM'den bağımsız)
-│   │   ├── turn-resolver/   # Fondaco → Emir → Rüzgâr döngüsü
-│   │   ├── combat/          # Pruva/Ateş/Manevra çözümleme
-│   │   ├── economy/         # Açlık/doyma, fiyat, ilk gelen bonusu
-│   │   ├── rumor/           # Söylenti üretim, yayılma, çürüme
-│   │   ├── experience/      # Gizli havuz birikimi, oran hesabı
-│   │   ├── renown/          # Ün koşul kontrolü, kazanım/kayıp
-│   │   ├── event/           # Event tetikleyici, etki uygulama
-│   │   └── quest/           # Görev zinciri aşama takibi
+│   │   ├── src/
+│   │   │   ├── combat.ts          # Pruva/Ateş/Manevra, d6 zar, güç hesabı
+│   │   │   ├── economy.ts         # Fiyat göstergesi, port doyma, otomatik satış
+│   │   │   ├── experience.ts      # Deneyim birikimi, ün belirleme, ün çürüme
+│   │   │   ├── rumor.ts           # Söylenti üretim, rota bazlı yayılma, güç çürümesi
+│   │   │   ├── scoring.ts         # Zafer puanı, Efsane kontrolü
+│   │   │   ├── shipyard.ts        # Tamir maliyeti, tersane indirimi
+│   │   │   ├── turn-resolver.ts   # Tam tur döngüsü (çok turlu transit dahil)
+│   │   │   └── *.test.ts          # Her modülün co-located test dosyası
+│   │   └── package.json
 │   │
-│   ├── server/              # API + WebSocket sunucu
-│   │   ├── api/             # REST endpoints
-│   │   ├── ws/              # Socket.io handler'ları
-│   │   ├── llm/             # LLM çağrı yönetimi, cache, fallback
-│   │   ├── db/              # Drizzle schema + migrations
-│   │   └── auth/            # Basit auth (email + OAuth)
+│   ├── server/              # Express + Socket.io API sunucusu
+│   │   ├── src/
+│   │   │   ├── index.ts     # REST API uç noktaları + Socket.io
+│   │   │   ├── db/
+│   │   │   │   └── schema.ts  # Drizzle ORM şema (12 tablo)
+│   │   │   └── llm/
+│   │   │       └── mock-whispers.ts  # Statik fısıltı havuzundan çekme
+│   │   └── package.json
 │   │
-│   └── client/              # Next.js frontend
-│       ├── app/             # Next.js App Router sayfalar
-│       ├── components/
-│       │   ├── map/         # Harita render (Pixi.js)
-│       │   ├── fondaco/     # Kahvehane, Pazar, Müzakere, Tersane
-│       │   ├── combat/      # Savaş ekranı, taktik seçimi
-│       │   ├── hud/         # Altın, kargo, ün gösterimi
-│       │   └── chat/        # Multiplayer mesajlaşma
-│       ├── hooks/           # useGameState, useSocket, useLLM
-│       └── stores/          # Zustand store'ları
+│   └── client/              # Next.js 15 frontend
+│       ├── app/
+│       │   ├── page.tsx           # Ana sayfa
+│       │   ├── layout.tsx         # Root layout
+│       │   ├── components/
+│       │   │   ├── game/          # GameShell, MapView, MapBackground, EmirView,
+│       │   │   │                  # FondacoView, Kahvehane, Pazar, Tersane,
+│       │   │   │                  # Muzakere, RuzgarView, TopBar, PortPanel, MainMenu
+│       │   │   └── ui/            # Badge, Card, DotIndicator, Modal, ProgressBar,
+│       │   │                      # StarRating, Timer, Tooltip
+│       │   └── stores/            # useGameStore, useUIStore, useSocketStore
+│       └── package.json
 │
 ├── data/
-│   ├── ports.json           # 15 liman detayları
-│   ├── routes.json          # 29 rota tanımları
-│   ├── goods.json           # 15 menşe mal
-│   ├── events.json          # 92 event tanımı
-│   ├── trivia.json          # ☽ Tarihsel trivia havuzu
-│   ├── whispers.json        # Statik fısıltı fallback havuzu
-│   ├── npc-profiles.json    # NPC kişilik şablonları
-│   └── quest-chains.json    # 4 görev zinciri tanımları
+│   ├── ports.json           # 15 liman (koordinatlar, üretim/talep, özellikler, trivia)
+│   ├── routes.json          # 29 rota (9 tramontana, 7 kabotaj, 12 fortuna, 1 uzun_kabotaj)
+│   ├── goods.json           # 17 menşe mal (7 yemek, 6 lüks, 4 savaş)
+│   ├── whispers.json        # Statik fısıltı fallback havuzu (liman bazlı)
+│   ├── coastlines.json      # SVG kıyı çizgileri (harita render)
+│   └── port-geo.json        # Gerçek lat/lon koordinatları
 │
-├── docs/                    # Tasarım dokümanları
-│   └── wiki/                # ← Bu wiki
-├── tests/
-└── docker-compose.yml       # PostgreSQL + Redis
+├── docker-compose.yml       # PostgreSQL 16 + Redis 7
+├── pnpm-workspace.yaml      # Workspace tanımı
+└── tsconfig.base.json       # Paylaşılan TypeScript yapılandırması
 ```
 
 ---
 
 ## Veritabanı Şeması (12 Tablo)
 
+> **Not:** Aşağıdaki şema `mockup/packages/server/src/db/schema.ts` dosyasındaki Drizzle ORM tanımlarını yansıtır.
+
 ### Ana Tablolar
 
 ```sql
-games          -- oyun durumu, tur sayısı, dönem, mod
-players        -- oyuncu verileri (altın, gemi, ün)
-orders         -- verilen emirler (kilitli, gizli)
-cargo          -- kargo takibi (kim ne taşıyor)
+games              -- oyun durumu: tur, mevsim, dönem, mod, max oyuncu, fondaco zamanlayıcı
+players            -- oyuncu: altın, gemi, liman, transit durum, kargo, ün, görev
+hidden_experience  -- 4 gizli havuz (Meltem/Terazi/Mürekkep/Simsar)
+orders             -- emir: hedef liman, rota tipi, niyet, kilit durumu
 
-rumors         -- aktif söylentiler
-rumor_ports    -- söylenti × liman ilişkisi
+port_states        -- liman: kontrolör, açlık durumu, kapanma
+city_relations     -- oyuncu × liman ilişkisi (yabancı/tanıdık/kem göz)
 
-port_hunger    -- her liman × menşe mal açlık seviyesi
-experience     -- 4 gizli havuz (Meltem/Terazi/Mürekkep/Simsar)
-renowns        -- kazanılmış ünler
+rumors             -- söylentiler: metin, ton, güç, yaş, mevcut limanlar
+combat_encounters  -- savaş kayıtları: saldırgan, savunan, taktik, güç, sonuç
 
-quest_states   -- görev aşama takibi
-events_log     -- tetiklenmiş event'ler
-npc_states     -- NPC durumları (borç sayacı, motivasyon)
+events             -- tetiklenen eventler ve etkileri
+messages           -- oyuncu/NPC mesajları (açık/özel kanal)
+quest_progress     -- görev zinciri aşama takibi
+npc_states         -- NPC kişilik, motivasyon, borç sayacı
+trade_history      -- ticaret geçmişi: liman, mal, miktar, fiyat
 ```
 
 ### Kritik Tasarım Kararı: Emir Gizliliği
@@ -138,7 +157,7 @@ CREATE TABLE orders (
   intent      VARCHAR(20) NOT NULL,   -- GİZLİ
   route_type  VARCHAR(20) NOT NULL,   -- GİZLİ
   locked      BOOLEAN DEFAULT FALSE,
-  revealed_at TIMESTAMP               -- Rüzgâr fazında açılır
+  locked_at   TIMESTAMP               -- Rüzgâr fazında açılır
 );
 ```
 
@@ -148,41 +167,53 @@ Emirler çözümleme anına kadar hiçbir client'a gönderilmez. Browser devtool
 
 ## Tur Çözümleme Akışı (Sunucu Tarafı)
 
+> **Not:** Aşağıdaki akış `mockup/packages/engine/src/turn-resolver.ts` dosyasındaki gerçek uygulamayı yansıtır.
+
 ```typescript
-// packages/engine/turn-resolver/index.ts
-async function resolveTurn(gameId: string) {
-  // 1. Hava durumu (fırtına kontrolü)
-  const weather = rollWeather(game.season, game.routes);
+// packages/engine/src/turn-resolver.ts
+function resolveTurn(input: {
+  state: GameState;
+  order: Order;
+  ports: Port[];
+  routes: Route[];
+  goods: Good[];
+  tactic?: Tactic;
+  rng?: () => number;  // Injectable RNG (testlerde deterministic)
+}): TurnResolution {
 
-  // 2. Tüm emirleri aç (gizliliği kaldır)
-  const orders = await revealOrders(gameId, game.turn);
+  // 1. Transit kontrol (çok turlu rota devam ediyor mu?)
+  //    → Kabotaj/uzun_kabotaj rotalarında ara turlar
 
-  // 3. Hareket çözümleme (paralel)
-  const movements = resolveMovements(orders, weather);
+  // 2. Emir doğrulama (rota geçerli mi?)
+  //    → isOrderReachable validator kontrolü
 
-  // 4. Karşılaşma kontrolü
-  const encounters = detectEncounters(movements, game.ports);
+  // 3. Çok turlu rota kontrolü (kabotaj = 2 tur, uzun_kabotaj = 3 tur)
+  //    → transitStatus/transitTurnsRemaining ayarla
 
-  // 5. Niyet matrisi çözümü
-  for (encounter of encounters) {
-    const result = resolveIntentMatrix(encounter);
-    if (result.combat) await combat.resolve(result);
-  }
+  // 4. Kara Bayrak niyetinde savaş çözümleme
+  //    → resolveCombat: taktik karşılaştırma + d6 zar + güç hesabı
+  //    → Gemiyi batırma (durability ≤ 0 → feluka ile respawn)
 
-  // 6. Ticaret çözümü
-  await economy.resolveTrading(movements, game.portHunger);
+  // 5. Hareket çözümleme
+  //    → Oyuncuyu hedef limana taşı
 
-  // 7. Söylenti üretimi
-  await rumor.generateAndSpread(gameId, actionLog);
+  // 6. Deneyim güncelleme (sessiz)
+  //    → applyExperienceGain: niyet bazlı havuz artışı
 
-  // 8. Deneyim güncelleme
-  await experience.update(gameId, actionLog);
+  // 7. Ticaret çözümü (Kervan niyetinde)
+  //    → sellCargoAtPort: port doyma çarpanıyla otomatik satış
+
+  // 8. Söylenti üretimi ve yayılma
+  //    → createRumor + spreadRumors: rota grafı boyunca yayılma
 
   // 9. Ün kontrolü
-  await renown.checkConditions(gameId);
+  //    → determineRenown: oran eşikleri + söylenti sayısı
+  //    → checkRenownDecay: pasiflik uyarısı + çelişki kontrolü
+  //    → updateRenownTracking: son eylem turu takibi
 
-  // 10. Event tetikleyici
-  await eventEngine.checkTriggers(gameId, game.turn);
+  // 10. Mevsim geçişi (her 4 turda yaz ↔ kış)
+
+  // 11. Port doyma çürümesi (her 3 turda -1)
 }
 ```
 
