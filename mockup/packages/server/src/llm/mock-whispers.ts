@@ -28,6 +28,9 @@ function hashSeed(seed: string) {
 function pickWhisperText(lines: WhisperLine[], category: WhisperCategory, seed: string) {
   const pool = lines.filter((line) => line.category === category);
   const candidates = pool.length > 0 ? pool : lines;
+  if (candidates.length === 0) {
+    return undefined;
+  }
   return candidates[hashSeed(seed) % candidates.length]?.text;
 }
 
@@ -46,5 +49,5 @@ export function getMockWhispers(portId: string, experience: HiddenExperience) {
 
   return selected
     .filter((line): line is string => typeof line === 'string')
-    .map((line, index) => (index === 0 ? `${line} (${focus} sezgin burada daha keskin.)` : line));
+    .map((line, index) => (index === 0 ? `${line} (${focus} hissin burada daha keskin.)` : line));
 }

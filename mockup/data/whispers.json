@@ -387,7 +387,7 @@
     {
       "id": "istanbul-economy-3",
       "category": "economy",
-      "text": "Osmanli tarafının kâtipleri, Doğu İpeği ile Ragusa Tuzu arasında dönen hesabı dikkatle tutuyor.",
+      "text": "Osmanlı tarafının kâtipleri, Doğu İpeği ile Ragusa Tuzu arasında dönen hesabı dikkatle tutuyor.",
       "provenanceRef": "whisper:istanbul:economy-3"
     },
     {
@@ -423,7 +423,7 @@
     {
       "id": "istanbul-politics-1",
       "category": "politics",
-      "text": "İstanbul kahvehanelerinde Osmanli memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "text": "İstanbul kahvehanelerinde Osmanlı memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
       "provenanceRef": "whisper:istanbul:politics-1"
     },
     {
@@ -511,7 +511,7 @@
     {
       "id": "kibris-economy-3",
       "category": "economy",
-      "text": "Kibris tarafının kâtipleri, Kıbrıs Tuzu ile Murano Camı arasında dönen hesabı dikkatle tutuyor.",
+      "text": "Kıbrıs tarafının kâtipleri, Kıbrıs Tuzu ile Murano Camı arasında dönen hesabı dikkatle tutuyor.",
       "provenanceRef": "whisper:kibris:economy-3"
     },
     {
@@ -541,7 +541,7 @@
     {
       "id": "kibris-politics-1",
       "category": "politics",
-      "text": "Kıbrıs kahvehanelerinde Kibris memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
+      "text": "Kıbrıs kahvehanelerinde Kıbrıs memurlarının vergiyi ve haberi aynı deftere yazdığı söyleniyor.",
       "provenanceRef": "whisper:kibris:politics-1"
     },
     {

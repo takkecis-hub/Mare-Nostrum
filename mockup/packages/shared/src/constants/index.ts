@@ -139,3 +139,5 @@ export const STATIC_WHISPER_POOL_MIN_LINES = 10;
 export const REQUIRED_WHISPER_CATEGORIES = ['economy', 'security', 'politics'] as const;
 /** Minimum trivia entries expected per port in the static trivia catalog. */
 export const STATIC_TRIVIA_MIN_LINES = 3;
+/** Canonical design authority path for grounding validation. */
+export const DESIGN_AUTHORITY_PATH = 'mare_nostrum_master_v3.md';

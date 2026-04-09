@@ -27,6 +27,7 @@ import type {
 } from '../types/index.js';
 import {
   CHOKEPOINT_ELEVATED_ENCOUNTER_CHANCE,
+  DESIGN_AUTHORITY_PATH,
   REQUIRED_WHISPER_CATEGORIES,
   STATIC_TRIVIA_MIN_LINES,
   STATIC_WHISPER_POOL_MIN_LINES,
@@ -369,6 +370,9 @@ export function collectGroundedDataIntegrityErrors(input: {
     ) {
       errors.push(`Chokepoint route ${route.id} must have elevated encounterChance`);
     }
+    if (route.isChokepoint !== null && route.isChokepoint.trim().length === 0) {
+      errors.push(`Chokepoint route ${route.id} must define a non-empty chokepoint id`);
+    }
   }
 
   for (const good of goods) {
@@ -472,8 +476,8 @@ export function collectGroundedDataIntegrityErrors(input: {
   }
 
   const hierarchyPaths = new Set(groundingManifest.sourceHierarchy.map((entry) => entry.path));
-  if (!hierarchyPaths.has('mare_nostrum_master_v3.md')) {
-    errors.push('grounding-manifest.json must declare mare_nostrum_master_v3.md as source hierarchy tier 1');
+  if (!hierarchyPaths.has(DESIGN_AUTHORITY_PATH)) {
+    errors.push(`grounding-manifest.json must declare ${DESIGN_AUTHORITY_PATH} as source hierarchy tier 1`);
   }
 
   for (const port of ports) {
