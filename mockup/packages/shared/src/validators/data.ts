@@ -25,6 +25,12 @@ import type {
   WhisperLine,
   WhisperPool,
 } from '../types/index.js';
+import {
+  CHOKEPOINT_ELEVATED_ENCOUNTER_CHANCE,
+  REQUIRED_WHISPER_CATEGORIES,
+  STATIC_TRIVIA_MIN_LINES,
+  STATIC_WHISPER_POOL_MIN_LINES,
+} from '../constants/index.js';
 
 const REGIONS = ['bati', 'orta', 'dogu', 'guney'] as const;
 const GOOD_CATEGORIES = ['yemek', 'luks', 'savas'] as const;
@@ -357,7 +363,7 @@ export function collectGroundedDataIntegrityErrors(input: {
     if (!portIds.has(route.to)) {
       errors.push(`Route ${route.id} references missing to port ${route.to}`);
     }
-    if (route.isChokepoint && route.encounterChance <= 0.35) {
+    if (route.isChokepoint && route.encounterChance <= CHOKEPOINT_ELEVATED_ENCOUNTER_CHANCE) {
       errors.push(`Chokepoint route ${route.id} must have elevated encounterChance`);
     }
   }
@@ -400,18 +406,19 @@ export function collectGroundedDataIntegrityErrors(input: {
     }
   }
 
-  const requiredWhisperCategories: WhisperCategory[] = ['economy', 'security', 'politics'];
   for (const port of ports) {
     const lines = whisperPool[port.id];
     if (!lines) {
       errors.push(`whispers.json is missing port ${port.id}`);
       continue;
     }
-    if (lines.length < 10) {
-      errors.push(`whispers.json port ${port.id} must contain at least 10 lines`);
+    if (lines.length < STATIC_WHISPER_POOL_MIN_LINES) {
+      errors.push(
+        `whispers.json port ${port.id} must contain at least ${STATIC_WHISPER_POOL_MIN_LINES} lines`,
+      );
     }
     const categories = new Set(lines.map((line) => line.category));
-    for (const category of requiredWhisperCategories) {
+    for (const category of REQUIRED_WHISPER_CATEGORIES) {
       if (!categories.has(category)) {
         errors.push(`whispers.json port ${port.id} is missing ${category} category`);
       }
@@ -423,8 +430,16 @@ export function collectGroundedDataIntegrityErrors(input: {
     }
   }
 
-  if (!whisperPool.default || whisperPool.default.length < 10) {
-    errors.push('whispers.json default pool must contain at least 10 lines');
+  if (!whisperPool.default || whisperPool.default.length < STATIC_WHISPER_POOL_MIN_LINES) {
+    errors.push(
+      `whispers.json default pool must contain at least ${STATIC_WHISPER_POOL_MIN_LINES} lines`,
+    );
+  } else {
+    for (const line of whisperPool.default) {
+      if (!provenanceCatalog.records[line.provenanceRef]) {
+        errors.push(`Missing provenance record for whisper ${line.provenanceRef}`);
+      }
+    }
   }
 
   for (const port of ports) {
@@ -433,8 +448,8 @@ export function collectGroundedDataIntegrityErrors(input: {
       errors.push(`trivia.json is missing port ${port.id}`);
       continue;
     }
-    if (entries.length < 3) {
-      errors.push(`trivia.json port ${port.id} must contain at least 3 entries`);
+    if (entries.length < STATIC_TRIVIA_MIN_LINES) {
+      errors.push(`trivia.json port ${port.id} must contain at least ${STATIC_TRIVIA_MIN_LINES} entries`);
     }
     for (const entry of entries) {
       if (entry.portId !== port.id) {
