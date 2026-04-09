@@ -13,9 +13,9 @@ export const PRICE_BAND_PAHALI = 50;
 
 /** Maps a PriceBand string to its gold cost. */
 export const PRICE_BAND_MAP: Record<string, number> = {
-  ucuz: 30,
-  normal: 40,
-  pahali: 50,
+  ucuz: PRICE_BAND_UCUZ,
+  normal: PRICE_BAND_NORMAL,
+  pahali: PRICE_BAND_PAHALI,
 };
 
 // --- Season economy modifiers ---

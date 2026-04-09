@@ -27,7 +27,10 @@ export function priceIndicatorForPort(port: Port, good: Good) {
  * Return the purchase cost of a good at a given port using the port's
  * basePrice band. Falls back to GOOD_PURCHASE_COST when no band matches.
  */
-export function purchaseCostForGood(port: Port, _good: Good): number {
+export function purchaseCostForGood(port: Port, good: Good): number {
+  // Currently uses only the port's basePrice band; the good parameter is
+  // available for future per-good pricing rules (e.g. quality tiers).
+  void good;
   return PRICE_BAND_MAP[port.produces.basePrice] ?? GOOD_PURCHASE_COST;
 }
 
@@ -69,6 +72,15 @@ export function saturationMultiplier(portId: string, goodId: string, saturation:
   return Math.max(SATURATION_PRICE_FLOOR, 1 - SATURATION_PRICE_STEP * count);
 }
 
+/**
+ * Determine the effective basePrice band for a good at a port.
+ * If the port desires the good, use the port's desires.basePrice;
+ * otherwise default to 'normal'.
+ */
+function effectiveBasePrice(port: Port, good: Good): PriceBand {
+  return port.desires.good === good.id ? port.desires.basePrice : 'normal';
+}
+
 export function sellCargoAtPort(
   cargo: CargoItem[],
   goods: Good[],
@@ -93,7 +105,7 @@ export function sellCargoAtPort(
     const indicator = priceIndicatorForPort(port, good);
     const satMult = saturationMultiplier(port.id, good.id, saturation);
     const seasonMult = season ? seasonMultiplier(season, good.category) : 1;
-    const bpMult = basePriceMultiplier(port.desires.good === good.id ? port.desires.basePrice : 'normal');
+    const bpMult = basePriceMultiplier(effectiveBasePrice(port, good));
     const saleValue = Math.round(indicator * 20 * item.quantity * satMult * routeBonus * seasonMult * bpMult);
     if (saleValue <= item.purchasePrice * item.quantity) {
       return true;
