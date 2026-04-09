@@ -145,3 +145,95 @@ describe('projectToSVG', () => {
     expect(y).toBeLessThan(480);
   });
 });
+
+// ─── indicatorToDots – full range ───────────────────────────────────────────
+
+describe('indicatorToDots – full range', () => {
+  it('returns 2 filled dots for value=2', () => {
+    expect(indicatorToDots(2)).toBe('●●○○○');
+  });
+
+  it('returns 4 filled dots for value=4', () => {
+    expect(indicatorToDots(4)).toBe('●●●●○');
+  });
+
+  it('clamps negative value to 1', () => {
+    expect(indicatorToDots(-3)).toBe('●○○○○');
+  });
+});
+
+// ─── getExperienceRatios – additional cases ─────────────────────────────────
+
+describe('getExperienceRatios – additional cases', () => {
+  it('ratios still sum to 1 for very large values', () => {
+    const exp: HiddenExperience = { meltem: 1000, terazi: 2000, murekkep: 3000, simsar: 4000 };
+    const ratios = getExperienceRatios(exp);
+    const sum = ratios.meltem + ratios.terazi + ratios.murekkep + ratios.simsar;
+    expect(sum).toBeCloseTo(1);
+  });
+
+  it('single non-zero skill gets ratio of 1.0', () => {
+    const exp: HiddenExperience = { meltem: 0, terazi: 0, murekkep: 7, simsar: 0 };
+    const ratios = getExperienceRatios(exp);
+    expect(ratios.murekkep).toBeCloseTo(1);
+    expect(ratios.meltem).toBe(0);
+    expect(ratios.terazi).toBe(0);
+    expect(ratios.simsar).toBe(0);
+  });
+
+  it('two equal skills each get ratio of 0.5', () => {
+    const exp: HiddenExperience = { meltem: 5, terazi: 5, murekkep: 0, simsar: 0 };
+    const ratios = getExperienceRatios(exp);
+    expect(ratios.meltem).toBeCloseTo(0.5);
+    expect(ratios.terazi).toBeCloseTo(0.5);
+    expect(ratios.murekkep).toBe(0);
+    expect(ratios.simsar).toBe(0);
+  });
+});
+
+// ─── isOrderReachable – additional cases ────────────────────────────────────
+
+describe('isOrderReachable – additional cases', () => {
+  it('returns false for same port as source and destination (no self-loop route)', () => {
+    const order: Order = { destinationPort: 'venedik', routeType: 'fortuna', intent: 'kervan' };
+    expect(isOrderReachable(order, 'venedik', sampleRoutes)).toBe(false);
+  });
+
+  it('returns false when route exists but type is uzun_kabotaj instead of tramontana', () => {
+    const order: Order = { destinationPort: 'beyrut', routeType: 'tramontana', intent: 'kervan' };
+    expect(isOrderReachable(order, 'istanbul', sampleRoutes)).toBe(false);
+  });
+
+  it('matches correct type when multiple routes exist between same ports', () => {
+    const multiRoutes: Route[] = [
+      ...sampleRoutes,
+      { id: 'r3', from: 'venedik', to: 'istanbul', type: 'kabotaj', isChokepoint: null, encounterChance: 0.1, turnsRequired: 3 },
+    ];
+    const fortunaOrder: Order = { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kervan' };
+    const kabotajOrder: Order = { destinationPort: 'istanbul', routeType: 'kabotaj', intent: 'kervan' };
+    const tramontanaOrder: Order = { destinationPort: 'istanbul', routeType: 'tramontana', intent: 'kervan' };
+    expect(isOrderReachable(fortunaOrder, 'venedik', multiRoutes)).toBe(true);
+    expect(isOrderReachable(kabotajOrder, 'venedik', multiRoutes)).toBe(true);
+    expect(isOrderReachable(tramontanaOrder, 'venedik', multiRoutes)).toBe(false);
+  });
+});
+
+// ─── projectToSVG – intermediate values ─────────────────────────────────────
+
+describe('projectToSVG – intermediate values', () => {
+  it('center of map (lat=38, lon=18) produces x and y within viewport', () => {
+    const { x, y } = projectToSVG(38, 18);
+    expect(x).toBeGreaterThan(40);
+    expect(x).toBeLessThan(820);
+    expect(y).toBeGreaterThan(40);
+    expect(y).toBeLessThan(480);
+  });
+
+  it('coordinates outside bounding box (lat=50) still produce a numeric result', () => {
+    const { x, y } = projectToSVG(50, 18);
+    expect(typeof x).toBe('number');
+    expect(typeof y).toBe('number');
+    expect(Number.isFinite(x)).toBe(true);
+    expect(Number.isFinite(y)).toBe(true);
+  });
+});

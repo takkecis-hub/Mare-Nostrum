@@ -383,3 +383,335 @@ describe('resolveTurn', () => {
     }
   });
 });
+
+// ─── Multi-turn transit continuation ────────────────────────────────────────
+
+describe('resolveTurn – multi-turn transit continuation', () => {
+  const transitState: GameState = {
+    ...baseState,
+    player: {
+      ...baseState.player,
+      currentPortId: 'venedik',
+      transitStatus: 'in_transit',
+      transitTurnsRemaining: 3,
+      transitDestination: 'istanbul',
+    },
+  };
+
+  it('decrements transitTurnsRemaining from 3 to 2 and stays in_transit', () => {
+    const result = resolveTurn({
+      state: transitState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.transitTurnsRemaining).toBe(2);
+    expect(result.nextState.player.transitStatus).toBe('in_transit');
+  });
+
+  it('decrements transitTurnsRemaining from 2 to 1 and stays in_transit', () => {
+    const transit2State: GameState = {
+      ...transitState,
+      player: { ...transitState.player, transitTurnsRemaining: 2 },
+    };
+    const result = resolveTurn({
+      state: transit2State,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.transitTurnsRemaining).toBe(1);
+    expect(result.nextState.player.transitStatus).toBe('in_transit');
+  });
+
+  it('does not change currentPortId during transit', () => {
+    const result = resolveTurn({
+      state: transitState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.currentPortId).toBe('venedik');
+  });
+
+  it('still spreads activeRumors during transit', () => {
+    const transitWithRumors: GameState = {
+      ...transitState,
+      activeRumors: [
+        {
+          id: 'rumor-transit',
+          aboutPlayerId: 'player-1',
+          text: 'Transit rumor',
+          tone: 'notr' as const,
+          currentPorts: ['venedik'],
+          strength: 3,
+          age: 0,
+          sourceAction: 'pusula',
+        },
+      ],
+    };
+    const result = resolveTurn({
+      state: transitWithRumors,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(Array.isArray(result.nextState.activeRumors)).toBe(true);
+  });
+});
+
+// ─── Transit arrival ────────────────────────────────────────────────────────
+
+describe('resolveTurn – transit arrival', () => {
+  const arrivalState: GameState = {
+    ...baseState,
+    player: {
+      ...baseState.player,
+      currentPortId: 'venedik',
+      transitStatus: 'in_transit',
+      transitTurnsRemaining: 1,
+      transitDestination: 'istanbul',
+    },
+  };
+
+  it('arrives at destination when transitTurnsRemaining is 1', () => {
+    const result = resolveTurn({
+      state: arrivalState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.transitStatus).toBe('at_port');
+  });
+
+  it('sets currentPortId to transitDestination after arrival', () => {
+    const result = resolveTurn({
+      state: arrivalState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.currentPortId).toBe('istanbul');
+  });
+
+  it('sets transitTurnsRemaining to 0 after arrival', () => {
+    const result = resolveTurn({
+      state: arrivalState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.transitTurnsRemaining).toBe(0);
+  });
+
+  it('clears transitDestination after arrival', () => {
+    const result = resolveTurn({
+      state: arrivalState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.transitDestination).toBeUndefined();
+  });
+});
+
+// ─── Saturation decay ───────────────────────────────────────────────────────
+
+describe('resolveTurn – saturation decay', () => {
+  it('decays saturation entries by 1 when next turn is divisible by SATURATION_DECAY_INTERVAL (3)', () => {
+    const satState: GameState = {
+      ...baseState,
+      turn: 2,
+      portSaturation: { 'venedik:murano_cami': 2 },
+      player: { ...baseState.player, currentPortId: 'venedik' },
+    };
+    const result = resolveTurn({
+      state: satState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    // nextState.turn = 3, 3 % 3 === 0 → decay: 2 → 1
+    expect(result.nextState.portSaturation?.['venedik:murano_cami']).toBe(1);
+  });
+
+  it('does not decay saturation when next turn is not divisible by 3', () => {
+    const satState4: GameState = {
+      ...baseState,
+      turn: 3,
+      portSaturation: { 'venedik:murano_cami': 2 },
+      player: { ...baseState.player, currentPortId: 'venedik' },
+    };
+    const result = resolveTurn({
+      state: satState4,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    // nextState.turn = 4, 4 % 3 !== 0 → no decay
+    expect(result.nextState.portSaturation?.['venedik:murano_cami']).toBe(2);
+  });
+
+  it('removes saturation entries that decay to 0', () => {
+    const satState0: GameState = {
+      ...baseState,
+      turn: 2,
+      portSaturation: { 'venedik:murano_cami': 1 },
+      player: { ...baseState.player, currentPortId: 'venedik' },
+    };
+    const result = resolveTurn({
+      state: satState0,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    // nextState.turn = 3, decay: 1 → 0 → removed
+    expect(result.nextState.portSaturation?.['venedik:murano_cami']).toBeUndefined();
+  });
+
+  it('initializes portSaturation as empty object when not present in state', () => {
+    const noSatState: GameState = {
+      ...baseState,
+      turn: 1,
+      player: { ...baseState.player, currentPortId: 'venedik' },
+    };
+    delete noSatState.portSaturation;
+    const result = resolveTurn({
+      state: noSatState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.portSaturation).toBeDefined();
+  });
+});
+
+// ─── Combat escape (kacti) ──────────────────────────────────────────────────
+
+describe('resolveTurn – combat escape (kacti)', () => {
+  // Use kadirga (power=3) so playerPower (6.0) >= enemyPower (5.6) with fixedRng
+  const escapeState: GameState = {
+    ...baseState,
+    player: {
+      ...baseState.player,
+      ship: { type: 'kadirga', cargoCapacity: 2, power: 3, durability: 100 },
+    },
+  };
+
+  it('does not change gold when combat results in kacti', () => {
+    const result = resolveTurn({
+      state: escapeState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kara_bayrak' },
+      ports,
+      routes,
+      goods,
+      tactic: 'kacis',
+      rng: fixedRng,
+    });
+    expect(result.combat?.result).toBe('kacti');
+    expect(result.nextState.player.gold).toBe(escapeState.player.gold);
+  });
+
+  it('does not change durability when combat results in kacti', () => {
+    const result = resolveTurn({
+      state: escapeState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kara_bayrak' },
+      ports,
+      routes,
+      goods,
+      tactic: 'kacis',
+      rng: fixedRng,
+    });
+    expect(result.combat?.result).toBe('kacti');
+    expect(result.nextState.player.ship.durability).toBe(escapeState.player.ship.durability);
+  });
+
+  it('includes escape message in the log', () => {
+    const result = resolveTurn({
+      state: escapeState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kara_bayrak' },
+      ports,
+      routes,
+      goods,
+      tactic: 'kacis',
+      rng: fixedRng,
+    });
+    expect(result.log.some((entry) => entry.detail.includes('sıyrıldın'))).toBe(true);
+  });
+
+  it('still moves player to destination port after escape', () => {
+    const result = resolveTurn({
+      state: escapeState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kara_bayrak' },
+      ports,
+      routes,
+      goods,
+      tactic: 'kacis',
+      rng: fixedRng,
+    });
+    expect(result.nextState.player.currentPortId).toBe('istanbul');
+  });
+});
+
+// ─── Trade with no profitable sales ─────────────────────────────────────────
+
+describe('resolveTurn – trade with no profitable sales', () => {
+  // ragusa→venedik (tramontana). Venedik produces murano_cami → indicator=2,
+  // saleValue = 2*20*1 = 40, purchasePrice = 40 → not profitable (40 <= 40).
+  const noProfitState: GameState = {
+    ...baseState,
+    player: {
+      ...baseState.player,
+      currentPortId: 'ragusa',
+      cargo: [
+        { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 },
+      ],
+    },
+  };
+
+  it('keeps cargo when sale is not profitable at destination', () => {
+    const result = resolveTurn({
+      state: noProfitState,
+      order: { destinationPort: 'venedik', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.cargo).toHaveLength(1);
+    expect(result.nextState.player.cargo[0].goodId).toBe('murano_cami');
+  });
+
+  it('does not change gold when no cargo is sold', () => {
+    const result = resolveTurn({
+      state: noProfitState,
+      order: { destinationPort: 'venedik', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.nextState.player.gold).toBe(noProfitState.player.gold);
+  });
+
+  it('log mentions kârlı satış not happening', () => {
+    const result = resolveTurn({
+      state: noProfitState,
+      order: { destinationPort: 'venedik', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.log.some((entry) => entry.detail.includes('kârlı satış'))).toBe(true);
+  });
+});
