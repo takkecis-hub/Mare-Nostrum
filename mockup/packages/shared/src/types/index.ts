@@ -90,6 +90,14 @@ export interface PlayerState {
   cargo: CargoItem[];
   experience: HiddenExperience;
   renown: string[];
+  /** Turn number when each renown title was last supported by a relevant action. */
+  renownLastAction?: Partial<Record<string, number>>;
+  /** 'at_port' when docked, 'in_transit' when travelling multi-turn routes. */
+  transitStatus?: 'at_port' | 'in_transit';
+  /** Turns remaining before arriving at destination (0 or undefined = arrived). */
+  transitTurnsRemaining?: number;
+  /** Port the player is travelling toward while in transit. */
+  transitDestination?: string;
 }
 
 export interface Order {
@@ -103,17 +111,27 @@ export interface TurnLogEntry {
   detail: string;
 }
 
+export interface CombatResult {
+  result: 'kazandi' | 'kaybetti' | 'kacti';
+  tactic: Tactic;
+  enemyTactic: Tactic;
+  playerPower: number;
+  enemyPower: number;
+  /** Gold looted on win, or gold lost on defeat. */
+  goldDelta: number;
+  /** Durability change (negative on defeat). */
+  durabilityDelta: number;
+  /** True when durability reached 0 — player is shipwrecked. */
+  shipwrecked: boolean;
+  /** True when the winning tactic was Manevra counter — grants intel bonus. */
+  manevraIntel: boolean;
+}
+
 export interface TurnResolution {
   nextState: GameState;
   log: TurnLogEntry[];
   whispers: string[];
-  combat?: {
-    result: 'kazandi' | 'kaybetti' | 'kacti';
-    tactic: Tactic;
-    enemyTactic: Tactic;
-    playerPower: number;
-    enemyPower: number;
-  };
+  combat?: CombatResult;
   trade?: {
     sold: string[];
     stars: number;
@@ -127,6 +145,8 @@ export interface GameState {
   player: PlayerState;
   activeRumors: Rumor[];
   lastWhispers: string[];
+  /** Tracks how many times each good has been sold at each port: "portId:goodId" → count. */
+  portSaturation?: Record<string, number>;
 }
 
 export interface BootstrapPayload {

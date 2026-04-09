@@ -102,3 +102,54 @@ describe('sellCargoAtPort', () => {
     expect(result.goldDelta).toBe(0);
   });
 });
+
+import { saturationMultiplier } from './economy.js';
+
+describe('saturationMultiplier', () => {
+  it('returns 1.0 when no prior deliveries', () => {
+    expect(saturationMultiplier('venedik', 'murano_cami', {})).toBe(1);
+  });
+
+  it('reduces price by 0.15 per delivery', () => {
+    const sat = { 'venedik:murano_cami': 2 };
+    // 1 - 0.15 * 2 = 0.7
+    expect(saturationMultiplier('venedik', 'murano_cami', sat)).toBeCloseTo(0.7);
+  });
+
+  it('floors at 0.4 (SATURATION_PRICE_FLOOR)', () => {
+    const sat = { 'venedik:murano_cami': 10 };
+    // 1 - 0.15 * 10 = -0.5 → clamped to 0.4
+    expect(saturationMultiplier('venedik', 'murano_cami', sat)).toBe(0.4);
+  });
+});
+
+describe('sellCargoAtPort with saturation', () => {
+  it('reduces sale value when port is saturated', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 },
+    ];
+    // Without saturation: indicator=5, value=100
+    const resultClean = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(resultClean.goldDelta).toBe(100);
+
+    // With heavy saturation: multiplier = 0.4 → value = round(100 * 0.4) = 40, not profitable (<=40)
+    const sat = { 'tunus:murano_cami': 5 };
+    const resultSaturated = sellCargoAtPort(
+      [{ goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 }],
+      [muranoCami],
+      tunus,
+      sat,
+    );
+    // 1 - 0.15*5 = 0.25 → clamped to 0.4, value = round(100*0.4) = 40, purchase=40, not profitable
+    expect(resultSaturated.goldDelta).toBe(0);
+    expect(resultSaturated.remainingCargo).toHaveLength(1);
+  });
+
+  it('returns saturationUpdates tracking sold quantities', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 2, originPort: 'venedik', purchasePrice: 40 },
+    ];
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(result.saturationUpdates['tunus:murano_cami']).toBe(2);
+  });
+});

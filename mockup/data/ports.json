@@ -147,9 +147,9 @@
       "basePrice": "normal"
     },
     "desires": {
-      "good": "misir_baharatlari",
+      "good": "ligurya_mercan",
       "category": "luks",
-      "basePrice": "normal"
+      "basePrice": "pahali"
     },
     "special": [
       "notr_liman",
@@ -175,9 +175,9 @@
       "basePrice": "ucuz"
     },
     "desires": {
-      "good": "lubnan_sediri",
-      "category": "savas",
-      "basePrice": "pahali"
+      "good": "ragusa_tuzu",
+      "category": "yemek",
+      "basePrice": "normal"
     },
     "special": [
       "mega_pazar"
@@ -202,7 +202,7 @@
       "basePrice": "ucuz"
     },
     "desires": {
-      "good": "girit_barutu",
+      "good": "malta_celigi",
       "category": "savas",
       "basePrice": "pahali"
     },
@@ -251,9 +251,9 @@
     "region": "dogu",
     "controller": "memluk",
     "produces": {
-      "good": "sam_ipegi",
-      "category": "luks",
-      "basePrice": "ucuz"
+      "good": "lubnan_sediri",
+      "category": "savas",
+      "basePrice": "pahali"
     },
     "desires": {
       "good": "osmanli_silahi",
@@ -283,8 +283,8 @@
       "basePrice": "ucuz"
     },
     "desires": {
-      "good": "lubnan_sediri",
-      "category": "savas",
+      "good": "sahra_altini",
+      "category": "luks",
       "basePrice": "pahali"
     },
     "special": [
@@ -310,9 +310,9 @@
       "basePrice": "ucuz"
     },
     "desires": {
-      "good": "nil_tahili",
+      "good": "kibris_tuzu",
       "category": "yemek",
-      "basePrice": "pahali"
+      "basePrice": "normal"
     },
     "special": [
       "nadir_mal_bonusu"
@@ -337,9 +337,9 @@
       "basePrice": "ucuz"
     },
     "desires": {
-      "good": "murano_cami",
-      "category": "luks",
-      "basePrice": "pahali"
+      "good": "girit_zeytinyagi",
+      "category": "yemek",
+      "basePrice": "normal"
     },
     "special": [
       "sicilya_darbogazi"
@@ -391,9 +391,9 @@
       "basePrice": "ucuz"
     },
     "desires": {
-      "good": "sicilya_bugdayi",
+      "good": "tunus_zeytinyagi",
       "category": "yemek",
-      "basePrice": "pahali"
+      "basePrice": "normal"
     },
     "special": [
       "savascı_liman",

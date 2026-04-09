@@ -103,5 +103,19 @@
     "category": "yemek",
     "originPort": "iskenderiye",
     "priceIndicator": 2
+  },
+  {
+    "id": "lubnan_sediri",
+    "name": "Lübnan Sediri",
+    "category": "savas",
+    "originPort": "beyrut",
+    "priceIndicator": 2
+  },
+  {
+    "id": "ragusa_tuzu",
+    "name": "Ragusa Tuzu",
+    "category": "yemek",
+    "originPort": "ragusa",
+    "priceIndicator": 2
   }
 ]

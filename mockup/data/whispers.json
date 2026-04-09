@@ -14,6 +14,66 @@
     "Ada şarapları bol, ama barut kasaları boşalmaya başladı.",
     "İstanbul'a giden rota, hikâye toplamak isteyenleri de korsanları da çağırıyor."
   ],
+  "istanbul": [
+    "Kapalıçarşı'da ipek fiyatları düşüşte; Doğu'dan büyük kervan bekleniyor.",
+    "Boğaz'da geceleri şüpheli yelkenler görülüyor, dikkatli ol.",
+    "Padişah'ın sarayından yeni bir ferman çıktığı söyleniyor; tüccarlar tedirgin."
+  ],
+  "barselona": [
+    "Katalan demircileri sipariş almakta zorlanıyor; demir stokları azalıyor.",
+    "Batı Akdeniz'de korsan baskınları artmış; Marsilya yolu tehlikeli.",
+    "Aragon tacirlerinden biri doğudan altın getirmiş; herkes peşinde."
+  ],
+  "marsilya": [
+    "Provence bağlarında bu yıl hasat bereketli; şarap fiyatları düşebilir.",
+    "Cenova'dan gelen tüccarlar limanda kalabalık oluşturmuş; rekabet kızışıyor.",
+    "Doğu'dan gelen ipek kervanlarının haberi kahvelerde dönüyor."
+  ],
+  "cenova": [
+    "Cenovalı bankacılar yeni kredi koşulları sunuyor; borçlanmak kolaylaşmış.",
+    "Ligurya mercanı için alıcılar sıraya girmiş; fiyat yükseliyor.",
+    "Sicilya buğdayı getiren gemiler rağbet görüyor; halk ekmek bekliyor."
+  ],
+  "palermo": [
+    "Sicilya'nın buğday ambarları dolup taşıyor; fiyat baskısı var.",
+    "Malta'dan çelik getiren gemiciler iyi kazanıyormuş.",
+    "Tunus Boğazı'nda korsanlar aktif; geçiş yapacaklar dikkatli olsun."
+  ],
+  "ragusa": [
+    "Ragusa'nın nötr konumu herkesi çekiyor; liman her zaman kalabalık.",
+    "Tuz ticareti durgun; İstanbul'dan talep bekleniyormuş.",
+    "Otranto'dan geçen gemilerin çoğu burada mola veriyor; haberler taze."
+  ],
+  "kibris": [
+    "Kıbrıs tuzu Doğu limanlarında her zaman alıcı buluyor.",
+    "Venedik'ten cam getiren gemiler limanda rağbet görüyor.",
+    "Ada etrafındaki sular sakin; ama batıdan fırtına haberleri geliyor."
+  ],
+  "beyrut": [
+    "Lübnan'ın sediri gemi ustalarının göz bebeği; fiyatlar yükseliyor.",
+    "Kara ticaret yollarından Şam ipeği hâlâ geliyor, ama miktarlar azaldı.",
+    "Osmanlı silahı arayan komutanlar Cezayir'e yöneliyor."
+  ],
+  "trablus": [
+    "Sahra altını kervanları gecikmiş; fiyatlar uçuşa geçti.",
+    "Tuz ve tahıl getiren gemilere kapılar açık; halk muhtaç.",
+    "Bu uzak limana gelen az olur; ama gelenler iyi kazanır."
+  ],
+  "tunus": [
+    "Tunus zeytinyağı mahsulü bu yıl bol; ihracat yükseliyor.",
+    "Sicilya Boğazı'ndan geçiş riskli; ama kısa yol isteyenler için cazip.",
+    "Girit'ten gelen zeytinyağı ile rekabet kızışmış."
+  ],
+  "cezayir": [
+    "Korsan limanında silah pazarı canlı; Osmanlı'dan yeni parti gelmiş.",
+    "Provence şarabı getirenlere iyi fiyat veriliyor; meyhane sahipleri açgözlü.",
+    "Bu limanda güçlü olan kazanır; diplomatlar burada pek tutulmaz."
+  ],
+  "malta": [
+    "Malta şövalyeleri çelik dövmeye devam ediyor; kalite yüksek.",
+    "Tunus'tan zeytinyağı getiren gemiler iyi karşılanıyor.",
+    "Adanın izole konumu fiyatları yükseltiyor; getiren kazanır."
+  ],
   "default": [
     "Bu limanda herkes fiyat biliyor sanır; kazanan sadece sabırlı olan olur.",
     "Kahve dumanı yükseldikçe gerçeğin fiyatı düşer.",
