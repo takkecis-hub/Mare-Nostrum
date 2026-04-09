@@ -67,6 +67,7 @@ describe('resolveCombat', () => {
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
     expect(result.result).toBe('kazandi');
@@ -259,5 +260,33 @@ describe('resolveCombat – edge cases', () => {
       rng: fixedRng,
     });
     expect(result.result).toBe('kazandi');
+  });
+});
+
+describe('resolveCombat – enemy tactic selection', () => {
+  it('picks a valid enemy tactic from RNG when none is specified', () => {
+    const validTactics = ['pruva', 'ates', 'manevra'];
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      rng: fixedRng,
+    });
+    expect(validTactics).toContain(result.enemyTactic);
+  });
+
+  it('uses different enemy tactics for different RNG seeds', () => {
+    const tactics = new Set<string>();
+    // rng() = 0 → index 0 → pruva; rng() = 0.5 → index 1 → ates; rng() = 0.99 → index 2 → manevra
+    for (const seed of [0, 0.34, 0.67]) {
+      const result = resolveCombat({
+        playerShip: karaka,
+        playerExperience: baseExperience,
+        playerTactic: 'pruva',
+        rng: () => seed,
+      });
+      tactics.add(result.enemyTactic);
+    }
+    expect(tactics.size).toBeGreaterThanOrEqual(2);
   });
 });

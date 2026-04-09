@@ -44,6 +44,13 @@ export function calculatePower(
   return Math.round((base + meltemBonus + tacticBonus + dieRoll) * 100) / 100;
 }
 
+const ENEMY_TACTICS: Tactic[] = ['pruva', 'ates', 'manevra'];
+
+/** Pick an enemy tactic using the injectable RNG instead of always 'ates'. */
+function pickEnemyTactic(rng: () => number): Tactic {
+  return ENEMY_TACTICS[Math.floor(rng() * ENEMY_TACTICS.length)];
+}
+
 export function resolveCombat(options: {
   playerShip: Ship;
   playerExperience: HiddenExperience;
@@ -54,7 +61,7 @@ export function resolveCombat(options: {
 }): CombatResult {
   const rng = options.rng ?? Math.random;
   const enemyShip = options.enemyShip ?? { type: 'karaka' as const, cargoCapacity: 4, power: 2, durability: 80 };
-  const enemyTactic = options.enemyTactic ?? 'ates';
+  const enemyTactic = options.enemyTactic ?? pickEnemyTactic(rng);
   const enemyExperience: HiddenExperience = { meltem: 2, terazi: 1, murekkep: 0, simsar: 1 };
 
   const playerDie = rollCombatDie(rng);

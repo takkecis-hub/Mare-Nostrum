@@ -59,6 +59,22 @@ describe('calculateScore', () => {
     // spread = 2, renown = 1 → 2*2 + 1*15 = 19
     expect(calculateScore(rumors, 'player-1', ['İpek Dil'])).toBe(19);
   });
+
+  it('includes port visitation score at 3 points per port', () => {
+    // no rumors, no renown, 5 ports visited → 0 + 0 + 5*3 = 15
+    expect(calculateScore([], 'player-1', [], ['venedik', 'istanbul', 'girit', 'barselona', 'malta'])).toBe(15);
+  });
+
+  it('combines all three scoring components', () => {
+    const rumors = [makeRumor('player-1', ['venedik', 'istanbul'])];
+    // spread = 2 → 4, renown = 1 → 15, ports = 3 → 9
+    expect(calculateScore(rumors, 'player-1', ['İpek Dil'], ['venedik', 'istanbul', 'girit'])).toBe(28);
+  });
+
+  it('backward compatible with no portsVisited argument', () => {
+    const rumors = [makeRumor('player-1', ['venedik'])];
+    expect(calculateScore(rumors, 'player-1', ['İpek Dil'])).toBe(17);
+  });
 });
 
 describe('isEfsane', () => {
