@@ -38,7 +38,7 @@ pnpm dev
 ## Doğrulama
 
 ```bash
-pnpm test        # Vitest — 289 test, 8 test dosyası (engine paketi)
+pnpm test        # Vitest — 383 test, 10 test dosyası (engine paketi)
 pnpm typecheck   # TypeScript derleyici kontrolleri (4 paket)
 pnpm build       # Üretim derlemesi
 ```
@@ -66,6 +66,6 @@ pnpm build       # Üretim derlemesi
 - **Skorlama:** Söylenti yayılım genişliği × 2 + ün sayısı × 15, Efsane eşiği = 100
 - **Kargo yönetimi:** Sunucu API üzerinden satın al / at
 - **Gemi tamiri:** Tersane üzerinden tam/kısmi tamir (tersane indirimi destekli)
-- **289 birim test:** Savaş, ekonomi, deneyim, söylenti, skorlama, tersane, tur çözümleme, paylaşılan formüller
+- **383 birim test:** Savaş, ekonomi, çatışma spektrumu, deneyim, söylenti, skorlama, tersane, tur çözümleme, görev zincirleri, paylaşılan formüller
 - Socket.io ping/pong bağlantı göstergesi
 - Drizzle ORM şema taslağı (12 tablo) ve JSON veri dosyaları

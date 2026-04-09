@@ -36,9 +36,10 @@
 ┌─ MOTOR ──────────────────────────────────┐
 │  Pure TypeScript — deterministik          │
 │  Injectable RNG (testlerde fixedRng)      │
-│  Vitest: 156 test, 8 test dosyası        │
-│  Modüller: combat, economy, experience,  │
-│    rumor, scoring, shipyard, turn-resolver│
+│  Vitest: 383 test, 10 test dosyası       │
+│  Modüller: combat, conflict, economy,    │
+│    experience, quest, rumor, scoring,    │
+│    shipyard, turn-resolver               │
 └──────────────────────────────────────────┘
 
 ┌─ LLM ────────────────────────────────────┐

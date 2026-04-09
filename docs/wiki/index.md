@@ -6,7 +6,7 @@
 
 Bu wiki, tüm tasarım belgelerinin sentezinden oluşan kapsamlı bir referans kaynağıdır.
 
-> **📦 Uygulama:** Oyunun çalışan TypeScript uygulaması [`mockup/`](../../mockup/) dizinindedir. 289 test, 15 liman, 29 rota, 17 menşe mal ile dikey kesit. Wiki sayfalarında `> Uygulama durumu:` notları, tasarım ile mevcut kodun farklılıklarını belirtir.
+> **📦 Uygulama:** Oyunun çalışan TypeScript uygulaması [`mockup/`](../../mockup/) dizinindedir. 383 test, 15 liman, 29 rota, 17 menşe mal ile dikey kesit. Wiki sayfalarında `> Uygulama durumu:` notları, tasarım ile mevcut kodun farklılıklarını belirtir.
 
 ---
 
@@ -44,10 +44,10 @@ Bu wiki aşağıdaki birincil belgelerden türetilmiştir:
 | [`mare_nostrum_naming_review.md`](../../mare_nostrum_naming_review.md) | ✅ Tamamlandı | Yaratıcı isimlendirme & etimoloji — tüm isim kuralları kod tabanında uygulandı |
 | [`mare_nostrum_experience_system.md`](../../mare_nostrum_experience_system.md) | ✅ Tamamlandı | Görünmez deneyim sistemi — 4 havuz, oran bazlı mekanik, ün eşikleri, çürüme takibi (57 test) |
 | [`mare_nostrum_map_design.md`](../../mare_nostrum_map_design.md) | ✅ Tamamlandı | Harita tasarımı — 15 liman, 29 rota, 3 darboğaz, Mercator SVG harita |
-| [`mare_nostrum_economy.md`](../../mare_nostrum_economy.md) | 🔧 WIP | Ekonomi derinleştirme — çekirdek menşe/doyma/mevsim sistemi ✅, kaçak mal/Commenda/kontrat beklemede |
-| [`mare_nostrum_conflict_spectrum.md`](../../mare_nostrum_conflict_spectrum.md) | 🔧 WIP | Çatışma spektrumu — Demir ✅ ve Zehir ✅ uygulandı, Kuşatma (ekonomik saldırı) beklemede |
-| [`mare_nostrum_combat_narrative.md`](../../mare_nostrum_combat_narrative.md) | 🔧 WIP | Savaş taktiği ✅ (48 test) + singleplayer anlatı sistemi beklemede |
-| [`mare_nostrum_quest_chains.md`](../../mare_nostrum_quest_chains.md) | 🔧 WIP | Görev zincirleri tam senaryo — henüz motor uygulaması yok |
+| [`mare_nostrum_economy.md`](../../mare_nostrum_economy.md) | ✅ Tamamlandı | Ekonomi derinleştirme — menşe/doyma/mevsim/toptan indirim/kaçak mal/kontrat/görünürlük sistemi (70 test) |
+| [`mare_nostrum_conflict_spectrum.md`](../../mare_nostrum_conflict_spectrum.md) | ✅ Tamamlandı | Çatışma spektrumu — Demir ✅, Zehir ✅, Kuşatma ✅ (38 test), söylenti savunması, kaçış mekaniği |
+| [`mare_nostrum_combat_narrative.md`](../../mare_nostrum_combat_narrative.md) | ✅ Tamamlandı | Savaş taktiği ✅ (48 test), kaçış mekaniği ✅, taktik-özel ganimet, görev ipuçları |
+| [`mare_nostrum_quest_chains.md`](../../mare_nostrum_quest_chains.md) | ✅ Tamamlandı | 4 köken görevi (5 aşama), durum makinesi, tetikleme sistemi, ipuçları (30 test) |
 
 > **Not:** Master doküman (`mare_nostrum_master_v3.md`) her zaman nihai referanstır. Modüler belgeler ek detay ve çalışma notları içerir.
 
