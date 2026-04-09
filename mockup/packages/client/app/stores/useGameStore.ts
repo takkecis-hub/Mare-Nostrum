@@ -53,6 +53,7 @@ interface GameStore {
   spreadRumor: (templateId: RumorTemplateId, targetPortId: string) => Promise<void>;
   clearActionError: () => void;
   clearNotice: () => void;
+  setActionError: (message: string) => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -83,7 +84,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const firstRoute = data.routes.find((route) => route.from === startPortId || route.to === startPortId);
       const defaultDestination = firstRoute
         ? (firstRoute.from === startPortId ? firstRoute.to : firstRoute.from)
-        : startPortId;
+        : '';
       set({
         ports: data.ports,
         routes: data.routes,
@@ -114,6 +115,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   clearActionError: () => set({ actionError: '' }),
   clearNotice: () => set({ notice: '' }),
+  setActionError: (message) => set({ actionError: message, notice: '' }),
 
   /* ── whispers ────────────────────────────────────── */
   refreshWhispers: async () => {

@@ -41,9 +41,10 @@ export async function createStatePersistence(databaseUrl = process.env.DATABASE_
       return rows[0]?.state ?? null;
     },
     async save(state: GameState) {
+      const snapshot = state as unknown as Parameters<typeof client.json>[0];
       await client`
         insert into game_snapshots (snapshot_key, state, updated_at)
-        values (${SNAPSHOT_KEY}, ${client.json(JSON.parse(JSON.stringify(state)))}, now())
+        values (${SNAPSHOT_KEY}, ${client.json(snapshot)}, now())
         on conflict (snapshot_key)
         do update set state = excluded.state, updated_at = now()
       `;

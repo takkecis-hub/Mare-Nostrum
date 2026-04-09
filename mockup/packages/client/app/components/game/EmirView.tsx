@@ -36,6 +36,7 @@ export default function EmirView() {
   const setOrder = useGameStore((s) => s.setOrder);
   const setTactic = useGameStore((s) => s.setTactic);
   const resolveTurn = useGameStore((s) => s.resolveTurn);
+  const setActionError = useGameStore((s) => s.setActionError);
   const setActiveView = useUIStore((s) => s.setActiveView);
   const setShowCombatResult = useUIStore((s) => s.setShowCombatResult);
   const setShowTradeResult = useUIStore((s) => s.setShowTradeResult);
@@ -66,6 +67,7 @@ export default function EmirView() {
 
   async function handleLockOrder() {
     if (!reachablePortIds.has(order.destinationPort)) {
+      setActionError('Seçili rota ve hedef birlikte geçerli değil.');
       return;
     }
     const result = await resolveTurn();

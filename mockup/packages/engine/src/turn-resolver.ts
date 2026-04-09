@@ -418,7 +418,9 @@ export function resolveTurn(input: {
 
   if (order.intent === 'pusula') {
     const portTrivia = triviaCatalog?.[destinationPort.id] ?? [];
-    const trivia = portTrivia.length > 0 ? portTrivia[state.turn % portTrivia.length]?.text : destinationPort.trivia[0];
+    const trivia = portTrivia.length > 0
+      ? portTrivia[state.turn % portTrivia.length]?.text ?? destinationPort.trivia[0] ?? undefined
+      : destinationPort.trivia[0] ?? undefined;
     const goldBonus = PUSULA_DISCOVERY_GOLD * (isFirstVisit ? PUSULA_FIRST_VISIT_MULTIPLIER : 1);
     player.gold += goldBonus;
     exploration = { ...exploration, trivia, goldBonus };
