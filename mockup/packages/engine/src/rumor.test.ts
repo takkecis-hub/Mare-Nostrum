@@ -121,3 +121,87 @@ describe('createRumor with custom playerId', () => {
     expect(rumor.aboutPlayerId).toBe('player-1');
   });
 });
+
+describe('createRumor – text content', () => {
+  it('pusula action creates rumor with text containing haritalar or pusula', () => {
+    const rumor = createRumor('pusula', 'venedik');
+    const hasKeyword = /haritalar|pusula/i.test(rumor.text);
+    expect(hasKeyword).toBe(true);
+  });
+
+  it('kara_bayrak text contains relevant combat-related content', () => {
+    const rumor = createRumor('kara_bayrak', 'venedik');
+    const hasCombat = /kılıç|deniz|tüccar/i.test(rumor.text);
+    expect(hasCombat).toBe(true);
+  });
+
+  it('unknown action uses default text', () => {
+    const rumor = createRumor('nonexistent_action', 'venedik');
+    expect(rumor.text).toContain('fısıltılar');
+  });
+});
+
+describe('spreadRumors – multi-rumor and limit', () => {
+  it('multiple simultaneous rumors all age and decay independently', () => {
+    const rumorA = createRumor('kara_bayrak', 'venedik');
+    const rumorB = createRumor('duman', 'istanbul');
+    const result = spreadRumors([rumorA, rumorB], sampleRoutes);
+
+    expect(result).toHaveLength(2);
+    expect(result[0].age).toBe(1);
+    expect(result[1].age).toBe(1);
+    // kara_bayrak decays by 10, duman decays by 20
+    expect(result[0].strength).toBe(90);
+    expect(result[1].strength).toBe(80);
+  });
+
+  it('hub port with 3+ connections: MAX_RUMOR_SPREAD_PORTS=2 limits spread to 2 new ports per existing port', () => {
+    const hubRoutes: Route[] = [
+      { id: 'h1', from: 'istanbul', to: 'venedik', type: 'fortuna', isChokepoint: null, encounterChance: 0.3, turnsRequired: 1 },
+      { id: 'h2', from: 'istanbul', to: 'beyrut', type: 'fortuna', isChokepoint: null, encounterChance: 0.2, turnsRequired: 1 },
+      { id: 'h3', from: 'istanbul', to: 'girit', type: 'fortuna', isChokepoint: null, encounterChance: 0.1, turnsRequired: 1 },
+    ];
+    const rumor = createRumor('kervan', 'istanbul');
+    const result = spreadRumors([rumor], hubRoutes);
+    // istanbul + 2 spread ports (slice limits to 2 routes)
+    expect(result[0].currentPorts).toContain('istanbul');
+    expect(result[0].currentPorts).toHaveLength(3); // istanbul + 2 new ports
+    // girit is route h3 (3rd), should be excluded by slice(0, 2)
+    expect(result[0].currentPorts).not.toContain('girit');
+  });
+
+  it('strength never goes negative (clamped to 0)', () => {
+    const weakRumor: Rumor = {
+      id: 'weak-1',
+      aboutPlayerId: 'player-1',
+      text: 'Weak rumor',
+      tone: 'notr',
+      currentPorts: ['venedik'],
+      strength: 5,
+      age: 3,
+      sourceAction: 'kara_bayrak', // decay = 10
+    };
+    // 5 - 10 = -5 → clamped to 0 → filtered out
+    const result = spreadRumors([weakRumor], sampleRoutes);
+    expect(result).toHaveLength(0);
+  });
+
+  it('spreading preserves all rumor metadata (id, aboutPlayerId, text, tone, sourceAction)', () => {
+    const rumor = createRumor('kervan', 'venedik', 'player-7');
+    const result = spreadRumors([rumor], sampleRoutes);
+
+    expect(result[0].id).toBe(rumor.id);
+    expect(result[0].aboutPlayerId).toBe('player-7');
+    expect(result[0].text).toBe(rumor.text);
+    expect(result[0].tone).toBe(rumor.tone);
+    expect(result[0].sourceAction).toBe('kervan');
+  });
+});
+
+describe('spreadRumors – pusula decay', () => {
+  it('pusula rumor decays by 15 (same as kervan)', () => {
+    const rumor = createRumor('pusula', 'venedik');
+    const result = spreadRumors([rumor], sampleRoutes);
+    expect(result[0].strength).toBe(85); // 100 - 15
+  });
+});
