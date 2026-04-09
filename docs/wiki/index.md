@@ -65,3 +65,4 @@ Teknik geliştirme için:
 - **[Teknik Mimari](teknik-mimari.md)** — Stack, monorepo yapısı, DB şeması
 - **[LLM Entegrasyonu](llm-entegrasyon.md)** — AI katmanı tasarımı
 - **[mockup/README.md](../../mockup/README.md)** — Çalışan uygulamayı başlatma
+- **[Data Grounding](../data-grounding/README.md)** — veri doğrulama, provenance ve çelişki takibi

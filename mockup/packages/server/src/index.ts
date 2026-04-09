@@ -5,16 +5,43 @@ import { Server } from 'socket.io';
 import portsJson from '../../../data/ports.json' with { type: 'json' };
 import routesJson from '../../../data/routes.json' with { type: 'json' };
 import goodsJson from '../../../data/goods.json' with { type: 'json' };
+import portGeoJson from '../../../data/port-geo.json' with { type: 'json' };
+import whispersJson from '../../../data/whispers.json' with { type: 'json' };
+import triviaJson from '../../../data/trivia.json' with { type: 'json' };
+import groundingManifestJson from '../../../data/grounding-manifest.json' with { type: 'json' };
+import provenanceJson from '../../../data/provenance.json' with { type: 'json' };
 import { DEFAULT_PLAYER_ID, DEFAULT_PLAYER_NAME, GOOD_PURCHASE_COST } from '../../shared/src/constants/index.js';
 import type { BootstrapPayload, CargoItem, GameState, Good, Order, Port, Route, Tactic } from '../../shared/src/types/index.js';
+import {
+  assertGroundedDataIntegrity,
+  parseGoods,
+  parseGroundingManifest,
+  parsePortGeoMap,
+  parsePorts,
+  parseProvenanceCatalog,
+  parseRoutes,
+  parseTriviaCatalog,
+  parseWhisperPool,
+} from '../../shared/src/validators/index.js';
 import { resolveTurn } from '../../engine/src/turn-resolver.js';
 import { repairShip, repairCost } from '../../engine/src/shipyard.js';
 import { purchaseCostForGood } from '../../engine/src/economy.js';
 import { getMockWhispers } from './llm/mock-whispers.js';
 
-const ports = portsJson as Port[];
-const routes = routesJson as Route[];
-const goods = goodsJson as Good[];
+const ports = parsePorts(portsJson) as Port[];
+const routes = parseRoutes(routesJson) as Route[];
+const goods = parseGoods(goodsJson) as Good[];
+
+assertGroundedDataIntegrity({
+  ports,
+  routes,
+  goods,
+  portGeo: parsePortGeoMap(portGeoJson),
+  whisperPool: parseWhisperPool(whispersJson),
+  triviaCatalog: parseTriviaCatalog(triviaJson),
+  groundingManifest: parseGroundingManifest(groundingManifestJson),
+  provenanceCatalog: parseProvenanceCatalog(provenanceJson),
+});
 
 const app = express();
 app.use(cors());
