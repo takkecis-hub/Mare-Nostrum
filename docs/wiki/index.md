@@ -6,7 +6,7 @@
 
 Bu wiki, tüm tasarım belgelerinin sentezinden oluşan kapsamlı bir referans kaynağıdır.
 
-> **📦 Uygulama:** Oyunun çalışan TypeScript uygulaması [`mockup/`](../../mockup/) dizinindedir. 156 test, 15 liman, 29 rota, 17 menşe mal ile dikey kesit. Wiki sayfalarında `> Uygulama durumu:` notları, tasarım ile mevcut kodun farklılıklarını belirtir.
+> **📦 Uygulama:** Oyunun çalışan TypeScript uygulaması [`mockup/`](../../mockup/) dizinindedir. 289 test, 15 liman, 29 rota, 17 menşe mal ile dikey kesit. Wiki sayfalarında `> Uygulama durumu:` notları, tasarım ile mevcut kodun farklılıklarını belirtir.
 
 ---
 
@@ -41,13 +41,13 @@ Bu wiki aşağıdaki birincil belgelerden türetilmiştir:
 | [`mare_nostrum_master_v3.md`](../../mare_nostrum_master_v3.md) | ✅ Aktif — Tek gerçek referans | Konsolide tasarım dokümanı |
 | [`mare_nostrum_implementation_plan_v2.md`](../../mare_nostrum_implementation_plan_v2.md) | ✅ Aktif | Teknik yol haritası (v2, tüm düzeltmeler entegre) |
 | [`mare_nostrum_mechanics_review.md`](../../mare_nostrum_mechanics_review.md) | ✅ Tamamlandı | Tüm sistemlerin denge incelemesi |
-| [`mare_nostrum_economy.md`](../../mare_nostrum_economy.md) | 🔧 WIP | Ekonomi derinleştirme |
-| [`mare_nostrum_conflict_spectrum.md`](../../mare_nostrum_conflict_spectrum.md) | 🔧 WIP | Çatışma spektrumu detayları |
-| [`mare_nostrum_experience_system.md`](../../mare_nostrum_experience_system.md) | 🔧 WIP | Görünmez deneyim sistemi |
-| [`mare_nostrum_combat_narrative.md`](../../mare_nostrum_combat_narrative.md) | 🔧 WIP | Savaş taktiği + singleplayer anlatı |
-| [`mare_nostrum_map_design.md`](../../mare_nostrum_map_design.md) | 🔧 WIP | Harita tasarımı |
-| [`mare_nostrum_quest_chains.md`](../../mare_nostrum_quest_chains.md) | 🔧 WIP | Görev zincirleri tam senaryo |
-| [`mare_nostrum_naming_review.md`](../../mare_nostrum_naming_review.md) | 🔧 WIP | Yaratıcı isimlendirme & etimoloji |
+| [`mare_nostrum_naming_review.md`](../../mare_nostrum_naming_review.md) | ✅ Tamamlandı | Yaratıcı isimlendirme & etimoloji — tüm isim kuralları kod tabanında uygulandı |
+| [`mare_nostrum_experience_system.md`](../../mare_nostrum_experience_system.md) | ✅ Tamamlandı | Görünmez deneyim sistemi — 4 havuz, oran bazlı mekanik, ün eşikleri, çürüme takibi (57 test) |
+| [`mare_nostrum_map_design.md`](../../mare_nostrum_map_design.md) | ✅ Tamamlandı | Harita tasarımı — 15 liman, 29 rota, 3 darboğaz, Mercator SVG harita |
+| [`mare_nostrum_economy.md`](../../mare_nostrum_economy.md) | 🔧 WIP | Ekonomi derinleştirme — çekirdek menşe/doyma/mevsim sistemi ✅, kaçak mal/Commenda/kontrat beklemede |
+| [`mare_nostrum_conflict_spectrum.md`](../../mare_nostrum_conflict_spectrum.md) | 🔧 WIP | Çatışma spektrumu — Demir ✅ ve Zehir ✅ uygulandı, Kuşatma (ekonomik saldırı) beklemede |
+| [`mare_nostrum_combat_narrative.md`](../../mare_nostrum_combat_narrative.md) | 🔧 WIP | Savaş taktiği ✅ (48 test) + singleplayer anlatı sistemi beklemede |
+| [`mare_nostrum_quest_chains.md`](../../mare_nostrum_quest_chains.md) | 🔧 WIP | Görev zincirleri tam senaryo — henüz motor uygulaması yok |
 
 > **Not:** Master doküman (`mare_nostrum_master_v3.md`) her zaman nihai referanstır. Modüler belgeler ek detay ve çalışma notları içerir.
 

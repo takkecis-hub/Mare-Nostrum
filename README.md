@@ -54,21 +54,21 @@ Mare-Nostrum/
 | # | File | Status | Contents |
 |---|---|---|---|
 | 🟢 | [`mare_nostrum_master_v3.md`](mare_nostrum_master_v3.md) | ✅ **Active — single source of truth** | Consolidated game design document (V3). All terms, core loop, economy, combat, experience, reputation, quests, and implementation overview. |
-| 1 | [`mare_nostrum_naming_review.md`](mare_nostrum_naming_review.md) | 🔧 WIP | Creative naming tables and V2 review. Disco Elysium–inspired thematic names for every mechanic (Meltem, Terazi, Mürekkep, Simsar, etc.). |
-| 2 | [`mare_nostrum_experience_system.md`](mare_nostrum_experience_system.md) | 🔧 WIP | Invisible experience system. Four hidden pools, ratio-based progression, LLM integration, and how players *feel* growth without *measuring* it. |
-| 3 | [`mare_nostrum_conflict_spectrum.md`](mare_nostrum_conflict_spectrum.md) | 🔧 WIP | Conflict spectrum — Physical (Demir), Social (Zehir), and Economic (Kuşatma) attack types. Coffeehouse rumour warfare, silent passage mechanics. |
-| 4 | [`mare_nostrum_map_design.md`](mare_nostrum_map_design.md) | 🔧 WIP | Map design. 15 ports, 29 routes, 3 chokepoints (Sicily Strait, Aegean Gate, Otranto). Regional dynamics and port personalities. |
-| 5 | [`mare_nostrum_economy.md`](mare_nostrum_economy.md) | 🔧 WIP | Economy deepening. Origin (Menşe) system, hunger/satiation mechanic, Terazi experience integration, and price display without numbers. |
-| 6 | [`mare_nostrum_combat_narrative.md`](mare_nostrum_combat_narrative.md) | 🔧 WIP | Combat tactics (Pruva/Ateş/Manevra rock-paper-scissors), singleplayer narrative system, and historical trivia integration. |
-| 7 | [`mare_nostrum_quest_chains.md`](mare_nostrum_quest_chains.md) | 🔧 WIP | Four origin quest chains — "Lost Treasure", "Father's Honour", "Revenge", and "Pure Curiosity". Full scenario with 5 stages each. |
-| 8 | [`mare_nostrum_implementation_plan.md`](mare_nostrum_implementation_plan.md) | 🔧 WIP | Technical implementation plan. Technology stack, development phases, cost estimates, DB schema. |
+| 1 | [`mare_nostrum_naming_review.md`](mare_nostrum_naming_review.md) | ✅ Tamamlandı | Creative naming tables and V2 review. Disco Elysium–inspired thematic names for every mechanic (Meltem, Terazi, Mürekkep, Simsar, etc.). All naming conventions fully adopted across the codebase. |
+| 2 | [`mare_nostrum_experience_system.md`](mare_nostrum_experience_system.md) | ✅ Tamamlandı | Invisible experience system. Four hidden pools, ratio-based progression, threshold gates, renown titles, decay tracking — fully implemented with 57 tests. |
+| 3 | [`mare_nostrum_conflict_spectrum.md`](mare_nostrum_conflict_spectrum.md) | 🔧 WIP | Conflict spectrum — Physical (Demir) ✅ and Social (Zehir) ✅ implemented. Economic (Kuşatma) attack types, advanced Duman mechanics still pending. |
+| 4 | [`mare_nostrum_map_design.md`](mare_nostrum_map_design.md) | ✅ Tamamlandı | Map design. 15 ports, 29 routes, 3 chokepoints, 4 regions — all implemented in data files and rendered via Mercator-projected SVG map. |
+| 5 | [`mare_nostrum_economy.md`](mare_nostrum_economy.md) | 🔧 WIP | Economy deepening. Core Menşe system, saturation, seasons, kabotaj bonus ✅ implemented. Smuggling, Commenda, city contracts, bulk discounts still pending. |
+| 6 | [`mare_nostrum_combat_narrative.md`](mare_nostrum_combat_narrative.md) | 🔧 WIP | Combat tactics (Pruva/Ateş/Manevra) ✅ implemented with 48 tests. Singleplayer narrative system and historical trivia integration still pending. |
+| 7 | [`mare_nostrum_quest_chains.md`](mare_nostrum_quest_chains.md) | 🔧 WIP | Four origin quest chains — design complete for "Lost Treasure", partially outlined for others. No engine implementation yet. |
+| 8 | [`mare_nostrum_implementation_plan.md`](mare_nostrum_implementation_plan.md) | 📦 Superseded by [v2](mare_nostrum_implementation_plan_v2.md) | Original technical implementation plan. See v2 for the active roadmap. Phase 0+1 ✅ complete (mockup workspace with 289 tests). |
 
 ### Wiki & Mockup
 
 | Resource | Description |
 |----------|-------------|
 | [`docs/wiki/`](docs/wiki/index.md) | 15-page game wiki in Turkish — synthesized reference from all design docs |
-| [`mockup/`](mockup/) | Working TypeScript pnpm monorepo — playable vertical slice with 156 tests |
+| [`mockup/`](mockup/) | Working TypeScript pnpm monorepo — playable vertical slice with 289 tests |
 
 > **Note:** The master document (`mare_nostrum_master_v3.md`) consolidates all WIP modules into a single reference. For the latest canonical rules, always refer to the master. The individual modules contain expanded details and working notes. The `mockup/` workspace is the running implementation.
 
@@ -231,7 +231,7 @@ The game is implemented as a **pnpm monorepo** under `mockup/`:
 |---|---|
 | **Client** | Next.js 15, React 19, Zustand stores, Socket.io-client, interactive SVG map |
 | **Server** | Express 4, Socket.io 4, Drizzle ORM (PostgreSQL 16), Redis 7 |
-| **Engine** | Pure TypeScript, deterministic functions, injectable RNG, vitest (156 tests) |
+| **Engine** | Pure TypeScript, deterministic functions, injectable RNG, vitest (289 tests) |
 | **Shared** | TypeScript types, constants, formulas, validators (no runtime deps) |
 | **LLM** | Claude API (mock whispers with static fallback pool for now) |
 | **Infrastructure** | Docker Compose (PostgreSQL + Redis), pnpm workspaces, ESM modules |
@@ -242,7 +242,7 @@ The game is implemented as a **pnpm monorepo** under `mockup/`:
 cd mockup/
 pnpm install          # Install all dependencies
 pnpm dev              # Start server (localhost:4000) + client (localhost:3000)
-pnpm test             # Run vitest — 156 tests across 8 test files (engine)
+pnpm test             # Run vitest — 289 tests across 8 test files (engine)
 pnpm typecheck        # TypeScript compiler checks (4 packages)
 pnpm build            # Production build (all packages)
 ```
