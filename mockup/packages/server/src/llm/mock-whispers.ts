@@ -27,7 +27,8 @@ function hashSeed(seed: string) {
 
 function pickWhisperText(lines: WhisperLine[], category: WhisperCategory, seed: string) {
   const pool = lines.filter((line) => line.category === category);
-  const candidates = pool.length > 0 ? pool : lines;
+  const candidates =
+    pool.length > 0 ? pool : category === 'social' ? lines : [];
   if (candidates.length === 0) {
     return undefined;
   }

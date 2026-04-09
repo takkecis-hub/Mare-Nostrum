@@ -659,7 +659,7 @@
     {
       "id": "iskenderiye-security-3",
       "category": "security",
-      "text": "Baharat baskenti yüzünden İskenderiye limanında hem nöbet hem söylenti eksik olmuyor.",
+      "text": "Baharat başkenti yüzünden İskenderiye limanında hem nöbet hem söylenti eksik olmuyor.",
       "provenanceRef": "whisper:iskenderiye:security-3"
     },
     {
@@ -789,7 +789,7 @@
     {
       "id": "tunus-security-4",
       "category": "security",
-      "text": "Sicilya darbogazi yüzünden Tunus limanında hem nöbet hem söylenti eksik olmuyor.",
+      "text": "Sicilya darboğazı yüzünden Tunus limanında hem nöbet hem söylenti eksik olmuyor.",
       "provenanceRef": "whisper:tunus:security-4"
     },
     {
@@ -845,7 +845,7 @@
     {
       "id": "cezayir-security-3",
       "category": "security",
-      "text": "Korsan limani yüzünden Cezayir limanında hem nöbet hem söylenti eksik olmuyor.",
+      "text": "Korsan limanı yüzünden Cezayir limanında hem nöbet hem söylenti eksik olmuyor.",
       "provenanceRef": "whisper:cezayir:security-3"
     },
     {
@@ -913,7 +913,7 @@
     {
       "id": "malta-security-4",
       "category": "security",
-      "text": "Savascı liman yüzünden Malta limanında hem nöbet hem söylenti eksik olmuyor.",
+      "text": "Savaşçı liman yüzünden Malta limanında hem nöbet hem söylenti eksik olmuyor.",
       "provenanceRef": "whisper:malta:security-4"
     },
     {

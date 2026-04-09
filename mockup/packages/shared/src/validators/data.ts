@@ -98,6 +98,14 @@ function expectString(value: unknown, path: string): string {
   return value;
 }
 
+function expectNonEmptyString(value: unknown, path: string): string {
+  const result = expectString(value, path);
+  if (result.trim().length === 0) {
+    throw new Error(`${path} must be a non-empty string`);
+  }
+  return result;
+}
+
 function expectNumber(value: unknown, path: string): number {
   if (typeof value !== 'number' || Number.isNaN(value)) {
     throw new Error(`${path} must be a number`);
@@ -228,14 +236,15 @@ export function parsePorts(data: unknown): Port[] {
 export function parseRoutes(data: unknown): Route[] {
   return expectArray(data, 'routes').map((item, index) => {
     const record = expectRecord(item, `routes[${index}]`);
-    const chokepointValue = record.isChokepoint;
     return {
       id: expectString(record.id, `routes[${index}].id`),
       from: expectString(record.from, `routes[${index}].from`),
       to: expectString(record.to, `routes[${index}].to`),
       type: expectEnumValue(record.type, `routes[${index}].type`, ROUTE_TYPES) as RouteType,
       isChokepoint:
-        chokepointValue === null ? null : expectString(chokepointValue, `routes[${index}].isChokepoint`),
+        record.isChokepoint === null
+          ? null
+          : expectNonEmptyString(record.isChokepoint, `routes[${index}].isChokepoint`),
       encounterChance: expectNumber(record.encounterChance, `routes[${index}].encounterChance`),
       turnsRequired: expectNumber(record.turnsRequired, `routes[${index}].turnsRequired`),
     };
@@ -369,9 +378,6 @@ export function collectGroundedDataIntegrityErrors(input: {
       route.encounterChance < CHOKEPOINT_ELEVATED_ENCOUNTER_CHANCE
     ) {
       errors.push(`Chokepoint route ${route.id} must have elevated encounterChance`);
-    }
-    if (route.isChokepoint !== null && route.isChokepoint.trim().length === 0) {
-      errors.push(`Chokepoint route ${route.id} must define a non-empty chokepoint id`);
     }
   }
 
