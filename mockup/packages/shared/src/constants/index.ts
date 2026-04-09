@@ -1,6 +1,33 @@
 export const DEFAULT_PLAYER_ID = 'player-1';
 export const DEFAULT_PLAYER_NAME = 'Kaptan Leyla';
 export const GOOD_PURCHASE_COST = 40;
+
+// --- Price bands (basePrice → gold cost) ---
+
+/** Purchase cost for goods with basePrice 'ucuz'. */
+export const PRICE_BAND_UCUZ = 30;
+/** Purchase cost for goods with basePrice 'normal'. */
+export const PRICE_BAND_NORMAL = 40;
+/** Purchase cost for goods with basePrice 'pahali'. */
+export const PRICE_BAND_PAHALI = 50;
+
+/** Maps a PriceBand string to its gold cost. */
+export const PRICE_BAND_MAP: Record<string, number> = {
+  ucuz: 30,
+  normal: 40,
+  pahali: 50,
+};
+
+// --- Season economy modifiers ---
+
+/** Sell-price multiplier for yemek goods in kış (winter demand). */
+export const SEASON_YEMEK_BONUS_KIS = 1.3;
+/** Sell-price multiplier for lüks goods in yaz (summer luxury demand). */
+export const SEASON_LUKS_BONUS_YAZ = 1.2;
+/** Sell-price multiplier for yemek goods in yaz (summer surplus). */
+export const SEASON_YEMEK_MALUS_YAZ = 0.85;
+/** Sell-price multiplier for lüks goods in kış (winter austerity). */
+export const SEASON_LUKS_MALUS_KIS = 0.85;
 export const REPAIR_COST_PER_POINT = 4;
 export const TERSANE_DISCOUNT = 0.75;
 export const EXPERIENCE_LABELS = {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CargoItem, Good, Port } from '../../shared/src/types/index.js';
-import { priceIndicatorForPort, sellCargoAtPort } from './economy.js';
+import { priceIndicatorForPort, sellCargoAtPort, purchaseCostForGood, seasonMultiplier, basePriceMultiplier } from './economy.js';
 
 const venedik: Port = {
   id: 'venedik',
@@ -9,7 +9,7 @@ const venedik: Port = {
   region: 'bati',
   controller: 'venedik',
   produces: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
-  desires: { good: 'lubnan_sediri', category: 'luks', basePrice: 'pahali' },
+  desires: { good: 'lubnan_sediri', category: 'savas', basePrice: 'pahali' },
   special: [],
   trivia: [],
   x: 0,
@@ -52,10 +52,10 @@ describe('sellCargoAtPort', () => {
     const cargo: CargoItem[] = [
       { goodId: 'murano_cami', name: 'Murano Camı', quantity: 2, originPort: 'venedik', purchasePrice: 40 },
     ];
-    // indicator=5, saleValue=5*20*2=200, purchasePrice total=80 → profitable
+    // indicator=5, bpMult=1.25 (pahali desired), saleValue=round(5*20*2*1.25)=250
     const result = sellCargoAtPort(cargo, [muranoCami], tunus);
     expect(result.remainingCargo).toHaveLength(0);
-    expect(result.goldDelta).toBe(200);
+    expect(result.goldDelta).toBe(250);
     expect(result.sold).toHaveLength(1);
     expect(result.stars).toBeGreaterThan(1);
   });
@@ -81,16 +81,16 @@ describe('sellCargoAtPort', () => {
 
   it('sells profitable items and keeps unprofitable ones', () => {
     const cargo: CargoItem[] = [
-      // murano_cami is desired by tunus → profitable
+      // murano_cami is desired by tunus → indicator=5, bpMult=1.25 → saleValue=125 → profitable
       { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 },
-      // atlas is produced by tunus → indicator=2, saleValue=40, purchasePrice total=50 → not profitable
+      // atlas is produced by tunus → indicator=2, bpMult=1.0, saleValue=40, purchasePrice total=50 → not profitable
       { goodId: 'atlas', name: 'Atlas', quantity: 1, originPort: 'tunus', purchasePrice: 50 },
     ];
     const result = sellCargoAtPort(cargo, [muranoCami, atlas], tunus);
     expect(result.remainingCargo).toHaveLength(1);
     expect(result.remainingCargo[0].goodId).toBe('atlas');
     expect(result.sold).toHaveLength(1);
-    expect(result.goldDelta).toBe(100);
+    expect(result.goldDelta).toBe(125);
   });
 
   it('keeps cargo when good is not in goods list', () => {
@@ -128,11 +128,12 @@ describe('sellCargoAtPort with saturation', () => {
     const cargo: CargoItem[] = [
       { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 },
     ];
-    // Without saturation: indicator=5, value=100
+    // Without saturation: indicator=5, bpMult=1.25, value=125
     const resultClean = sellCargoAtPort(cargo, [muranoCami], tunus);
-    expect(resultClean.goldDelta).toBe(100);
+    expect(resultClean.goldDelta).toBe(125);
 
-    // With heavy saturation: multiplier = 0.4 → value = round(100 * 0.4) = 40, not profitable (<=40)
+    // With heavy saturation: satMult = max(0.4, 1-0.15*5=0.25) = 0.4
+    // value = round(5*20*1*0.4*1.25) = round(50) = 50, purchase=40 → still profitable
     const sat = { 'tunus:murano_cami': 5 };
     const resultSaturated = sellCargoAtPort(
       [{ goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 }],
@@ -140,9 +141,8 @@ describe('sellCargoAtPort with saturation', () => {
       tunus,
       sat,
     );
-    // 1 - 0.15*5 = 0.25 → clamped to 0.4, value = round(100*0.4) = 40, purchase=40, not profitable
-    expect(resultSaturated.goldDelta).toBe(0);
-    expect(resultSaturated.remainingCargo).toHaveLength(1);
+    expect(resultSaturated.goldDelta).toBe(50);
+    expect(resultSaturated.remainingCargo).toHaveLength(0);
   });
 
   it('returns saturationUpdates tracking sold quantities', () => {
@@ -238,10 +238,10 @@ describe('sellCargoAtPort – stars calculation', () => {
 describe('sellCargoAtPort – exact boundary conditions', () => {
   it('does not sell when sale value exactly equals purchase price', () => {
     const cargo: CargoItem[] = [
-      // tunus desires murano_cami → indicator=5, saleValue=5*20*1=100
-      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 100 },
+      // tunus desires murano_cami → indicator=5, bpMult=1.25, saleValue=round(5*20*1*1.25)=125
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 125 },
     ];
-    // saleValue(100) <= purchasePrice*qty(100) → not sold
+    // saleValue(125) <= purchasePrice*qty(125) → not sold
     const result = sellCargoAtPort(cargo, [muranoCami], tunus);
     expect(result.remainingCargo).toHaveLength(1);
     expect(result.goldDelta).toBe(0);
@@ -250,22 +250,22 @@ describe('sellCargoAtPort – exact boundary conditions', () => {
 
   it('sells when sale value is 1 more than purchase price', () => {
     const cargo: CargoItem[] = [
-      // tunus desires murano_cami → indicator=5, saleValue=5*20*1=100
-      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 99 },
+      // tunus desires murano_cami → indicator=5, bpMult=1.25, saleValue=125
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 124 },
     ];
-    // saleValue(100) > purchasePrice*qty(99) → sold
+    // saleValue(125) > purchasePrice*qty(124) → sold
     const result = sellCargoAtPort(cargo, [muranoCami], tunus);
     expect(result.remainingCargo).toHaveLength(0);
-    expect(result.goldDelta).toBe(100);
+    expect(result.goldDelta).toBe(125);
     expect(result.sold).toHaveLength(1);
   });
 
   it('multiple quantities affect profitability check (saleValue vs purchasePrice * quantity)', () => {
     const cargo: CargoItem[] = [
-      // tunus desires murano_cami → indicator=5, saleValue=5*20*2=200
-      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 2, originPort: 'venedik', purchasePrice: 100 },
+      // tunus desires murano_cami → indicator=5, bpMult=1.25, saleValue=round(5*20*2*1.25)=250
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 2, originPort: 'venedik', purchasePrice: 125 },
     ];
-    // saleValue(200) <= purchasePrice*qty(100*2=200) → not sold
+    // saleValue(250) <= purchasePrice*qty(125*2=250) → not sold
     const result = sellCargoAtPort(cargo, [muranoCami], tunus);
     expect(result.remainingCargo).toHaveLength(1);
     expect(result.goldDelta).toBe(0);
@@ -279,27 +279,27 @@ describe('sellCargoAtPort – saturation interaction', () => {
       { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 },
     ];
     const sat = { 'tunus:murano_cami': 1 };
-    // indicator=5, multiplier=0.85, saleValue=round(5*20*1*0.85)=85, purchasePrice=40 → sold
+    // indicator=5, satMult=0.85, bpMult=1.25, saleValue=round(5*20*1*0.85*1.25)=round(106.25)=106
     const result = sellCargoAtPort(cargo, [muranoCami], tunus, sat);
     expect(result.remainingCargo).toHaveLength(0);
-    expect(result.goldDelta).toBe(85);
+    expect(result.goldDelta).toBe(106);
     expect(result.sold).toHaveLength(1);
   });
 
   it('multiple items with different saturation levels', () => {
     const cargo: CargoItem[] = [
-      // murano_cami desired by tunus → indicator=5, sat=2 → multiplier=0.7
+      // murano_cami desired by tunus → indicator=5, sat=2 → satMult=0.7, bpMult=1.25
       { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 20 },
-      // atlas produced by tunus → indicator=2, no saturation → multiplier=1.0
+      // atlas produced by tunus → indicator=2, no saturation → satMult=1.0, bpMult=1.0
       { goodId: 'atlas', name: 'Atlas', quantity: 1, originPort: 'tunus', purchasePrice: 10 },
     ];
     const sat = { 'tunus:murano_cami': 2 };
-    // murano_cami: saleValue=round(5*20*1*0.7)=70, purchasePrice=20 → sold
-    // atlas: saleValue=round(2*20*1*1.0)=40, purchasePrice=10 → sold
+    // murano_cami: saleValue=round(5*20*1*0.7*1.25)=round(87.5)=88
+    // atlas: saleValue=round(2*20*1*1.0*1.0)=40
     const result = sellCargoAtPort(cargo, [muranoCami, atlas], tunus, sat);
     expect(result.remainingCargo).toHaveLength(0);
     expect(result.sold).toHaveLength(2);
-    expect(result.goldDelta).toBe(70 + 40);
+    expect(result.goldDelta).toBe(88 + 40);
   });
 
   it('saturation updates accumulate across multiple cargo items of the same good', () => {
@@ -311,5 +311,127 @@ describe('sellCargoAtPort – saturation interaction', () => {
     const result = sellCargoAtPort(cargo, [muranoCami], tunus);
     expect(result.sold).toHaveLength(2);
     expect(result.saturationUpdates['tunus:murano_cami']).toBe(4);
+  });
+});
+
+// ─── New feature tests ──────────────────────────────────────────────────────
+
+describe('purchaseCostForGood', () => {
+  const muranoCamiGood: Good = { id: 'murano_cami', name: 'Murano Camı', category: 'luks', originPort: 'venedik', priceIndicator: 2 };
+
+  it('returns pahali band cost (50) for port with basePrice pahali', () => {
+    expect(purchaseCostForGood(venedik, muranoCamiGood)).toBe(50);
+  });
+
+  it('returns normal band cost (40) for port with basePrice normal', () => {
+    expect(purchaseCostForGood(tunus, muranoCamiGood)).toBe(40);
+  });
+
+  it('returns ucuz band cost (30) for port with basePrice ucuz', () => {
+    const ucuzPort: Port = {
+      ...venedik,
+      produces: { good: 'cheap_good', category: 'yemek', basePrice: 'ucuz' },
+    };
+    expect(purchaseCostForGood(ucuzPort, muranoCamiGood)).toBe(30);
+  });
+});
+
+describe('seasonMultiplier', () => {
+  it('returns 0.85 for yemek in yaz (summer surplus)', () => {
+    expect(seasonMultiplier('yaz', 'yemek')).toBeCloseTo(0.85);
+  });
+
+  it('returns 1.2 for luks in yaz (summer luxury demand)', () => {
+    expect(seasonMultiplier('yaz', 'luks')).toBeCloseTo(1.2);
+  });
+
+  it('returns 1.3 for yemek in kis (winter food demand)', () => {
+    expect(seasonMultiplier('kis', 'yemek')).toBeCloseTo(1.3);
+  });
+
+  it('returns 0.85 for luks in kis (winter austerity)', () => {
+    expect(seasonMultiplier('kis', 'luks')).toBeCloseTo(0.85);
+  });
+
+  it('returns 1.0 for savas in both seasons', () => {
+    expect(seasonMultiplier('yaz', 'savas')).toBe(1);
+    expect(seasonMultiplier('kis', 'savas')).toBe(1);
+  });
+});
+
+describe('basePriceMultiplier', () => {
+  it('returns 1.25 for pahali', () => {
+    expect(basePriceMultiplier('pahali')).toBeCloseTo(1.25);
+  });
+
+  it('returns 1.0 for normal', () => {
+    expect(basePriceMultiplier('normal')).toBe(1);
+  });
+
+  it('returns 0.85 for ucuz', () => {
+    expect(basePriceMultiplier('ucuz')).toBeCloseTo(0.85);
+  });
+});
+
+describe('sellCargoAtPort – kabotaj route bonus', () => {
+  it('applies 1.25x route bonus for kabotaj deliveries', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 10 },
+    ];
+    // Without bonus: indicator=5, bpMult=1.25, saleValue = round(5*20*1*1.25) = 125
+    const resultNormal = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(resultNormal.goldDelta).toBe(125);
+
+    // With kabotaj bonus: saleValue = round(5*20*1*1.25*1.25) = round(156.25) = 156
+    const resultKabotaj = sellCargoAtPort(
+      [{ goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 10 }],
+      [muranoCami],
+      tunus,
+      {},
+      { routeBonus: 1.25 },
+    );
+    expect(resultKabotaj.goldDelta).toBe(156);
+  });
+});
+
+describe('sellCargoAtPort – season modifier', () => {
+  it('increases yemek sale value in winter (kis)', () => {
+    const yemekGood: Good = { id: 'sicilya_bugdayi', name: 'Sicilya Buğdayı', category: 'yemek', originPort: 'palermo', priceIndicator: 1 };
+    const yemekPort: Port = {
+      ...tunus,
+      desires: { good: 'sicilya_bugdayi', category: 'yemek', basePrice: 'ucuz' },
+    };
+    const cargo: CargoItem[] = [
+      { goodId: 'sicilya_bugdayi', name: 'Sicilya Buğdayı', quantity: 1, originPort: 'palermo', purchasePrice: 10 },
+    ];
+    // indicator=5 (desired), bpMult=0.85 (ucuz), season=kis → seasonMult=1.3
+    // saleValue = round(5*20*1*0.85*1.3) = round(110.5) = 111 (JS rounds 0.5 up)
+    const result = sellCargoAtPort(cargo, [yemekGood], yemekPort, {}, { season: 'kis' });
+    expect(result.goldDelta).toBe(111);
+  });
+
+  it('decreases yemek sale value in summer (yaz)', () => {
+    const yemekGood: Good = { id: 'sicilya_bugdayi', name: 'Sicilya Buğdayı', category: 'yemek', originPort: 'palermo', priceIndicator: 1 };
+    const yemekPort: Port = {
+      ...tunus,
+      desires: { good: 'sicilya_bugdayi', category: 'yemek', basePrice: 'ucuz' },
+    };
+    const cargo: CargoItem[] = [
+      { goodId: 'sicilya_bugdayi', name: 'Sicilya Buğdayı', quantity: 1, originPort: 'palermo', purchasePrice: 10 },
+    ];
+    // indicator=5 (desired), bpMult=0.85 (ucuz), season=yaz → seasonMult=0.85
+    // saleValue = round(5*20*1*0.85*0.85) = round(72.25) = 72
+    const result = sellCargoAtPort(cargo, [yemekGood], yemekPort, {}, { season: 'yaz' });
+    expect(result.goldDelta).toBe(72);
+  });
+
+  it('increases luks sale value in summer (yaz)', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 10 },
+    ];
+    // indicator=5, bpMult=1.25, season=yaz → seasonMult=1.2
+    // saleValue = round(5*20*1*1.25*1.2) = round(150) = 150
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus, {}, { season: 'yaz' });
+    expect(result.goldDelta).toBe(150);
   });
 });

@@ -669,14 +669,15 @@ describe('resolveTurn – combat escape (kacti)', () => {
 
 describe('resolveTurn – trade with no profitable sales', () => {
   // ragusa→venedik (tramontana). Venedik produces murano_cami → indicator=2,
-  // saleValue = 2*20*1 = 40, purchasePrice = 40 → not profitable (40 <= 40).
+  // With season bonus (yaz, luks → ×1.2): saleValue = round(2*20*1*1.2) = 48.
+  // Set purchasePrice=50 so it's not profitable (48 <= 50).
   const noProfitState: GameState = {
     ...baseState,
     player: {
       ...baseState.player,
       currentPortId: 'ragusa',
       cargo: [
-        { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 },
+        { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 50 },
       ],
     },
   };
