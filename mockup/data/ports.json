@@ -179,6 +179,13 @@
       "category": "yemek",
       "basePrice": "normal"
     },
+    "bonusDesires": [
+      {
+        "good": "sam_ipegi",
+        "category": "luks",
+        "basePrice": "pahali"
+      }
+    ],
     "special": [
       "mega_pazar"
     ],
@@ -255,6 +262,13 @@
       "category": "savas",
       "basePrice": "pahali"
     },
+    "bonusProduces": [
+      {
+        "good": "sam_ipegi",
+        "category": "luks",
+        "basePrice": "normal"
+      }
+    ],
     "desires": {
       "good": "osmanli_silahi",
       "category": "savas",
@@ -282,6 +296,13 @@
       "category": "luks",
       "basePrice": "ucuz"
     },
+    "bonusProduces": [
+      {
+        "good": "nil_tahili",
+        "category": "yemek",
+        "basePrice": "ucuz"
+      }
+    ],
     "desires": {
       "good": "sahra_altini",
       "category": "luks",
@@ -395,6 +416,13 @@
       "category": "yemek",
       "basePrice": "normal"
     },
+    "bonusDesires": [
+      {
+        "good": "nil_tahili",
+        "category": "yemek",
+        "basePrice": "normal"
+      }
+    ],
     "special": [
       "savascı_liman",
       "tamir_indirimi"

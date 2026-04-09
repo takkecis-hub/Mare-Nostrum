@@ -16,6 +16,10 @@ export default function PortPanel() {
 
   if (!gameState || !selectedPort) return null;
   const { player } = gameState;
+  const visibility = gameState.priceVisibility ?? 'none';
+  const isCurrentPort = selectedPort.id === player.currentPortId;
+  const canSeeSelectedMarket = visibility === 'full' || (isCurrentPort && visibility !== 'none');
+  const canSeeSelectedDemand = visibility === 'full' || visibility === 'network' || isCurrentPort;
 
   return (
     <div className="port-panel">
@@ -31,11 +35,11 @@ export default function PortPanel() {
         </li>
         <li>
           <span>Ürettiği</span>
-          <strong>{selectedPort.produces.good}</strong>
+          <strong>{canSeeSelectedMarket ? selectedPort.produces.good : 'Sisli pazar'}</strong>
         </li>
         <li>
           <span>Aradığı</span>
-          <strong>{selectedPort.desires.good}</strong>
+          <strong>{canSeeSelectedDemand ? selectedPort.desires.good : 'Terazi yetersiz'}</strong>
         </li>
         <li>
           <span>Kontrol</span>

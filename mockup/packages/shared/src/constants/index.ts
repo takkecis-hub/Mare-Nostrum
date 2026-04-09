@@ -41,6 +41,10 @@ export const RENOWN_THRESHOLDS = {
   demirPruva: 0.35,
   ipekDil: 0.35,
   hayaletPala: 0.3,
+  muhurluSoz: 0.3,
+  akrep: 0.35,
+  acikEl: 0.3,
+  deliRuzgar: 0.3,
 };
 
 // --- Port saturation (economy balance) ---
@@ -83,6 +87,10 @@ export const RENOWN_CONTRADICTIONS: Record<string, string[]> = {
   'Demir Pruva': ['duman'],
   'İpek Dil': ['kara_bayrak'],
   'Hayalet Pala': ['kervan'],
+  'Mühürlü Söz': ['kara_bayrak'],
+  Akrep: ['pusula'],
+  'Açık El': ['duman'],
+  'Deli Rüzgâr': ['kervan'],
 };
 
 // --- Renown gates ---
@@ -144,11 +152,19 @@ export const CONTRACT_DEFAULT_TURNS = 30;
 export const CONTRACT_PRICE_BONUS = 1.3;
 /** Gold penalty for breaking a city contract. */
 export const CONTRACT_BREAK_PENALTY = 100;
+/** Default quantity requested by a generated city contract. */
+export const CONTRACT_DEFAULT_QUANTITY = 2;
+/** Gold reward baseline for a generated city contract. */
+export const CONTRACT_DEFAULT_REWARD = 90;
 
 // --- First arrival bonus ---
 
 /** Sell-price bonus multiplier for the first delivery of a good to a port in a turn. */
 export const FIRST_ARRIVAL_BONUS = 1.15;
+/** Gold paid for a successful Pusula discovery. */
+export const PUSULA_DISCOVERY_GOLD = 15;
+/** Multiplier when the player discovers a port for the first time. */
+export const PUSULA_FIRST_VISIT_MULTIPLIER = 2;
 
 // --- Price visibility ---
 
@@ -158,6 +174,17 @@ export const PRICE_VISIBILITY_LOCAL = 0.2;
 export const PRICE_VISIBILITY_NETWORK = 0.35;
 /** Terazi ratio threshold for full market map (1-turn delayed). */
 export const PRICE_VISIBILITY_FULL = 0.5;
+
+// --- Active rumors ---
+
+/** Gold cost to actively spread a rumor from the kahvehane. */
+export const RUMOR_SPREAD_COST = 25;
+/** Maximum player-initiated rumors counted in the anti-spam window before backlash. */
+export const RUMOR_SPREAD_SPAM_THRESHOLD = 3;
+/** Number of turns tracked for rumor-spam backlash. */
+export const RUMOR_SPREAD_SPAM_WINDOW = 5;
+/** Starting strength for player-initiated rumors. */
+export const RUMOR_SPREAD_INITIAL_STRENGTH = 90;
 
 // --- Conflict spectrum ---
 

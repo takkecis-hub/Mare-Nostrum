@@ -1,6 +1,6 @@
 {
   "name": "@mare-nostrum/server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,6 +12,7 @@
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.0",
     "express": "^4.21.2",
+    "postgres": "3.4.9",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {

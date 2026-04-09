@@ -8,6 +8,7 @@ import type {
   GroundingHierarchyEntry,
   GroundingRisk,
   Port,
+  PortTradeSlot,
   PortGeoMap,
   PriceBand,
   ProvenanceCatalog,
@@ -125,13 +126,18 @@ function expectEnumValue<T extends readonly string[]>(value: unknown, path: stri
   return result;
 }
 
-function parsePortTradeSlot(value: unknown, path: string): Port['produces'] {
+function parsePortTradeSlot(value: unknown, path: string): PortTradeSlot {
   const record = expectRecord(value, path);
   return {
     good: expectString(record.good, `${path}.good`),
     category: expectEnumValue(record.category, `${path}.category`, GOOD_CATEGORIES) as GoodCategory,
     basePrice: expectEnumValue(record.basePrice, `${path}.basePrice`, PRICE_BANDS) as PriceBand,
   };
+}
+
+function parseOptionalPortTradeSlots(value: unknown, path: string): PortTradeSlot[] | undefined {
+  if (value === undefined) return undefined;
+  return expectArray(value, path).map((slot, index) => parsePortTradeSlot(slot, `${path}[${index}]`));
 }
 
 function parseWhisperLine(value: unknown, path: string): WhisperLine {
@@ -223,6 +229,8 @@ export function parsePorts(data: unknown): Port[] {
       controller: expectString(record.controller, `ports[${index}].controller`),
       produces: parsePortTradeSlot(record.produces, `ports[${index}].produces`),
       desires: parsePortTradeSlot(record.desires, `ports[${index}].desires`),
+      bonusProduces: parseOptionalPortTradeSlots(record.bonusProduces, `ports[${index}].bonusProduces`),
+      bonusDesires: parseOptionalPortTradeSlots(record.bonusDesires, `ports[${index}].bonusDesires`),
       special: expectStringArray(record.special, `ports[${index}].special`),
       trivia: expectStringArray(record.trivia, `ports[${index}].trivia`),
       x: expectNumber(record.x, `ports[${index}].x`),
@@ -329,7 +337,10 @@ export function parseProvenanceCatalog(data: unknown): ProvenanceCatalog {
 }
 
 function findPortDesireCount(ports: Port[], goodId: string): number {
-  return ports.filter((port) => port.desires.good === goodId).length;
+  return ports.filter(
+    (port) =>
+      port.desires.good === goodId || (port.bonusDesires ?? []).some((slot) => slot.good === goodId),
+  ).length;
 }
 
 export function collectGroundedDataIntegrityErrors(input: {
@@ -388,17 +399,26 @@ export function collectGroundedDataIntegrityErrors(input: {
   }
 
   for (const port of ports) {
-    const producedGood = goods.find((good) => good.id === port.produces.good);
-    const desiredGood = goods.find((good) => good.id === port.desires.good);
-    if (!producedGood) {
-      errors.push(`Port ${port.id} produces missing good ${port.produces.good}`);
-    } else if (producedGood.category !== port.produces.category) {
-      errors.push(`Port ${port.id} produce category mismatch for ${port.produces.good}`);
+    const producedSlots = [port.produces, ...(port.bonusProduces ?? [])];
+    const desiredSlots = [port.desires, ...(port.bonusDesires ?? [])];
+    for (const slot of producedSlots) {
+      const producedGood = goods.find((good) => good.id === slot.good);
+      if (!producedGood) {
+        errors.push(`Port ${port.id} produces missing good ${slot.good}`);
+      } else if (producedGood.category !== slot.category) {
+        errors.push(`Port ${port.id} produce category mismatch for ${slot.good}`);
+      }
+      if (findPortDesireCount(ports, slot.good) < 1) {
+        errors.push(`Produced good ${slot.good} from ${port.id} has no destination demand`);
+      }
     }
-    if (!desiredGood) {
-      errors.push(`Port ${port.id} desires missing good ${port.desires.good}`);
-    } else if (desiredGood.category !== port.desires.category) {
-      errors.push(`Port ${port.id} desire category mismatch for ${port.desires.good}`);
+    for (const slot of desiredSlots) {
+      const desiredGood = goods.find((good) => good.id === slot.good);
+      if (!desiredGood) {
+        errors.push(`Port ${port.id} desires missing good ${slot.good}`);
+      } else if (desiredGood.category !== slot.category) {
+        errors.push(`Port ${port.id} desire category mismatch for ${slot.good}`);
+      }
     }
     if (port.lat !== undefined && port.lon !== undefined) {
       const geo = portGeo[port.id];
@@ -407,9 +427,6 @@ export function collectGroundedDataIntegrityErrors(input: {
       } else if (geo.lat !== port.lat || geo.lon !== port.lon) {
         errors.push(`Port ${port.id} lat/lon differs between ports.json and port-geo.json`);
       }
-    }
-    if (findPortDesireCount(ports, port.produces.good) < 1) {
-      errors.push(`Produced good ${port.produces.good} from ${port.id} has no destination demand`);
     }
   }
 

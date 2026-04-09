@@ -16,6 +16,11 @@ export default function GameShell() {
   const bootstrap = useGameStore((s) => s.bootstrap);
   const loading = useGameStore((s) => s.loading);
   const error = useGameStore((s) => s.error);
+  const actionError = useGameStore((s) => s.actionError);
+  const notice = useGameStore((s) => s.notice);
+  const actionLoading = useGameStore((s) => s.actionLoading);
+  const clearActionError = useGameStore((s) => s.clearActionError);
+  const clearNotice = useGameStore((s) => s.clearNotice);
   const gameState = useGameStore((s) => s.gameState);
   const connect = useSocketStore((s) => s.connect);
   const disconnect = useSocketStore((s) => s.disconnect);
@@ -55,11 +60,14 @@ export default function GameShell() {
     return (
       <main className="shell">
         <div className="error-screen card">
-          <h2>⚠️ Bağlantı Hatası</h2>
-          <p>{error}</p>
-        </div>
-      </main>
-    );
+            <h2>⚠️ Bağlantı Hatası</h2>
+            <p>{error}</p>
+            <button className="primary" onClick={() => void bootstrap()}>
+              Tekrar Dene
+            </button>
+          </div>
+        </main>
+      );
   }
 
   /* ── Main Menu ───────────────────────────────────── */
@@ -71,6 +79,24 @@ export default function GameShell() {
   return (
     <main className="shell">
       <TopBar />
+
+      {(actionError || notice || actionLoading) && (
+        <div className="card" style={{ marginBottom: 12 }}>
+          {actionLoading && <p className="note">⏳ İşlem sürüyor...</p>}
+          {actionError && (
+            <div className="section-head">
+              <p>⚠️ {actionError}</p>
+              <button className="small" onClick={clearActionError}>Kapat</button>
+            </div>
+          )}
+          {notice && (
+            <div className="section-head">
+              <p>✅ {notice}</p>
+              <button className="small" onClick={clearNotice}>Kapat</button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ── Phase navigation ─────────────────────────── */}
       <nav className="phase-nav">

@@ -25,7 +25,7 @@ describe('createRumor', () => {
 
   it('creates rumor with correct id structure containing action', () => {
     const rumor = createRumor('kara_bayrak', 'venedik');
-    expect(rumor.id).toMatch(/^kara_bayrak-\d+$/);
+    expect(rumor.id).toBe('kara_bayrak-venedik-player-1-0');
   });
 
   it('creates rumor with strength=100 and age=0', () => {

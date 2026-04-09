@@ -17,9 +17,14 @@ export default function Pazar() {
     [ports, gameState?.player.currentPortId],
   );
 
-  const producedGood = useMemo(
-    () => goods.find((g) => g.id === currentPort?.produces.good) ?? null,
-    [goods, currentPort?.produces.good],
+  const producedGoods = useMemo(
+    () =>
+      currentPort
+        ? [currentPort.produces, ...(currentPort.bonusProduces ?? [])]
+          .map((slot) => goods.find((g) => g.id === slot.good))
+          .filter((good): good is NonNullable<typeof good> => Boolean(good))
+        : [],
+    [goods, currentPort],
   );
 
   if (!gameState || !currentPort) return null;
@@ -27,6 +32,9 @@ export default function Pazar() {
   const cargoCount = player.cargo.reduce((sum, item) => sum + item.quantity, 0);
   const atCapacity = cargoCount >= player.ship.cargoCapacity;
   const canBuy = player.gold >= GOOD_PURCHASE_COST && !atCapacity;
+  const visibility = gameState.priceVisibility ?? 'none';
+  const canSeeLocalMarket = visibility !== 'none';
+  const canSeeDemand = visibility === 'network' || visibility === 'full';
 
   return (
     <div className="fondaco-panel">
@@ -38,23 +46,32 @@ export default function Pazar() {
       <div className="market-info">
         <div className="market-row">
           <span>Liman üretimi</span>
-          <strong>{currentPort.produces.good}</strong>
-          {producedGood && <DotIndicator value={producedGood.priceIndicator} />}
+          {canSeeLocalMarket ? (
+            <strong>{producedGoods.map((good) => good.name).join(', ')}</strong>
+          ) : (
+            <strong>Terazi zayıf — pazar sisli</strong>
+          )}
         </div>
         <div className="market-row">
           <span>Aranan mal</span>
-          <strong>{currentPort.desires.good}</strong>
+          <strong>{canSeeDemand ? currentPort.desires.good : 'Ağ bilgisi kapalı'}</strong>
         </div>
+        {canSeeLocalMarket && producedGoods[0] && <DotIndicator value={producedGoods[0].priceIndicator} />}
       </div>
 
       {/* ── Buy button ───────────────────────────────── */}
-      <button
-        className="primary market-buy-btn"
-        onClick={buyCurrentGood}
-        disabled={!canBuy}
-      >
-        {`Liman malını al (-${GOOD_PURCHASE_COST} 🪙)`}
-      </button>
+      <div className="stack">
+        {producedGoods.map((good) => (
+          <button
+            key={good.id}
+            className="primary market-buy-btn"
+            onClick={() => void buyCurrentGood(good.id)}
+            disabled={!canBuy}
+          >
+            {`${good.name} al (-${GOOD_PURCHASE_COST} 🪙)`}
+          </button>
+        ))}
+      </div>
 
       {/* ── Cargo capacity bar ───────────────────────── */}
       <div className="cargo-section">

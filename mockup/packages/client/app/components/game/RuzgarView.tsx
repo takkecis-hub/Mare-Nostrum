@@ -8,6 +8,7 @@ import Modal from '../ui/Modal';
 export default function RuzgarView() {
   const gameState = useGameStore((s) => s.gameState);
   const turnLog = useGameStore((s) => s.turnLog);
+  const lastResolution = useGameStore((s) => s.lastResolution);
   const showCombatResult = useUIStore((s) => s.showCombatResult);
   const showTradeResult = useUIStore((s) => s.showTradeResult);
   const setShowCombatResult = useUIStore((s) => s.setShowCombatResult);
@@ -57,13 +58,36 @@ export default function RuzgarView() {
 
       {/* ── Combat result modal ──────────────────────── */}
       <Modal open={showCombatResult} onClose={() => setShowCombatResult(false)} title="⚔️ Savaş Sonucu">
-        <p className="note">Savaş detayları gelecek versiyonda görsel olarak gösterilecek.</p>
+        {lastResolution?.combat ? (
+          <div className="stack">
+            <p><strong>Sonuç:</strong> {lastResolution.combat.result}</p>
+            <p><strong>Taktik:</strong> {lastResolution.combat.tactic}</p>
+            <p><strong>Düşman:</strong> {lastResolution.combat.enemyTactic}</p>
+            <p><strong>Güç:</strong> {lastResolution.combat.playerPower} / {lastResolution.combat.enemyPower}</p>
+            <p><strong>Altın etkisi:</strong> {lastResolution.combat.goldDelta}</p>
+          </div>
+        ) : (
+          <p className="note">Bu tur savaş yaşanmadı.</p>
+        )}
         <button className="primary" onClick={() => setShowCombatResult(false)}>Tamam</button>
       </Modal>
 
       {/* ── Trade result modal ───────────────────────── */}
       <Modal open={showTradeResult} onClose={() => setShowTradeResult(false)} title="💰 Ticaret Sonucu">
-        <p className="note">Ticaret sonuçları burada detaylı gösterilecek.</p>
+        {lastResolution?.trade ? (
+          <div className="stack">
+            <p><strong>Satılan mallar:</strong> {lastResolution.trade.sold.join(', ') || 'Yok'}</p>
+            <p><strong>Altın:</strong> +{lastResolution.trade.goldDelta}</p>
+            <div>
+              <strong>Pazar yıldızı:</strong> <StarRating stars={lastResolution.trade.stars} />
+            </div>
+            {lastResolution.contracts && lastResolution.contracts.goldDelta !== 0 && (
+              <p><strong>Kontrat etkisi:</strong> {lastResolution.contracts.goldDelta}</p>
+            )}
+          </div>
+        ) : (
+          <p className="note">Bu tur ticaret raporu oluşmadı.</p>
+        )}
         <button className="primary" onClick={() => setShowTradeResult(false)}>Tamam</button>
       </Modal>
     </div>

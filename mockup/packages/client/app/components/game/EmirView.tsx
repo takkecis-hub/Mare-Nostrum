@@ -36,6 +36,7 @@ export default function EmirView() {
   const setOrder = useGameStore((s) => s.setOrder);
   const setTactic = useGameStore((s) => s.setTactic);
   const resolveTurn = useGameStore((s) => s.resolveTurn);
+  const setActionError = useGameStore((s) => s.setActionError);
   const setActiveView = useUIStore((s) => s.setActiveView);
   const setShowCombatResult = useUIStore((s) => s.setShowCombatResult);
   const setShowTradeResult = useUIStore((s) => s.setShowTradeResult);
@@ -51,12 +52,24 @@ export default function EmirView() {
     () => [...new Set(reachableRoutes.map((r) => r.type))],
     [reachableRoutes],
   );
+  const reachablePortIds = useMemo(() => {
+    if (!currentPortId) return new Set<string>();
+    return new Set(
+      reachableRoutes
+        .filter((route) => route.type === order.routeType)
+        .map((route) => (route.from === currentPortId ? route.to : route.from)),
+    );
+  }, [currentPortId, order.routeType, reachableRoutes]);
 
   function handlePortSelect(portId: string) {
     setOrder({ destinationPort: portId });
   }
 
   async function handleLockOrder() {
+    if (!reachablePortIds.has(order.destinationPort)) {
+      setActionError('Seçili rota ve hedef birlikte geçerli değil.');
+      return;
+    }
     const result = await resolveTurn();
     if (result) {
       if (result.combat) {
@@ -70,6 +83,7 @@ export default function EmirView() {
   }
 
   const destPort = ports.find((p) => p.id === order.destinationPort);
+  const canLockOrder = Boolean(destPort) && reachablePortIds.has(order.destinationPort);
 
   return (
     <div className="emir-view">
@@ -135,25 +149,27 @@ export default function EmirView() {
       </div>
 
       {/* ── TAKTİK (Tactic — visible when intent is kara_bayrak) ─ */}
-      <div className="emir-section">
-        <h3>⚔️ TAKTİK</h3>
-        <div className="choice-cards">
-          {(Object.keys(TACTIC_INFO) as Tactic[]).map((t) => {
-            const info = TACTIC_INFO[t];
-            return (
-              <button
-                key={t}
-                className={`choice-card ${tactic === t ? 'choice-card-selected' : ''}`}
-                onClick={() => setTactic(t)}
-              >
-                <span className="choice-icon">{info.icon}</span>
-                <strong>{info.label}</strong>
-                <span className="choice-desc">{info.desc}</span>
-              </button>
-            );
-          })}
+      {order.intent === 'kara_bayrak' && (
+        <div className="emir-section">
+          <h3>⚔️ TAKTİK</h3>
+          <div className="choice-cards">
+            {(Object.keys(TACTIC_INFO) as Tactic[]).map((t) => {
+              const info = TACTIC_INFO[t];
+              return (
+                <button
+                  key={t}
+                  className={`choice-card ${tactic === t ? 'choice-card-selected' : ''}`}
+                  onClick={() => setTactic(t)}
+                >
+                  <span className="choice-icon">{info.icon}</span>
+                  <strong>{info.label}</strong>
+                  <span className="choice-desc">{info.desc}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Summary + Lock ──────────────────────────── */}
       <div className="emir-summary">
@@ -161,9 +177,9 @@ export default function EmirView() {
           <span>📍 {destPort?.name ?? '?'}</span>
           <span>🧭 {ROUTE_INFO[order.routeType]?.label}</span>
           <span>🎯 {INTENT_INFO[order.intent]?.label}</span>
-          <span>⚔️ {TACTIC_INFO[tactic]?.label}</span>
+          {order.intent === 'kara_bayrak' && <span>⚔️ {TACTIC_INFO[tactic]?.label}</span>}
         </div>
-        <button className="primary emir-lock-btn" onClick={handleLockOrder}>
+        <button className="primary emir-lock-btn" onClick={handleLockOrder} disabled={!canLockOrder}>
           🔒 Emri Kilitle ve Çöz
         </button>
       </div>

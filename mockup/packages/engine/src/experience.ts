@@ -5,6 +5,7 @@ import {
   RENOWN_LOSS_TURNS,
   RENOWN_CONTRADICTIONS,
   RENOWN_MIN_TOTAL_EXPERIENCE,
+  RENOWN_THRESHOLDS,
 } from '../../shared/src/constants/index.js';
 
 export function applyExperienceGain(experience: HiddenExperience, intent: Intent) {
@@ -24,6 +25,10 @@ const RENOWN_SUPPORT_INTENTS: Record<string, Intent> = {
   'Demir Pruva': 'kara_bayrak',
   'İpek Dil': 'pusula',
   'Hayalet Pala': 'duman',
+  'Mühürlü Söz': 'pusula',
+  Akrep: 'duman',
+  'Açık El': 'kervan',
+  'Deli Rüzgâr': 'kara_bayrak',
 };
 
 /**
@@ -92,10 +97,14 @@ export function determineRenown(experience: HiddenExperience, activeRumorCount: 
   const ratios = getExperienceRatios(experience);
   const renown: string[] = [];
 
-  if (ratios.terazi >= 0.35 && activeRumorCount >= 1) renown.push('Altın Parmak');
-  if (ratios.meltem >= 0.35 && activeRumorCount >= 1) renown.push('Demir Pruva');
-  if (ratios.murekkep >= 0.35) renown.push('İpek Dil');
-  if (ratios.simsar >= 0.3) renown.push('Hayalet Pala');
+  if (ratios.terazi >= RENOWN_THRESHOLDS.altinParmak && activeRumorCount >= 1) renown.push('Altın Parmak');
+  if (ratios.meltem >= RENOWN_THRESHOLDS.demirPruva && activeRumorCount >= 1) renown.push('Demir Pruva');
+  if (ratios.murekkep >= RENOWN_THRESHOLDS.ipekDil) renown.push('İpek Dil');
+  if (ratios.simsar >= RENOWN_THRESHOLDS.hayaletPala) renown.push('Hayalet Pala');
+  if (ratios.murekkep >= RENOWN_THRESHOLDS.muhurluSoz && ratios.terazi >= 0.2) renown.push('Mühürlü Söz');
+  if (ratios.simsar >= RENOWN_THRESHOLDS.akrep && activeRumorCount >= 2) renown.push('Akrep');
+  if (ratios.terazi >= RENOWN_THRESHOLDS.acikEl && ratios.murekkep >= 0.2) renown.push('Açık El');
+  if (ratios.meltem >= RENOWN_THRESHOLDS.deliRuzgar && ratios.simsar >= 0.2) renown.push('Deli Rüzgâr');
 
   return renown;
 }
@@ -137,6 +146,10 @@ export function getRenownDescription(renown: string[]): string {
   if (renown.includes('Demir Pruva')) parts.push('Deniz savaşlarında adınız korku ve saygıyla anılıyor.');
   if (renown.includes('İpek Dil')) parts.push('Diplomatik zekanız limanların dilinde dolaşıyor.');
   if (renown.includes('Hayalet Pala')) parts.push('Gölgelerde hareket eden bir kaçakçı olarak efsaneleşiyorsunuz.');
+  if (renown.includes('Mühürlü Söz')) parts.push('Sözünüz liman meclislerinde mühür kadar ağır basıyor.');
+  if (renown.includes('Akrep')) parts.push('Rakipleriniz sinsi darbelerinizden çekiniyor.');
+  if (renown.includes('Açık El')) parts.push('Cömertliğiniz ve ticari vakarınız güven telkin ediyor.');
+  if (renown.includes('Deli Rüzgâr')) parts.push('Fırtınayı kışkırtan kaptan diye anılıyor, cesaretinizle ün salıyorsunuz.');
 
   return parts.join(' ');
 }
