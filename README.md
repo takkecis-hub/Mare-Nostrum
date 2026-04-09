@@ -29,7 +29,27 @@
 
 ## 📂 Repository Structure
 
-The repository is organized around one **master document** and several **modular design documents** that dive deep into individual systems.
+The repository contains both **game design documents** and a **working implementation** (mockup workspace):
+
+```
+Mare-Nostrum/
+├── mockup/                          # ← Working pnpm monorepo
+│   ├── packages/
+│   │   ├── shared/                  # Types, constants, formulas, validators
+│   │   ├── engine/                  # Pure deterministic game engine (vitest)
+│   │   ├── server/                  # Express + Socket.io API, Drizzle ORM
+│   │   └── client/                  # Next.js 15 + React 19 + Zustand, SVG map
+│   ├── data/                        # Static JSON: ports, routes, goods, whispers, coastlines
+│   ├── docker-compose.yml           # PostgreSQL 16 + Redis 7
+│   └── package.json                 # Workspace scripts
+├── docs/
+│   └── wiki/                        # 15-page game wiki (Turkish)
+├── mare_nostrum_master_v3.md        # Master design document
+├── mare_nostrum_implementation_plan_v2.md  # Technical roadmap
+└── (modular design docs)            # Economy, combat, map, quests, etc.
+```
+
+### Design Documents
 
 | # | File | Status | Contents |
 |---|---|---|---|
@@ -37,13 +57,20 @@ The repository is organized around one **master document** and several **modular
 | 1 | [`mare_nostrum_naming_review.md`](mare_nostrum_naming_review.md) | 🔧 WIP | Creative naming tables and V2 review. Disco Elysium–inspired thematic names for every mechanic (Meltem, Terazi, Mürekkep, Simsar, etc.). |
 | 2 | [`mare_nostrum_experience_system.md`](mare_nostrum_experience_system.md) | 🔧 WIP | Invisible experience system. Four hidden pools, ratio-based progression, LLM integration, and how players *feel* growth without *measuring* it. |
 | 3 | [`mare_nostrum_conflict_spectrum.md`](mare_nostrum_conflict_spectrum.md) | 🔧 WIP | Conflict spectrum — Physical (Demir), Social (Zehir), and Economic (Kuşatma) attack types. Coffeehouse rumour warfare, silent passage mechanics. |
-| 4 | [`mare_nostrum_map_design.md`](mare_nostrum_map_design.md) | 🔧 WIP | Map design. 15 ports, 28 routes, 3 chokepoints (Sicily Strait, Aegean Gate, Otranto). Regional dynamics and port personalities. |
+| 4 | [`mare_nostrum_map_design.md`](mare_nostrum_map_design.md) | 🔧 WIP | Map design. 15 ports, 29 routes, 3 chokepoints (Sicily Strait, Aegean Gate, Otranto). Regional dynamics and port personalities. |
 | 5 | [`mare_nostrum_economy.md`](mare_nostrum_economy.md) | 🔧 WIP | Economy deepening. Origin (Menşe) system, hunger/satiation mechanic, Terazi experience integration, and price display without numbers. |
 | 6 | [`mare_nostrum_combat_narrative.md`](mare_nostrum_combat_narrative.md) | 🔧 WIP | Combat tactics (Pruva/Ateş/Manevra rock-paper-scissors), singleplayer narrative system, and historical trivia integration. |
 | 7 | [`mare_nostrum_quest_chains.md`](mare_nostrum_quest_chains.md) | 🔧 WIP | Four origin quest chains — "Lost Treasure", "Father's Honour", "Revenge", and "Pure Curiosity". Full scenario with 5 stages each. |
-| 8 | [`mare_nostrum_implementation_plan.md`](mare_nostrum_implementation_plan.md) | 🔧 WIP | Technical implementation plan. Technology stack (React/Node.js/PostgreSQL/LLM API), development phases, cost estimates, DB schema. |
+| 8 | [`mare_nostrum_implementation_plan.md`](mare_nostrum_implementation_plan.md) | 🔧 WIP | Technical implementation plan. Technology stack, development phases, cost estimates, DB schema. |
 
-> **Note:** The master document (`mare_nostrum_master_v3.md`) consolidates all WIP modules into a single reference. For the latest canonical rules, always refer to the master. The individual modules contain expanded details and working notes.
+### Wiki & Mockup
+
+| Resource | Description |
+|----------|-------------|
+| [`docs/wiki/`](docs/wiki/index.md) | 15-page game wiki in Turkish — synthesized reference from all design docs |
+| [`mockup/`](mockup/) | Working TypeScript pnpm monorepo — playable vertical slice with 156 tests |
+
+> **Note:** The master document (`mare_nostrum_master_v3.md`) consolidates all WIP modules into a single reference. For the latest canonical rules, always refer to the master. The individual modules contain expanded details and working notes. The `mockup/` workspace is the running implementation.
 
 ---
 
@@ -134,7 +161,7 @@ Players **feel** the effects but can never **measure** them:
 
 ## 🗺️ Map & World
 
-The Mediterranean is divided into **15 ports** across 4 regions, connected by **28 routes** with **3 strategic chokepoints**:
+The Mediterranean is divided into **15 ports** across 4 regions, connected by **29 routes** with **3 strategic chokepoints**:
 
 - **Western Mediterranean** — Barselona, Marsilya, Cenova, Cezayir
 - **Central Mediterranean** — Tunus, Palermo, Ragusa
@@ -156,9 +183,9 @@ Goods are not generic. Every item carries an **origin** (Menşe) that determines
 
 | Category | Example Origins |
 |---|---|
-| **Food (Yemek)** | Sicilya Buğdayı, Provence Şarabı, Nil Tahılı, Adriyatik Tuzu |
-| **Luxury (Lüks)** | Mısır Baharatı, Murano Camı, Doğu İpeği, Ligurya Mercanı, Sahra Altını |
-| **War (Savaş)** | Katalan Demiri, Girit Barut, Osmanlı Silahı |
+| **Food (Yemek)** | Sicilya Buğdayı, Provence Şarabı, Girit Zeytinyağı, Kıbrıs Tuzu, Tunus Zeytinyağı, Ragusa Tuzu |
+| **Luxury (Lüks)** | Mısır Baharatları, Murano Camı, Doğu İpeği, Ligurya Mercanı, Sahra Altını, Halep Sabunu |
+| **War (Savaş)** | Katalan Demiri, Malta Çeliği, Osmanlı Silahı, Lübnan Sediri |
 
 **Key principle:** If everyone takes the same route, the destination market saturates and prices crash. This naturally diversifies trade routes and creates information asymmetry — knowing *where* prices are good becomes as valuable as the cargo itself.
 
@@ -198,14 +225,50 @@ Quest clues appear as **⚓ whispers** in the coffeehouse. Players can follow or
 
 ## 🛠️ Technical Implementation
 
-The implementation plan targets a **Solo Developer (Scenario A)** baseline:
+The game is implemented as a **pnpm monorepo** under `mockup/`:
 
 | Layer | Technology |
 |---|---|
-| **Client** | React (or Next.js), Canvas/SVG or Pixi.js for the map, Zustand/Redux for state, Socket.io for multiplayer |
-| **Server** | Node.js (or Python FastAPI), PostgreSQL for game state, Redis for sessions/realtime |
-| **LLM** | Anthropic Claude API (or OpenAI) for coffeehouse whispers, city governors, NPCs, event narration |
-| **Deployment** | Vercel (frontend) + Railway/Fly.io (backend), Supabase (hosted PostgreSQL) |
+| **Client** | Next.js 15, React 19, Zustand stores, Socket.io-client, interactive SVG map |
+| **Server** | Express 4, Socket.io 4, Drizzle ORM (PostgreSQL 16), Redis 7 |
+| **Engine** | Pure TypeScript, deterministic functions, injectable RNG, vitest (156 tests) |
+| **Shared** | TypeScript types, constants, formulas, validators (no runtime deps) |
+| **LLM** | Claude API (mock whispers with static fallback pool for now) |
+| **Infrastructure** | Docker Compose (PostgreSQL + Redis), pnpm workspaces, ESM modules |
+
+### Quick Start
+
+```bash
+cd mockup/
+pnpm install          # Install all dependencies
+pnpm dev              # Start server (localhost:4000) + client (localhost:3000)
+pnpm test             # Run vitest — 156 tests across 8 test files (engine)
+pnpm typecheck        # TypeScript compiler checks (4 packages)
+pnpm build            # Production build (all packages)
+```
+
+### Engine Modules
+
+| Module | Description |
+|--------|-------------|
+| `combat.ts` | Rock-paper-scissors tactics (Pruva/Ateş/Manevra), d6 dice, Meltem bonus, ship synergies |
+| `economy.ts` | Origin-based pricing, port saturation with decay, automatic cargo selling |
+| `experience.ts` | Hidden experience gains per intent, ratio-based renown, decay/contradiction tracking |
+| `rumor.ts` | Automatic rumor generation, graph-based spread across routes, strength decay |
+| `scoring.ts` | Victory score = rumor spread × 2 + renown titles × 15, Efsane threshold = 100 |
+| `shipyard.ts` | Repair cost calculation, tersane discount (25%), partial repair support |
+| `turn-resolver.ts` | Full turn cycle: movement, combat, trade, rumor spread, experience, renown decay |
+
+### Data Files
+
+| File | Contents |
+|------|----------|
+| `ports.json` | 15 ports with coordinates, produces/desires, specials, trivia |
+| `routes.json` | 29 routes (9 tramontana, 7 kabotaj, 12 fortuna, 1 uzun_kabotaj) |
+| `goods.json` | 17 origin goods (7 yemek, 6 lüks, 4 savaş) |
+| `whispers.json` | Static fallback whisper pool per port |
+| `coastlines.json` | SVG coastline paths for map rendering |
+| `port-geo.json` | Real lat/lon coordinates for Mercator projection |
 
 Development is planned in multiple phases, starting with a **playable singleplayer demo** and expanding toward multiplayer alpha.
 
@@ -214,9 +277,11 @@ Development is planned in multiple phases, starting with a **playable singleplay
 ## 🤝 How to Navigate This Repository
 
 1. **Start with** [`mare_nostrum_master_v3.md`](mare_nostrum_master_v3.md) — the single source of truth for the entire game design.
-2. **Dive into modules** for expanded details on specific systems (economy, combat, map, quests, etc.).
-3. **WIP modules** may contain working notes and ideas not yet consolidated into the master document.
-4. **All design documents are written in Turkish.** The master document includes a full glossary of all game terms.
+2. **Browse the wiki** at [`docs/wiki/`](docs/wiki/index.md) — 15-page Turkish reference synthesized from all design docs.
+3. **Explore the mockup** at [`mockup/`](mockup/) — the working TypeScript implementation.
+4. **Dive into modules** for expanded details on specific systems (economy, combat, map, quests, etc.).
+5. **WIP modules** may contain working notes and ideas not yet consolidated into the master document.
+6. **All design documents are written in Turkish.** The master document includes a full glossary of all game terms.
 
 ---
 
@@ -233,7 +298,7 @@ Development is planned in multiple phases, starting with a **playable singleplay
 | **Tramontana** | Normal route (1 turn) |
 | **Kabotaj** | Coastal route (2 turns, safe) |
 | **Fortuna** | Open sea route (1 turn, risky) |
-| **Feluka** | Small ship — fast, low cargo, power 1 |
+| **Feluka** | Small ship — fast, low cargo, power 2 |
 | **Karaka** | Merchant ship — medium, high cargo, power 2 |
 | **Kadırga** | War galley — slow, low cargo, power 3 |
 | **Meltem** | Sea experience pool |
