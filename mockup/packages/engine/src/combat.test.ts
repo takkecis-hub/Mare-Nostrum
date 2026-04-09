@@ -72,6 +72,7 @@ describe('resolveCombat', () => {
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
     expect(result.result).toBe('kazandi');
@@ -311,14 +312,13 @@ describe('calculatePower – additional coverage', () => {
 
 describe('resolveCombat – goldDelta/durabilityDelta details', () => {
   it('on win: goldDelta equals COMBAT_LOOT_GOLD + floor(enemyPower * 2)', () => {
-    // pruva counters ates → kazandi
     const result = resolveCombat({
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
-    // enemyPower = 5.6 (default enemy with fixedRng: karaka power=2, dur=80, meltemBonus=1.0, die=1)
     expect(result.result).toBe('kazandi');
     expect(result.goldDelta).toBe(COMBAT_LOOT_GOLD + Math.floor(result.enemyPower * 2));
   });
@@ -328,6 +328,7 @@ describe('resolveCombat – goldDelta/durabilityDelta details', () => {
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
     expect(result.result).toBe('kazandi');
@@ -339,6 +340,7 @@ describe('resolveCombat – goldDelta/durabilityDelta details', () => {
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
     expect(result.result).toBe('kazandi');
@@ -350,9 +352,9 @@ describe('resolveCombat – goldDelta/durabilityDelta details', () => {
       playerShip: kadirga,
       playerExperience: meltemDominant,
       playerTactic: 'kacis',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
-    // playerPower=7.0 >= enemyPower=5.6 → kacti
     expect(result.result).toBe('kacti');
     expect(result.goldDelta).toBe(0);
     expect(result.durabilityDelta).toBe(0);
@@ -369,7 +371,6 @@ describe('resolveCombat – goldDelta/durabilityDelta details', () => {
       enemyTactic: 'pruva',
       rng: fixedRng,
     });
-    // playerPower=4.6, enemyPower=11.0, powerDiff=6.4
     expect(result.result).toBe('kaybetti');
     const powerDiff = Math.max(0, result.enemyPower - result.playerPower);
     expect(result.goldDelta).toBe(-(COMBAT_LOSS_GOLD + Math.floor(powerDiff * 3)));
@@ -391,11 +392,11 @@ describe('resolveCombat – goldDelta/durabilityDelta details', () => {
   });
 
   it('manevraIntel is false for pruva counter win', () => {
-    // pruva counters ates → kazandi, but tactic is pruva not manevra
     const result = resolveCombat({
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
     expect(result.result).toBe('kazandi');
@@ -403,7 +404,6 @@ describe('resolveCombat – goldDelta/durabilityDelta details', () => {
   });
 
   it('manevraIntel is false for ates counter win', () => {
-    // ates counters manevra → kazandi, but tactic is ates not manevra
     const result = resolveCombat({
       playerShip: karaka,
       playerExperience: baseExperience,
@@ -423,6 +423,7 @@ describe('resolveCombat – default enemy', () => {
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
+      enemyTactic: 'ates',
       rng: fixedRng,
     });
     // Default enemy: {type:'karaka', power:2, durability:80}
@@ -430,14 +431,15 @@ describe('resolveCombat – default enemy', () => {
     expect(result.enemyPower).toBe(5.6);
   });
 
-  it('uses default enemyTactic ates when not provided', () => {
+  it('picks enemy tactic from RNG when not provided', () => {
+    // With fixedRng (always 0), pickEnemyTactic picks index 0 → 'pruva'
     const result = resolveCombat({
       playerShip: karaka,
       playerExperience: baseExperience,
       playerTactic: 'pruva',
       rng: fixedRng,
     });
-    expect(result.enemyTactic).toBe('ates');
+    expect(result.enemyTactic).toBe('pruva');
   });
 
   it('custom enemyShip overrides the default', () => {
@@ -452,5 +454,33 @@ describe('resolveCombat – default enemy', () => {
     // Custom enemy: base=1+50/50=2, meltemBonus=1.0, die=1 (fixedRng) → 4.0
     // Default would be 5.6, confirming override
     expect(result.enemyPower).toBe(4);
+  });
+});
+
+describe('resolveCombat – enemy tactic selection', () => {
+  it('picks a valid enemy tactic from RNG when none is specified', () => {
+    const validTactics = ['pruva', 'ates', 'manevra'];
+    const result = resolveCombat({
+      playerShip: karaka,
+      playerExperience: baseExperience,
+      playerTactic: 'pruva',
+      rng: fixedRng,
+    });
+    expect(validTactics).toContain(result.enemyTactic);
+  });
+
+  it('uses different enemy tactics for different RNG seeds', () => {
+    const tactics = new Set<string>();
+    // rng() = 0 → index 0 → pruva; rng() = 0.5 → index 1 → ates; rng() = 0.99 → index 2 → manevra
+    for (const seed of [0, 0.34, 0.67]) {
+      const result = resolveCombat({
+        playerShip: karaka,
+        playerExperience: baseExperience,
+        playerTactic: 'pruva',
+        rng: () => seed,
+      });
+      tactics.add(result.enemyTactic);
+    }
+    expect(tactics.size).toBeGreaterThanOrEqual(2);
   });
 });

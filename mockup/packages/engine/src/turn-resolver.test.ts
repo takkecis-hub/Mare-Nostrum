@@ -184,7 +184,7 @@ describe('resolveTurn', () => {
       routes,
       goods,
     });
-    expect(result.nextState.player.experience.murekkep).toBe(baseState.player.experience.murekkep + 1);
+    expect(result.nextState.player.experience.murekkep).toBe(baseState.player.experience.murekkep + 2);
   });
 
   it('duman intent increases simsar experience', () => {

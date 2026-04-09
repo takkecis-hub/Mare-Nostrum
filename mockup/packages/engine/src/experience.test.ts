@@ -26,9 +26,9 @@ describe('applyExperienceGain', () => {
     expect(result.terazi).toBe(1);
   });
 
-  it('adds 1 to murekkep on pusula intent', () => {
+  it('adds 2 to murekkep on pusula intent', () => {
     const result = applyExperienceGain(baseExperience, 'pusula');
-    expect(result.murekkep).toBe(2);
+    expect(result.murekkep).toBe(3);
     expect(result.meltem).toBe(1);
   });
 
@@ -72,8 +72,9 @@ describe('determineRenown', () => {
   });
 
   it('grants Hayalet Pala when simsar >= 30%', () => {
-    // simsar = 5, total = 8 → ratio = 0.625
-    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 5 };
+    // simsar = 5, total = 8 → ratio = 0.625, total = 8 < 12 → must boost total
+    // simsar = 10, total = 13 → ratio = ~0.77, total ≥ 12
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 10 };
     const renown = determineRenown(exp, 0);
     expect(renown).toContain('Hayalet Pala');
   });
@@ -229,6 +230,34 @@ describe('checkRenownDecay', () => {
     // Altın Parmak contradicts kara_bayrak
     const result = checkRenownDecay(['Altın Parmak'], 'kara_bayrak', 2, { 'Altın Parmak': 1 });
     expect(result.warnings).toContain('Altın Parmak');
+  });
+
+  it('contradictory action causes loss when combined with time gap', () => {
+    // gap = 3 turns, but contradiction adds RENOWN_WARNING_TURNS (5) → effective gap = 8 → loss
+    const result = checkRenownDecay(['Altın Parmak'], 'kara_bayrak', 4, { 'Altın Parmak': 1 });
+    expect(result.losses).toContain('Altın Parmak');
+  });
+
+  it('contradictory action on fresh title causes warning (effective gap = 5)', () => {
+    // gap = 0, contradiction adds 5 → effective gap = 5 → warning
+    const result = checkRenownDecay(['Altın Parmak'], 'kara_bayrak', 1, { 'Altın Parmak': 1 });
+    expect(result.warnings).toContain('Altın Parmak');
+  });
+});
+
+describe('determineRenown – minimum experience gate', () => {
+  it('returns no renown when total experience is below RENOWN_MIN_TOTAL_EXPERIENCE', () => {
+    // simsar = 5, total = 8 → below 12 threshold
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 5 };
+    const renown = determineRenown(exp, 1);
+    expect(renown).toHaveLength(0);
+  });
+
+  it('grants renown when total experience meets minimum', () => {
+    // total = 1 + 1 + 1 + 10 = 13 ≥ 12
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 10 };
+    const renown = determineRenown(exp, 1);
+    expect(renown).toContain('Hayalet Pala');
   });
 });
 
