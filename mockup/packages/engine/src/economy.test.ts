@@ -153,3 +153,163 @@ describe('sellCargoAtPort with saturation', () => {
     expect(result.saturationUpdates['tunus:murano_cami']).toBe(2);
   });
 });
+
+describe('saturationMultiplier – additional coverage', () => {
+  it('returns 0.85 for a single delivery (count=1)', () => {
+    const sat = { 'venedik:murano_cami': 1 };
+    expect(saturationMultiplier('venedik', 'murano_cami', sat)).toBeCloseTo(0.85);
+  });
+
+  it('returns exactly 0.4 at floor boundary (count=4)', () => {
+    const sat = { 'venedik:murano_cami': 4 };
+    // 1 - 0.15 * 4 = 0.4, exactly the floor
+    expect(saturationMultiplier('venedik', 'murano_cami', sat)).toBeCloseTo(0.4);
+  });
+
+  it('different port/good keys do not interfere', () => {
+    const sat = { 'tunus:atlas': 5 };
+    // querying a completely different key should return 1.0
+    expect(saturationMultiplier('venedik', 'murano_cami', sat)).toBe(1);
+  });
+
+  it('returns 1.0 when key is for a different good than the saturated one', () => {
+    const sat = { 'venedik:atlas': 3 };
+    // same port, different good → no saturation
+    expect(saturationMultiplier('venedik', 'murano_cami', sat)).toBe(1);
+  });
+});
+
+describe('priceIndicatorForPort – additional coverage', () => {
+  const lowIndicatorGood: Good = { id: 'cheap_good', name: 'Cheap Good', category: 'luks', originPort: 'other', priceIndicator: 1 };
+  const highIndicatorGood: Good = { id: 'pricey_good', name: 'Pricey Good', category: 'luks', originPort: 'other', priceIndicator: 5 };
+
+  it('returns 1 for a good with priceIndicator=1 at unrelated port', () => {
+    expect(priceIndicatorForPort(venedik, lowIndicatorGood)).toBe(1);
+  });
+
+  it('returns 5 for a good with priceIndicator=5 at unrelated port', () => {
+    expect(priceIndicatorForPort(venedik, highIndicatorGood)).toBe(5);
+  });
+});
+
+describe('sellCargoAtPort – stars calculation', () => {
+  it('stars = 4 when good is desired (indicator=5)', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 10 },
+    ];
+    // tunus desires murano_cami → indicator=5, stars = min(4, 5-1) = 4
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(result.stars).toBe(4);
+  });
+
+  it('stars = 2 for unrelated good (indicator=3)', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'atlas', name: 'Atlas', quantity: 1, originPort: 'tunus', purchasePrice: 10 },
+    ];
+    // venedik neither produces nor desires atlas → indicator=3, stars = min(4, 3-1) = 2
+    const result = sellCargoAtPort(cargo, [atlas], venedik);
+    expect(result.stars).toBe(2);
+  });
+
+  it('stars remains 1 when no items are sold', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 200 },
+    ];
+    // indicator=5 at tunus, saleValue=100, purchasePrice=200 → not profitable → not sold
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(result.sold).toHaveLength(0);
+    expect(result.stars).toBe(1);
+  });
+
+  it('stars uses the highest indicator among all sold items', () => {
+    const lubnanSediri: Good = { id: 'lubnan_sediri', name: 'Lübnan Sediri', category: 'luks', originPort: 'beyrut', priceIndicator: 3 };
+    const cargo: CargoItem[] = [
+      // venedik desires lubnan_sediri → indicator=5, stars contribution = min(4,4) = 4
+      { goodId: 'lubnan_sediri', name: 'Lübnan Sediri', quantity: 1, originPort: 'beyrut', purchasePrice: 10 },
+      // venedik has atlas as unrelated → indicator=3, stars contribution = min(4,2) = 2
+      { goodId: 'atlas', name: 'Atlas', quantity: 1, originPort: 'tunus', purchasePrice: 10 },
+    ];
+    const result = sellCargoAtPort(cargo, [lubnanSediri, atlas], venedik);
+    expect(result.sold).toHaveLength(2);
+    expect(result.stars).toBe(4);
+  });
+});
+
+describe('sellCargoAtPort – exact boundary conditions', () => {
+  it('does not sell when sale value exactly equals purchase price', () => {
+    const cargo: CargoItem[] = [
+      // tunus desires murano_cami → indicator=5, saleValue=5*20*1=100
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 100 },
+    ];
+    // saleValue(100) <= purchasePrice*qty(100) → not sold
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(result.remainingCargo).toHaveLength(1);
+    expect(result.goldDelta).toBe(0);
+    expect(result.sold).toHaveLength(0);
+  });
+
+  it('sells when sale value is 1 more than purchase price', () => {
+    const cargo: CargoItem[] = [
+      // tunus desires murano_cami → indicator=5, saleValue=5*20*1=100
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 99 },
+    ];
+    // saleValue(100) > purchasePrice*qty(99) → sold
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(result.remainingCargo).toHaveLength(0);
+    expect(result.goldDelta).toBe(100);
+    expect(result.sold).toHaveLength(1);
+  });
+
+  it('multiple quantities affect profitability check (saleValue vs purchasePrice * quantity)', () => {
+    const cargo: CargoItem[] = [
+      // tunus desires murano_cami → indicator=5, saleValue=5*20*2=200
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 2, originPort: 'venedik', purchasePrice: 100 },
+    ];
+    // saleValue(200) <= purchasePrice*qty(100*2=200) → not sold
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(result.remainingCargo).toHaveLength(1);
+    expect(result.goldDelta).toBe(0);
+    expect(result.sold).toHaveLength(0);
+  });
+});
+
+describe('sellCargoAtPort – saturation interaction', () => {
+  it('saturation reduces sale value but item is still profitable at light saturation', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 40 },
+    ];
+    const sat = { 'tunus:murano_cami': 1 };
+    // indicator=5, multiplier=0.85, saleValue=round(5*20*1*0.85)=85, purchasePrice=40 → sold
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus, sat);
+    expect(result.remainingCargo).toHaveLength(0);
+    expect(result.goldDelta).toBe(85);
+    expect(result.sold).toHaveLength(1);
+  });
+
+  it('multiple items with different saturation levels', () => {
+    const cargo: CargoItem[] = [
+      // murano_cami desired by tunus → indicator=5, sat=2 → multiplier=0.7
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 20 },
+      // atlas produced by tunus → indicator=2, no saturation → multiplier=1.0
+      { goodId: 'atlas', name: 'Atlas', quantity: 1, originPort: 'tunus', purchasePrice: 10 },
+    ];
+    const sat = { 'tunus:murano_cami': 2 };
+    // murano_cami: saleValue=round(5*20*1*0.7)=70, purchasePrice=20 → sold
+    // atlas: saleValue=round(2*20*1*1.0)=40, purchasePrice=10 → sold
+    const result = sellCargoAtPort(cargo, [muranoCami, atlas], tunus, sat);
+    expect(result.remainingCargo).toHaveLength(0);
+    expect(result.sold).toHaveLength(2);
+    expect(result.goldDelta).toBe(70 + 40);
+  });
+
+  it('saturation updates accumulate across multiple cargo items of the same good', () => {
+    const cargo: CargoItem[] = [
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 10 },
+      { goodId: 'murano_cami', name: 'Murano Camı', quantity: 3, originPort: 'venedik', purchasePrice: 10 },
+    ];
+    // Both sold at tunus (indicator=5), no existing saturation
+    const result = sellCargoAtPort(cargo, [muranoCami], tunus);
+    expect(result.sold).toHaveLength(2);
+    expect(result.saturationUpdates['tunus:murano_cami']).toBe(4);
+  });
+});
