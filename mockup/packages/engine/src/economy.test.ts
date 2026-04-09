@@ -435,3 +435,212 @@ describe('sellCargoAtPort – season modifier', () => {
     expect(result.goldDelta).toBe(150);
   });
 });
+
+// ─── Economy Deepening: Bulk discounts, Smuggling, Contracts, Price Visibility ───
+
+import type { HiddenExperience } from '../../shared/src/types/index.js';
+import {
+  bulkDiscountMultiplier,
+  purchaseCostWithDiscount,
+  smugglingDetectionProbability,
+  attemptSmuggling,
+  checkContractFulfillment,
+  contractRewardGold,
+  contractBreakPenalty,
+  contractSaleBonus,
+  firstArrivalMultiplier,
+  priceVisibilityTier,
+} from './economy.js';
+import {
+  BULK_DISCOUNT_TIER1,
+  BULK_DISCOUNT_TIER2,
+  SMUGGLING_DETECT_BASE,
+  SMUGGLING_DETECT_FLOOR,
+  SMUGGLING_FINE_GOLD,
+  SMUGGLING_LOCKOUT_TURNS,
+  CONTRACT_PRICE_BONUS,
+  CONTRACT_BREAK_PENALTY,
+  FIRST_ARRIVAL_BONUS,
+} from '../../shared/src/constants/index.js';
+
+const baseExperience: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 1 };
+const highSimsar: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 10 };
+const highTerazi: HiddenExperience = { meltem: 1, terazi: 10, murekkep: 1, simsar: 1 };
+
+describe('bulkDiscountMultiplier', () => {
+  it('returns 1.0 for 1-3 units (no discount)', () => {
+    expect(bulkDiscountMultiplier(1)).toBe(1);
+    expect(bulkDiscountMultiplier(2)).toBe(1);
+    expect(bulkDiscountMultiplier(3)).toBe(1);
+  });
+
+  it('returns 0.9 for 4-7 units (tier 1)', () => {
+    expect(bulkDiscountMultiplier(4)).toBe(BULK_DISCOUNT_TIER1);
+    expect(bulkDiscountMultiplier(7)).toBe(BULK_DISCOUNT_TIER1);
+  });
+
+  it('returns 0.8 for 8+ units (tier 2)', () => {
+    expect(bulkDiscountMultiplier(8)).toBe(BULK_DISCOUNT_TIER2);
+    expect(bulkDiscountMultiplier(15)).toBe(BULK_DISCOUNT_TIER2);
+  });
+});
+
+describe('purchaseCostWithDiscount', () => {
+  it('returns full price for small quantities', () => {
+    // venedik produces with basePrice pahali → 50 per unit
+    const cost = purchaseCostWithDiscount(venedik, muranoCami, 2);
+    expect(cost).toBe(100); // 50 * 2 * 1.0
+  });
+
+  it('applies tier 1 discount for 4-7 units', () => {
+    const cost = purchaseCostWithDiscount(venedik, muranoCami, 5);
+    // 50 * 5 * 0.9 = 225
+    expect(cost).toBe(225);
+  });
+
+  it('applies tier 2 discount for 8+ units', () => {
+    const cost = purchaseCostWithDiscount(venedik, muranoCami, 10);
+    // 50 * 10 * 0.8 = 400
+    expect(cost).toBe(400);
+  });
+});
+
+describe('smugglingDetectionProbability', () => {
+  it('returns high detection for low simsar', () => {
+    const lowSimsar: HiddenExperience = { meltem: 5, terazi: 5, murekkep: 5, simsar: 0 };
+    const rate = smugglingDetectionProbability(lowSimsar);
+    expect(rate).toBeCloseTo(SMUGGLING_DETECT_BASE);
+  });
+
+  it('returns low detection for high simsar', () => {
+    const rate = smugglingDetectionProbability(highSimsar);
+    expect(rate).toBeLessThan(SMUGGLING_DETECT_BASE);
+  });
+
+  it('never goes below the floor', () => {
+    const maxSimsar: HiddenExperience = { meltem: 0, terazi: 0, murekkep: 0, simsar: 100 };
+    const rate = smugglingDetectionProbability(maxSimsar);
+    expect(rate).toBeGreaterThanOrEqual(SMUGGLING_DETECT_FLOOR);
+  });
+});
+
+describe('attemptSmuggling', () => {
+  const forbiddenGoods = ['ottoman_silahi'];
+  const smuggleCargo = [
+    { goodId: 'ottoman_silahi', name: 'Osmanlı Silahı', quantity: 2, originPort: 'istanbul', purchasePrice: 40 },
+    { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 50 },
+  ];
+
+  it('returns clean result when no forbidden goods in cargo', () => {
+    const result = attemptSmuggling([smuggleCargo[1]], forbiddenGoods, baseExperience);
+    expect(result.detected).toBe(false);
+    expect(result.goodsConfiscated).toHaveLength(0);
+  });
+
+  it('detects smuggling when rng is below threshold', () => {
+    const result = attemptSmuggling(smuggleCargo, forbiddenGoods, baseExperience, () => 0);
+    expect(result.detected).toBe(true);
+    expect(result.fineGold).toBe(SMUGGLING_FINE_GOLD);
+    expect(result.lockoutTurns).toBe(SMUGGLING_LOCKOUT_TURNS);
+    expect(result.goodsConfiscated).toHaveLength(1);
+    expect(result.goodsConfiscated[0].goodId).toBe('ottoman_silahi');
+  });
+
+  it('smuggling succeeds when rng is above threshold', () => {
+    const result = attemptSmuggling(smuggleCargo, forbiddenGoods, baseExperience, () => 0.999);
+    expect(result.detected).toBe(false);
+  });
+});
+
+describe('checkContractFulfillment', () => {
+  const contract = {
+    id: 'contract-1',
+    portId: 'venedik',
+    goodId: 'murano_cami',
+    quantity: 3,
+    rewardGold: 200,
+    deadlineTurn: 20,
+    breakPenalty: 100,
+    accepted: true,
+    completed: false,
+  };
+
+  it('returns fulfilled when enough goods delivered', () => {
+    const result = checkContractFulfillment(contract, [{ goodId: 'murano_cami', quantity: 3 }], 10);
+    expect(result.fulfilled).toBe(true);
+    expect(result.expired).toBe(false);
+  });
+
+  it('returns not fulfilled when not enough goods', () => {
+    const result = checkContractFulfillment(contract, [{ goodId: 'murano_cami', quantity: 2 }], 10);
+    expect(result.fulfilled).toBe(false);
+    expect(result.expired).toBe(false);
+  });
+
+  it('returns expired when past deadline', () => {
+    const result = checkContractFulfillment(contract, [{ goodId: 'murano_cami', quantity: 5 }], 21);
+    expect(result.fulfilled).toBe(false);
+    expect(result.expired).toBe(true);
+  });
+
+  it('returns not fulfilled for completed contracts', () => {
+    const completed = { ...contract, completed: true };
+    const result = checkContractFulfillment(completed, [{ goodId: 'murano_cami', quantity: 5 }], 10);
+    expect(result.fulfilled).toBe(false);
+  });
+});
+
+describe('contractRewardGold', () => {
+  it('returns the contract reward', () => {
+    expect(contractRewardGold({ rewardGold: 200 } as any)).toBe(200);
+  });
+});
+
+describe('contractBreakPenalty', () => {
+  it('returns the contract break penalty', () => {
+    expect(contractBreakPenalty({ breakPenalty: 150 } as any)).toBe(150);
+  });
+
+  it('returns default penalty when not specified', () => {
+    expect(contractBreakPenalty({ breakPenalty: 0 } as any)).toBe(CONTRACT_BREAK_PENALTY);
+  });
+});
+
+describe('contractSaleBonus', () => {
+  it('returns the contract price bonus multiplier', () => {
+    expect(contractSaleBonus()).toBe(CONTRACT_PRICE_BONUS);
+  });
+});
+
+describe('firstArrivalMultiplier', () => {
+  it('returns bonus for first arrival', () => {
+    expect(firstArrivalMultiplier(true)).toBe(FIRST_ARRIVAL_BONUS);
+  });
+
+  it('returns 1.0 for non-first arrival', () => {
+    expect(firstArrivalMultiplier(false)).toBe(1);
+  });
+});
+
+describe('priceVisibilityTier', () => {
+  it('returns none for low terazi', () => {
+    const lowTerazi: HiddenExperience = { meltem: 10, terazi: 0, murekkep: 10, simsar: 10 };
+    expect(priceVisibilityTier(lowTerazi)).toBe('none');
+  });
+
+  it('returns local for terazi >= 20%', () => {
+    const medTerazi: HiddenExperience = { meltem: 1, terazi: 3, murekkep: 1, simsar: 1 };
+    // terazi ratio = 3/6 = 0.5 → full
+    expect(priceVisibilityTier(medTerazi)).toBe('full');
+  });
+
+  it('returns network for terazi >= 35%', () => {
+    // terazi ratio = 5/12 ≈ 0.416 → full (>0.5? No, 5/12=0.416 → >0.35 → network)
+    const netTerazi: HiddenExperience = { meltem: 3, terazi: 5, murekkep: 2, simsar: 2 };
+    expect(priceVisibilityTier(netTerazi)).toBe('network');
+  });
+
+  it('returns full for very high terazi', () => {
+    expect(priceVisibilityTier(highTerazi)).toBe('full');
+  });
+});
