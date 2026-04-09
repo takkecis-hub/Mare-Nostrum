@@ -156,7 +156,7 @@ export interface BootstrapPayload {
   gameState: GameState;
 }
 
-// --- Smuggling ---
+// --- Kaçakçılık (Smuggling) ---
 
 export interface SmuggleResult {
   detected: boolean;
@@ -165,7 +165,7 @@ export interface SmuggleResult {
   lockoutTurns: number;
 }
 
-// --- City contracts ---
+// --- Şehir Kontratları (City Contracts) ---
 
 export interface CityContract {
   id: string;
@@ -179,11 +179,11 @@ export interface CityContract {
   completed: boolean;
 }
 
-// --- Price visibility ---
+// --- Fiyat Görünürlüğü (Price Visibility) ---
 
 export type PriceVisibilityTier = 'none' | 'local' | 'network' | 'full';
 
-// --- Conflict spectrum ---
+// --- Çatışma Spektrumu (Conflict Spectrum) ---
 
 export type RumorDefenseAction = 'atese_su' | 'izi_surmek' | 'karsi_soylenti';
 
@@ -198,7 +198,7 @@ export interface RumorDefenseResult {
   backfired?: boolean;
 }
 
-// --- Economic warfare (Kuşatma) ---
+// --- Kuşatma (Economic Warfare) ---
 
 export type KusatmaAction = 'stok_ablukasi' | 'fiyat_sabotaji' | 'bilgi_blokaji' | 'rota_korkutmasi';
 
@@ -215,7 +215,7 @@ export interface KusatmaResult {
   blocked?: boolean;
 }
 
-// --- Escape mechanic ---
+// --- Kaçış Mekaniği (Escape Mechanic) ---
 
 export interface EscapeResult {
   escaped: boolean;
@@ -223,7 +223,7 @@ export interface EscapeResult {
   attackerBonus: number;
 }
 
-// --- Quest system ---
+// --- Görev Sistemi (Quest System) ---
 
 export type QuestId = 'kayip_hazine' | 'babanin_serefi' | 'intikam' | 'saf_merak';
 

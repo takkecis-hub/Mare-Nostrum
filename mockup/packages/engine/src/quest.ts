@@ -22,7 +22,7 @@ const KAYIP_HAZINE_STAGES: QuestStage[] = [
   {
     stage: 2,
     title: 'Antikacı',
-    description: 'İstanbul\'da bir antikacı harita parçasını elinde tutuyor. Karşılığında bir Murano ikonu istiyor.',
+    description: 'İstanbul\'da bir antikacı harita parçasını elinde tutuyor. Karşılığında bir Murano ikonunu istiyor.',
     turnRange: [7, 12],
     triggerPorts: ['istanbul'],
     conditions: { requiredGood: 'murano_cami' },
