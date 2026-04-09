@@ -83,12 +83,14 @@ NİYET?    Kervan / Kara Bayrak / Pusula / Duman
 
 ### Niyetlerin Karşılaştırması
 
-| Niyet | Özellik | Deneyim Katkısı |
-|-------|---------|-----------------|
-| **Kervan** | Limanda al/sat, yolda muhatap ol | Terazi |
-| **Kara Bayrak** | Yolda rastladığına saldır | Meltem, Simsar |
-| **Pusula** | Bilgi topla, kimseyle muhatap olma | Meltem, Simsar |
-| **Duman** | Görünmez kal, gözlemle, karışma | Mürekkep, Simsar |
+> **Uygulama durumu:** Deneyim katkıları `mockup/packages/engine/src/experience.ts` dosyasındaki `applyExperienceGain` fonksiyonunda tanımlıdır.
+
+| Niyet | Özellik | Deneyim Katkısı | Miktar |
+|-------|---------|-----------------|--------|
+| **Kervan** | Limanda al/sat, yolda muhatap ol | Terazi | +2 |
+| **Kara Bayrak** | Yolda rastladığına saldır | Meltem | +2 |
+| **Pusula** | Bilgi topla, kimseyle muhatap olma | Mürekkep | +1 |
+| **Duman** | Görünmez kal, gözlemle, karışma | Simsar | +2 |
 
 ### Rota Kombinasyonları
 
@@ -104,17 +106,23 @@ NİYET?    Kervan / Kara Bayrak / Pusula / Duman
 
 ## Rüzgâr (Deniz Fazı): Otomatik Çözümleme
 
+> **Uygulama durumu:** Tur çözümlemesi `mockup/packages/engine/src/turn-resolver.ts` dosyasında uygulanmıştır. Çok turlu transit (kabotaj), port doyma çürümesi ve mevsim geçişi dahildir.
+
 Emirler verildikten sonra Rüzgâr fazı **deterministik** biçimde çözümlenir:
 
 ```
-1. Hava durumu kontrolü (fırtına var mı?)
-2. Karşılaşma kontrolü (yolda kimi buldun?)
-3. Niyet çözümü (çatışma, gözlem veya geçiş)
-4. Savaş varsa → taktik seçimi (Pruva / Ateş / Manevra)
-5. Ticaret çözümü (açlık/doyma + ilk gelen bonusu)
-6. Söylenti üretimi (otomatik)
-7. Deneyim güncelleme (sessiz)
-8. Ün kontrolü (sessiz)
+1. Transit kontrol (çok turlu rota devam ediyor mu?)
+2. Emir doğrulama (rota geçerli mi?)
+3. Çok turlu rota başlatma (kabotaj/uzun_kabotaj)
+4. Savaş varsa → taktik çözümleme (Pruva / Ateş / Manevra + d6 zar)
+5. Hareket (hedefe taşınma)
+6. Deneyim güncelleme (niyet bazlı, sessiz)
+7. Ticaret çözümü (Kervan niyetinde → otomatik satış + port doyma)
+8. Söylenti üretimi ve rota boyunca yayılma
+9. Ün kontrolü (oran eşikleri + söylenti sayısı)
+10. Ün çürüme kontrolü (pasiflik + çelişki)
+11. Mevsim geçişi (her 4 turda yaz ↔ kış)
+12. Port doyma çürümesi (her 3 turda -1)
 ```
 
 > Oyun motoru ve söylenti motoru deterministiktir — LLM'e bağlı değildir. LLM sadece metin üretir, mekanik etkilemez.
