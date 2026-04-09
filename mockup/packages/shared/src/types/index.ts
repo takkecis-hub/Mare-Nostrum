@@ -155,3 +155,102 @@ export interface BootstrapPayload {
   goods: Good[];
   gameState: GameState;
 }
+
+// --- Smuggling ---
+
+export interface SmuggleResult {
+  detected: boolean;
+  fineGold: number;
+  goodsConfiscated: CargoItem[];
+  lockoutTurns: number;
+}
+
+// --- City contracts ---
+
+export interface CityContract {
+  id: string;
+  portId: string;
+  goodId: string;
+  quantity: number;
+  rewardGold: number;
+  deadlineTurn: number;
+  breakPenalty: number;
+  accepted: boolean;
+  completed: boolean;
+}
+
+// --- Price visibility ---
+
+export type PriceVisibilityTier = 'none' | 'local' | 'network' | 'full';
+
+// --- Conflict spectrum ---
+
+export type RumorDefenseAction = 'atese_su' | 'izi_surmek' | 'karsi_soylenti';
+
+export interface RumorDefenseResult {
+  action: RumorDefenseAction;
+  success: boolean;
+  /** The rumor that was targeted. */
+  targetRumorId: string;
+  /** If izi_surmek succeeded, the original player who created the rumor. */
+  tracedPlayerId?: string;
+  /** If karsi_soylenti backfired, the counter-rumor hurt the defender. */
+  backfired?: boolean;
+}
+
+// --- Economic warfare (Kuşatma) ---
+
+export type KusatmaAction = 'stok_ablukasi' | 'fiyat_sabotaji' | 'bilgi_blokaji' | 'rota_korkutmasi';
+
+export interface KusatmaResult {
+  action: KusatmaAction;
+  targetPortId: string;
+  /** For stok_ablukasi: saturation increase applied. */
+  saturationDelta?: number;
+  /** For fiyat_sabotaji: price multiplier applied. */
+  priceMultiplier?: number;
+  /** For rota_korkutmasi: turns of increased encounter chance. */
+  scareTurns?: number;
+  /** For bilgi_blokaji: target port's visibility blocked. */
+  blocked?: boolean;
+}
+
+// --- Escape mechanic ---
+
+export interface EscapeResult {
+  escaped: boolean;
+  /** Bonus granted to attacker if escape failed. */
+  attackerBonus: number;
+}
+
+// --- Quest system ---
+
+export type QuestId = 'kayip_hazine' | 'babanin_serefi' | 'intikam' | 'saf_merak';
+
+export interface QuestStage {
+  stage: number;
+  title: string;
+  description: string;
+  /** Turn range when this stage is available. */
+  turnRange: [number, number];
+  /** Port(s) where this stage can be triggered. */
+  triggerPorts: string[];
+  /** Conditions that must be met (e.g. cargo, gold, renown). */
+  conditions?: Record<string, unknown>;
+}
+
+export interface QuestState {
+  questId: QuestId;
+  currentStage: number;
+  completed: boolean;
+  stageFlags: Record<string, boolean>;
+  /** Evidence or items collected during the quest. */
+  evidence: string[];
+}
+
+export interface QuestChain {
+  id: QuestId;
+  name: string;
+  description: string;
+  stages: QuestStage[];
+}
