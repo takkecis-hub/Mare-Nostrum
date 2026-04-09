@@ -11,7 +11,7 @@ import triviaJson from '../../../data/trivia.json' with { type: 'json' };
 import groundingManifestJson from '../../../data/grounding-manifest.json' with { type: 'json' };
 import provenanceJson from '../../../data/provenance.json' with { type: 'json' };
 import { DEFAULT_PLAYER_ID, DEFAULT_PLAYER_NAME, GOOD_PURCHASE_COST } from '../../shared/src/constants/index.js';
-import type { BootstrapPayload, CargoItem, GameState, Good, Order, Port, Route, Tactic } from '../../shared/src/types/index.js';
+import type { BootstrapPayload, CargoItem, GameState, Order, Tactic } from '../../shared/src/types/index.js';
 import {
   assertGroundedDataIntegrity,
   parseGoods,
@@ -28,9 +28,9 @@ import { repairShip, repairCost } from '../../engine/src/shipyard.js';
 import { purchaseCostForGood } from '../../engine/src/economy.js';
 import { getMockWhispers } from './llm/mock-whispers.js';
 
-const ports = parsePorts(portsJson) as Port[];
-const routes = parseRoutes(routesJson) as Route[];
-const goods = parseGoods(goodsJson) as Good[];
+const ports = parsePorts(portsJson);
+const routes = parseRoutes(routesJson);
+const goods = parseGoods(goodsJson);
 
 assertGroundedDataIntegrity({
   ports,

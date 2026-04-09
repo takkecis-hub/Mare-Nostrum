@@ -227,14 +227,14 @@ export function parsePorts(data: unknown): Port[] {
 export function parseRoutes(data: unknown): Route[] {
   return expectArray(data, 'routes').map((item, index) => {
     const record = expectRecord(item, `routes[${index}]`);
-    const isChokepoint = record.isChokepoint;
+    const chokepointValue = record.isChokepoint;
     return {
       id: expectString(record.id, `routes[${index}].id`),
       from: expectString(record.from, `routes[${index}].from`),
       to: expectString(record.to, `routes[${index}].to`),
       type: expectEnumValue(record.type, `routes[${index}].type`, ROUTE_TYPES) as RouteType,
       isChokepoint:
-        isChokepoint === null ? null : expectString(isChokepoint, `routes[${index}].isChokepoint`),
+        chokepointValue === null ? null : expectString(chokepointValue, `routes[${index}].isChokepoint`),
       encounterChance: expectNumber(record.encounterChance, `routes[${index}].encounterChance`),
       turnsRequired: expectNumber(record.turnsRequired, `routes[${index}].turnsRequired`),
     };
@@ -363,7 +363,10 @@ export function collectGroundedDataIntegrityErrors(input: {
     if (!portIds.has(route.to)) {
       errors.push(`Route ${route.id} references missing to port ${route.to}`);
     }
-    if (route.isChokepoint && route.encounterChance <= CHOKEPOINT_ELEVATED_ENCOUNTER_CHANCE) {
+    if (
+      route.isChokepoint !== null &&
+      route.encounterChance < CHOKEPOINT_ELEVATED_ENCOUNTER_CHANCE
+    ) {
       errors.push(`Chokepoint route ${route.id} must have elevated encounterChance`);
     }
   }
