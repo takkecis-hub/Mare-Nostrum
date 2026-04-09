@@ -58,13 +58,31 @@ export const RENOWN_CONTRADICTIONS: Record<string, string[]> = {
   'Hayalet Pala': ['kervan'],
 };
 
+// --- Renown gates ---
+
+/**
+ * Minimum total experience points before any renown title can be granted.
+ * Prevents instant renown on turn 1 — at +2 per turn, a focused player
+ * reaches this threshold in ~6 turns of consistent play.
+ */
+export const RENOWN_MIN_TOTAL_EXPERIENCE = 12;
+
+// --- Kabotaj trade bonus ---
+
+/**
+ * Sell-price multiplier bonus for goods delivered via a kabotaj route.
+ * Compensates for the 2-turn travel time with a better price, making kabotaj
+ * a viable alternative to faster but riskier fortuna/tramontana routes.
+ */
+export const KABOTAJ_TRADE_BONUS = 1.25;
+
 // --- Victory scoring ---
 
 /** Points per port that carries an active rumor about the player. */
 export const SCORE_RUMOR_SPREAD = 2;
 /** Points per renown title held. */
 export const SCORE_RENOWN = 15;
-/** Points per unique port the player has visited (future tracking). */
+/** Points per unique port the player has visited. */
 export const SCORE_PORT_VISITED = 3;
 /** Score threshold to achieve Efsane (Legend) status in a 30-turn game. */
 export const EFSANE_SCORE_THRESHOLD = 100;

@@ -4,6 +4,7 @@ import {
   RENOWN_WARNING_TURNS,
   RENOWN_LOSS_TURNS,
   RENOWN_CONTRADICTIONS,
+  RENOWN_MIN_TOTAL_EXPERIENCE,
 } from '../../shared/src/constants/index.js';
 
 export function applyExperienceGain(experience: HiddenExperience, intent: Intent) {
@@ -11,7 +12,7 @@ export function applyExperienceGain(experience: HiddenExperience, intent: Intent
 
   if (intent === 'kervan') next.terazi += 2;
   if (intent === 'kara_bayrak') next.meltem += 2;
-  if (intent === 'pusula') next.murekkep += 1;
+  if (intent === 'pusula') next.murekkep += 2;
   if (intent === 'duman') next.simsar += 2;
 
   return next;
@@ -68,16 +69,13 @@ export function checkRenownDecay(
     const lastAction = renownLastAction[title] ?? 0;
     const gap = currentTurn - lastAction;
 
-    // Check for contradictory action
+    // Contradictory actions accelerate decay: count as double the gap
     const contradictions = RENOWN_CONTRADICTIONS[title] ?? [];
-    if (contradictions.includes(intent)) {
-      warnings.push(title);
-      continue;
-    }
+    const effectiveGap = contradictions.includes(intent) ? gap + RENOWN_WARNING_TURNS : gap;
 
-    if (gap >= RENOWN_LOSS_TURNS) {
+    if (effectiveGap >= RENOWN_LOSS_TURNS) {
       losses.push(title);
-    } else if (gap >= RENOWN_WARNING_TURNS) {
+    } else if (effectiveGap >= RENOWN_WARNING_TURNS) {
       warnings.push(title);
     }
   }
@@ -86,6 +84,11 @@ export function checkRenownDecay(
 }
 
 export function determineRenown(experience: HiddenExperience, activeRumorCount: number) {
+  const total = experience.meltem + experience.terazi + experience.murekkep + experience.simsar;
+
+  // Require a minimum investment before any title can be earned
+  if (total < RENOWN_MIN_TOTAL_EXPERIENCE) return [];
+
   const ratios = getExperienceRatios(experience);
   const renown: string[] = [];
 
