@@ -36,7 +36,7 @@ Oyuncu hiçbir zaman "Ticaret: 47" görmez. Hiçbir zaman "skill puanım arttı"
 |----------------|-------|--------|
 | **Kervan** | Terazi | +2 |
 | **Kara Bayrak** | Meltem | +2 |
-| **Pusula** | Mürekkep | +1 |
+| **Pusula** | Mürekkep | +2 |
 | **Duman** | Simsar | +2 |
 
 ### Tasarım Hedefi (Henüz Uygulanmamış)

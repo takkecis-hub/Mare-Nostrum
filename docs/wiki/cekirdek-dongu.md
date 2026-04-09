@@ -89,7 +89,7 @@ NİYET?    Kervan / Kara Bayrak / Pusula / Duman
 |-------|---------|-----------------|--------|
 | **Kervan** | Limanda al/sat, yolda muhatap ol | Terazi | +2 |
 | **Kara Bayrak** | Yolda rastladığına saldır | Meltem | +2 |
-| **Pusula** | Bilgi topla, kimseyle muhatap olma | Mürekkep | +1 |
+| **Pusula** | Bilgi topla, kimseyle muhatap olma | Mürekkep | +2 |
 | **Duman** | Görünmez kal, gözlemle, karışma | Simsar | +2 |
 
 ### Rota Kombinasyonları

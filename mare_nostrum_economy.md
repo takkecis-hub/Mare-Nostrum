@@ -5,6 +5,15 @@
 # MARE NOSTRUM — Ekonomi Derinleştirme
 ## Terazi'nin Gördüğü Dünya
 
+> **Uygulama Notu (Güncel):** Aşağıdaki temel mekaniklerin engine uygulaması tamamlanmıştır:
+> - ✅ **Menşe sistemi** — Her limanın ürettiği/arzuladığı özel mallar (`ports.json`, `goods.json`)
+> - ✅ **Fiyat bant sistemi** — ucuz (30₳), normal (40₳), pahali (50₳) alış maliyeti + satış çarpanı (`purchaseCostForGood`, `basePriceMultiplier`)
+> - ✅ **Port doyma mekaniği** — Her teslimat fiyatı %15 düşürür, min %40, 3 turda 1 çürüme (`saturationMultiplier`)
+> - ✅ **Mevsim etkisi** — Yaz: yemek ×0.85 / lüks ×1.2, Kış: yemek ×1.3 / lüks ×0.85 (`seasonMultiplier`)
+> - ✅ **Kabotaj bonusu** — 2 turda teslim edilen mallarda ×1.25 satış bonusu (`KABOTAJ_TRADE_BONUS`)
+> - ✅ **priceIndicator farklılaşması** — Yemek=1, Lüks=2-3, Savaş=2-3 (`goods.json`)
+> - ⬜ Kaçak mal, Commenda, Kontratlar, İlk gelen bonusu, Ragusa transit vergisi — henüz uygulanmadı
+
 ---
 
 # SORUN TEŞHİSİ
