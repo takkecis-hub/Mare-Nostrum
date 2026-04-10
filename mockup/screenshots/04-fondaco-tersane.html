@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mare Nostrum — 04 Fondaco: Tersane</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{color-scheme:dark;--bg:#060d1a;--card:rgba(12,20,38,0.85);--accent:#f0a030;--accent-hover:#d48a20;--text:#e8edf5;--text-bright:#f8fafc;--muted:#8b9bb5;--muted-dim:#5a6a80;--line:rgba(30,41,59,0.6);--glass:rgba(12,20,38,0.65);--glass-border:rgba(148,163,184,0.12);--success:#34d399;--danger:#ef4444;--info:#60a5fa;--radius-md:12px;--radius-lg:16px;--radius-xl:20px;--radius-2xl:24px;--radius-full:9999px;--shadow-card:0 8px 32px rgba(0,0,0,0.25),0 2px 8px rgba(0,0,0,0.1)}
+body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgba(16,32,61,0.8) 0%,transparent 50%);color:var(--text);line-height:1.6;min-height:100vh;padding-bottom:120px}
+.shell{width:min(900px,calc(100vw - 40px));margin:0 auto;padding:20px 0 48px}
+.card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:20px;box-shadow:var(--shadow-card);backdrop-filter:blur(16px)}
+
+/* Top Bar */
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-2xl);margin-bottom:20px;backdrop-filter:blur(20px)}
+.top-bar-left,.top-bar-right{display:flex;align-items:center;gap:16px}
+.top-bar-title{font-size:1.1rem;font-weight:800;color:var(--accent)}
+.top-bar-sep{color:var(--muted-dim);opacity:.4}
+.top-bar-item{font-size:.88rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.top-bar-item strong{color:var(--text-bright)}
+.connected{color:var(--success);font-size:.72rem;font-weight:600}
+
+/* Fondaco Tabs */
+.fondaco-tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.fondaco-tab{display:flex;align-items:center;gap:8px;padding:12px 20px;border:none;background:transparent;color:var(--muted);font-weight:500;font-size:.9rem;cursor:pointer;position:relative;font-family:inherit}
+.fondaco-tab-active{color:var(--accent)!important}
+.fondaco-tab-active::after{content:'';position:absolute;bottom:-1px;left:12px;right:12px;height:2px;background:var(--accent);border-radius:1px 1px 0 0;box-shadow:0 0 8px rgba(240,160,48,0.4)}
+
+/* Ship Display */
+.ship-display{display:flex;gap:20px;align-items:center;margin-bottom:20px;padding:16px;background:rgba(6,13,26,0.4);border-radius:var(--radius-lg);border:1px solid var(--line)}
+.ship-silhouette{font-size:2.5rem;width:68px;height:68px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(6,13,26,0.8),rgba(16,28,50,0.6));border:1px solid var(--glass-border);border-radius:var(--radius-lg)}
+.ship-identity h3{margin:0;font-size:1.15rem}
+
+/* Progress Bar (Durability) */
+.progress-bar{position:relative;height:30px;background:rgba(6,13,26,0.6);border:1px solid var(--line);border-radius:var(--radius-full);overflow:hidden;margin-bottom:12px}
+.progress-fill-gradient{height:100%;background:linear-gradient(90deg,var(--danger) 0%,var(--accent) 50%,var(--success) 100%);border-radius:var(--radius-full);box-shadow:inset 0 1px 0 rgba(255,255,255,0.15)}
+.progress-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.78rem;font-weight:700;color:var(--text-bright);text-shadow:0 1px 4px rgba(0,0,0,0.7)}
+
+/* Tersane Label */
+.tersane-label{display:block;color:var(--muted);font-size:.82rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.repair-btn{margin-top:12px;width:100%;padding:10px 16px;border-radius:var(--radius-md);border:1px solid var(--line);background:rgba(16,28,50,0.7);color:var(--text);cursor:pointer;font-family:inherit;font-weight:500}
+
+/* Stats Grid */
+.ship-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.stat-box{background:rgba(6,13,26,0.5);border:1px solid var(--line);border-radius:var(--radius-md);padding:12px 16px;text-align:center}
+.stat-box:hover{border-color:var(--muted-dim)}
+.stat-box span{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.stat-box strong{display:block;margin-top:4px;font-size:1.15rem;color:var(--text-bright)}
+
+/* Experience Grid */
+.exp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.exp-item{background:rgba(6,13,26,0.5);border:1px solid var(--line);border-radius:var(--radius-md);padding:12px 16px}
+.exp-item:hover{border-color:var(--muted-dim)}
+.exp-item span{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.exp-item strong{display:block;margin-top:4px;font-size:1.1rem;color:var(--text-bright)}
+
+.section-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:16px;align-items:center}
+.section-head h2,.section-head h3{margin:0}
+.muted{color:var(--muted);font-size:.85rem}
+.note{color:var(--muted);font-size:.88rem}
+button{font:inherit}
+
+/* Annotations */
+.annotations{position:fixed;top:0;left:0;right:0;bottom:120px;z-index:10;pointer-events:none}
+.balloon{position:absolute;padding:12px 16px;border-radius:12px;font-size:.82rem;line-height:1.5;max-width:260px;pointer-events:auto;box-shadow:0 4px 20px rgba(0,0,0,0.3);backdrop-filter:blur(12px)}
+.balloon-gold{background:rgba(240,160,48,0.15);border:1px solid rgba(240,160,48,0.3);color:#f0a030}
+.balloon-blue{background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#60a5fa}
+.balloon-green{background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:#34d399}
+.balloon-red{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#ef4444}
+.balloon-label{font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;display:block}
+
+.notes-panel{position:fixed;bottom:0;left:0;right:0;background:rgba(6,13,26,0.95);border-top:1px solid var(--glass-border);backdrop-filter:blur(20px);padding:16px 24px;z-index:20;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.notes-panel h3{color:var(--accent);font-size:.85rem;margin:0 0 6px;letter-spacing:.1em;text-transform:uppercase;width:100%}
+.note-item{font-size:.8rem;color:var(--muted);line-height:1.5;flex:1;min-width:200px}
+.note-item strong{color:var(--text);display:block;margin-bottom:2px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <span class="top-bar-title">Mare Nostrum</span>
+      <span class="top-bar-sep">·</span>
+      <span class="top-bar-item">Tur <strong>5</strong></span>
+      <span class="top-bar-item">☀️ Yaz</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="top-bar-item"><span class="gold-icon">🪙</span> <strong>87</strong></span>
+      <span class="top-bar-item" style="color:var(--info)">⛵ karaka</span>
+      <span class="top-bar-item connected">● bağlı</span>
+    </div>
+  </header>
+
+  <div class="card">
+    <nav class="fondaco-tabs">
+      <button class="fondaco-tab"><span>☕</span> <span>Kahvehane</span></button>
+      <button class="fondaco-tab"><span>🏪</span> <span>Pazar</span></button>
+      <button class="fondaco-tab"><span>🤝</span> <span>Müzakere</span></button>
+      <button class="fondaco-tab fondaco-tab-active"><span>⚓</span> <span>Tersane</span></button>
+    </nav>
+
+    <div>
+      <div class="section-head"><h2>⚓ Tersane</h2></div>
+
+      <!-- Ship Display -->
+      <div class="ship-display">
+        <div class="ship-silhouette">🚢</div>
+        <div class="ship-identity">
+          <h3>Karaka</h3>
+          <span class="muted">Kaptan Oyuncu</span>
+        </div>
+      </div>
+
+      <!-- Durability -->
+      <div style="margin-bottom:20px">
+        <span class="tersane-label">Dayanıklılık</span>
+        <div class="progress-bar">
+          <div class="progress-fill-gradient" style="width:72%"></div>
+          <span class="progress-label">72/100</span>
+        </div>
+        <button class="repair-btn">🔧 Tamir et (56 🪙)</button>
+      </div>
+
+      <!-- Ship Stats -->
+      <div class="ship-stats-grid">
+        <div class="stat-box">
+          <span>Güç</span>
+          <strong>2</strong>
+        </div>
+        <div class="stat-box">
+          <span>Kapasite</span>
+          <strong>5</strong>
+        </div>
+        <div class="stat-box">
+          <span>Tip</span>
+          <strong>karaka</strong>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="section-head" style="margin-top:16px"><h3>Deneyim</h3></div>
+      <div class="exp-grid">
+        <div class="exp-item">
+          <span>Meltem (Deniz)</span>
+          <strong>4</strong>
+        </div>
+        <div class="exp-item">
+          <span>Terazi (Pazar)</span>
+          <strong>6</strong>
+        </div>
+        <div class="exp-item">
+          <span>Mürekkep (Diplomasi)</span>
+          <strong>2</strong>
+        </div>
+        <div class="exp-item">
+          <span>Simsar (Gölge)</span>
+          <strong>3</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Annotations -->
+<div class="annotations">
+  <div class="balloon balloon-gold" style="top:130px;right:12px">
+    <span class="balloon-label">🟡 Ship Identity</span>
+    Ship silhouette with emoji icon, type name, and captain identity. Glass-bordered card gives a dashboard feel.
+  </div>
+  <div class="balloon balloon-blue" style="top:250px;left:12px">
+    <span class="balloon-label">🔵 Durability Bar</span>
+    Rounded pill bar with red→orange→green gradient. 72/100 shows damage from combat. Repair cost = 2 gold per point.
+  </div>
+  <div class="balloon balloon-green" style="top:360px;right:12px">
+    <span class="balloon-label">🟢 Ship Stats</span>
+    Three-column stat boxes with hover effect. Future: add ship upgrade options (mast, hull, cannon improvements).
+  </div>
+  <div class="balloon balloon-gold" style="top:480px;left:12px">
+    <span class="balloon-label">🟡 Experience System</span>
+    Four experience tracks: Meltem (sea), Terazi (market), Mürekkep (diplomacy), Simsar (shadow). Hidden from other players.
+  </div>
+  <div class="balloon balloon-red" style="top:540px;right:12px;max-width:240px">
+    <span class="balloon-label">🔴 Missing Feature</span>
+    No ship upgrade system yet. Players can't upgrade from Feluka → Karaka → Kadırga.
+  </div>
+</div>
+
+<!-- Notes -->
+<div class="notes-panel">
+  <h3>📝 Improvement Notes — Fondaco: Tersane</h3>
+  <div class="note-item">
+    <strong>🚢 Ship Upgrades</strong>
+    Add upgrade paths: Feluka → Karaka (300 gold), Karaka → Kadırga (500 gold). Each tier unlocks new stats and tactics.
+  </div>
+  <div class="note-item">
+    <strong>📊 Experience Visualization</strong>
+    Replace plain numbers with radial progress rings or radar chart. Show threshold markers for renown titles.
+  </div>
+  <div class="note-item">
+    <strong>🎖️ Renown Badges</strong>
+    Display earned renown titles as decorative badges below the ship. Show progress toward next title.
+  </div>
+  <div class="note-item">
+    <strong>⚡ Quick Actions</strong>
+    Add "Repair to 100%" button for convenience. Show estimated gold needed prominently.
+  </div>
+</div>
+
+</body>
+</html>
