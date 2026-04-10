@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.0] - 2026-04-10
+
+### Changed
+- Synchronized version bump to 0.2.0 for client UI redesign release.
+
 ## [0.1.0] - 2026-04-09
 
 ### Added
