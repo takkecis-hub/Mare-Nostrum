@@ -84,6 +84,47 @@ describe('determineRenown', () => {
     const renown = determineRenown(exp, 0);
     expect(renown).toHaveLength(0);
   });
+
+  it('grants Mühürlü Söz when murekkep >= 30% and terazi >= 20%', () => {
+    // murekkep = 8, terazi = 5, total = 16 → murekkep ratio = 0.5, terazi ratio = 0.3125
+    const exp: HiddenExperience = { meltem: 1, terazi: 5, murekkep: 8, simsar: 2 };
+    const renown = determineRenown(exp, 0);
+    expect(renown).toContain('Mühürlü Söz');
+  });
+
+  it('grants Akrep when simsar >= 35% and 2+ active rumors', () => {
+    // simsar = 10, total = 13 → ratio = ~0.77
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 10 };
+    const renown = determineRenown(exp, 2);
+    expect(renown).toContain('Akrep');
+  });
+
+  it('does not grant Akrep with < 2 active rumors', () => {
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 10 };
+    const renown = determineRenown(exp, 1);
+    expect(renown).not.toContain('Akrep');
+  });
+
+  it('grants Açık El when terazi >= 30% and murekkep >= 20%', () => {
+    // terazi = 8, murekkep = 5, total = 16 → terazi ratio = 0.5, murekkep ratio = 0.3125
+    const exp: HiddenExperience = { meltem: 1, terazi: 8, murekkep: 5, simsar: 2 };
+    const renown = determineRenown(exp, 0);
+    expect(renown).toContain('Açık El');
+  });
+
+  it('grants Deli Rüzgâr when meltem >= 30% and simsar >= 20%', () => {
+    // meltem = 8, simsar = 5, total = 16 → meltem ratio = 0.5, simsar ratio = 0.3125
+    const exp: HiddenExperience = { meltem: 8, terazi: 1, murekkep: 2, simsar: 5 };
+    const renown = determineRenown(exp, 0);
+    expect(renown).toContain('Deli Rüzgâr');
+  });
+
+  it('returns empty when total experience is below RENOWN_MIN_TOTAL_EXPERIENCE', () => {
+    // total = 4 < 12
+    const exp: HiddenExperience = { meltem: 1, terazi: 1, murekkep: 1, simsar: 1 };
+    const renown = determineRenown(exp, 5);
+    expect(renown).toHaveLength(0);
+  });
 });
 
 describe('dominantExperienceLabel', () => {
@@ -187,6 +228,26 @@ describe('getRenownDescription', () => {
     const desc = getRenownDescription(['Altın Parmak', 'Demir Pruva']);
     expect(desc).toContain('tüccar');
     expect(desc.toLowerCase()).toContain('deniz');
+  });
+
+  it('includes Mühürlü Söz description', () => {
+    const desc = getRenownDescription(['Mühürlü Söz']);
+    expect(desc).toContain('mühür');
+  });
+
+  it('includes Akrep description', () => {
+    const desc = getRenownDescription(['Akrep']);
+    expect(desc).toContain('sinsi');
+  });
+
+  it('includes Açık El description', () => {
+    const desc = getRenownDescription(['Açık El']);
+    expect(desc).toContain('Cömertliğiniz');
+  });
+
+  it('includes Deli Rüzgâr description', () => {
+    const desc = getRenownDescription(['Deli Rüzgâr']);
+    expect(desc).toContain('Fırtınayı');
   });
 });
 

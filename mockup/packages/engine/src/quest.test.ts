@@ -151,6 +151,26 @@ describe('checkQuestTrigger', () => {
     expect(checkQuestTrigger(quest, 7, 'istanbul', basePlayer)).toBe(false);
     expect(checkQuestTrigger(quest, 7, 'istanbul', playerWithGood)).toBe(true);
   });
+
+  it('checks minEvidence condition – fails when insufficient evidence', () => {
+    // Stage 4 of kayip_hazine requires minEvidence: 2
+    const quest = {
+      ...createQuestState('kayip_hazine'),
+      currentStage: 4,
+      evidence: ['only_one'],
+    };
+    // Has enough gold (200 ≥ 100), correct port and turn, but only 1 evidence < 2
+    expect(checkQuestTrigger(quest, 19, 'girit', basePlayer)).toBe(false);
+  });
+
+  it('checks minEvidence condition – succeeds when enough evidence', () => {
+    const quest = {
+      ...createQuestState('kayip_hazine'),
+      currentStage: 4,
+      evidence: ['harita_parcasi_1', 'harita_parcasi_2'],
+    };
+    expect(checkQuestTrigger(quest, 19, 'girit', basePlayer)).toBe(true);
+  });
 });
 
 describe('advanceQuest', () => {

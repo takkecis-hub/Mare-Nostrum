@@ -205,3 +205,80 @@ describe('spreadRumors – pusula decay', () => {
     expect(result[0].strength).toBe(85); // 100 - 15
   });
 });
+
+// ─── createPlayerRumor ──────────────────────────────────────────────────────
+
+import { createPlayerRumor } from './rumor.js';
+import { RUMOR_SPREAD_INITIAL_STRENGTH } from '../../shared/src/constants/index.js';
+
+describe('createPlayerRumor', () => {
+  it('creates a gozdagi rumor with olumsuz tone', () => {
+    const rumor = createPlayerRumor({ templateId: 'gozdagi', sourcePortId: 'venedik', targetPortId: 'istanbul', turn: 1 });
+    expect(rumor.tone).toBe('olumsuz');
+    expect(rumor.text).toContain('istanbul');
+    expect(rumor.sourceAction).toBe('rumor:gozdagi');
+  });
+
+  it('creates a suclama rumor with olumsuz tone', () => {
+    const rumor = createPlayerRumor({ templateId: 'suclama', sourcePortId: 'venedik', targetPortId: 'tunus', turn: 2 });
+    expect(rumor.tone).toBe('olumsuz');
+    expect(rumor.text).toContain('tunus');
+  });
+
+  it('creates a karalama rumor with olumsuz tone', () => {
+    const rumor = createPlayerRumor({ templateId: 'karalama', sourcePortId: 'venedik', targetPortId: 'girit', turn: 3 });
+    expect(rumor.tone).toBe('olumsuz');
+    expect(rumor.text).toContain('girit');
+  });
+
+  it('creates an ovgu rumor with olumlu tone', () => {
+    const rumor = createPlayerRumor({ templateId: 'ovgu', sourcePortId: 'venedik', targetPortId: 'ragusa', turn: 4 });
+    expect(rumor.tone).toBe('olumlu');
+    expect(rumor.text).toContain('ragusa');
+  });
+
+  it('creates an ifsa rumor with olumsuz tone', () => {
+    const rumor = createPlayerRumor({ templateId: 'ifsa', sourcePortId: 'venedik', targetPortId: 'palermo', turn: 5 });
+    expect(rumor.tone).toBe('olumsuz');
+    expect(rumor.text).toContain('palermo');
+  });
+
+  it('creates a piyasa rumor with notr tone', () => {
+    const rumor = createPlayerRumor({ templateId: 'piyasa', sourcePortId: 'venedik', targetPortId: 'cezayir', turn: 6 });
+    expect(rumor.tone).toBe('notr');
+    expect(rumor.text).toContain('cezayir');
+  });
+
+  it('uses default player id when not provided', () => {
+    const rumor = createPlayerRumor({ templateId: 'gozdagi', sourcePortId: 'venedik', targetPortId: 'istanbul', turn: 1 });
+    expect(rumor.aboutPlayerId).toBe('player-1');
+  });
+
+  it('uses custom player id when provided', () => {
+    const rumor = createPlayerRumor({ templateId: 'gozdagi', sourcePortId: 'venedik', targetPortId: 'istanbul', playerId: 'player-42', turn: 1 });
+    expect(rumor.aboutPlayerId).toBe('player-42');
+  });
+
+  it('sets currentPorts to sourcePort', () => {
+    const rumor = createPlayerRumor({ templateId: 'gozdagi', sourcePortId: 'tunus', targetPortId: 'istanbul', turn: 1 });
+    expect(rumor.currentPorts).toEqual(['tunus']);
+  });
+
+  it('starts with initial strength from constants', () => {
+    const rumor = createPlayerRumor({ templateId: 'gozdagi', sourcePortId: 'venedik', targetPortId: 'istanbul', turn: 1 });
+    expect(rumor.strength).toBe(RUMOR_SPREAD_INITIAL_STRENGTH);
+  });
+
+  it('starts at age 0', () => {
+    const rumor = createPlayerRumor({ templateId: 'ovgu', sourcePortId: 'venedik', targetPortId: 'istanbul', turn: 1 });
+    expect(rumor.age).toBe(0);
+  });
+
+  it('generates unique ids for different templates and turns', () => {
+    const r1 = createPlayerRumor({ templateId: 'gozdagi', sourcePortId: 'venedik', targetPortId: 'istanbul', turn: 1 });
+    const r2 = createPlayerRumor({ templateId: 'suclama', sourcePortId: 'venedik', targetPortId: 'istanbul', turn: 1 });
+    const r3 = createPlayerRumor({ templateId: 'gozdagi', sourcePortId: 'venedik', targetPortId: 'istanbul', turn: 2 });
+    expect(r1.id).not.toBe(r2.id);
+    expect(r1.id).not.toBe(r3.id);
+  });
+});
