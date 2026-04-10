@@ -13,11 +13,31 @@ const ROUTE_INFO: Record<RouteType, { icon: string; label: string; desc: string;
   uzun_kabotaj: { icon: '🗺️', label: 'Uzun Kabotaj', desc: '2+ tur, keşif odaklı', color: '#c4b5fd' },
 };
 
-const INTENT_INFO: Record<Intent, { icon: string; label: string; desc: string }> = {
-  kervan: { icon: '🐪', label: 'Kervan', desc: 'Barışçıl ticaret' },
-  kara_bayrak: { icon: '🏴‍☠️', label: 'Kara Bayrak', desc: 'Saldır ve yağmala' },
-  pusula: { icon: '🧭', label: 'Pusula', desc: 'Keşfet ve gözle' },
-  duman: { icon: '🌫️', label: 'Duman', desc: 'Sessiz geçiş, istihbarat topla' },
+const INTENT_INFO: Record<Intent, { icon: string; label: string; desc: string; riskClass: string; riskLabel: string; rewardClass: string; rewardLabel: string; cardClass: string }> = {
+  kervan: {
+    icon: '🐪', label: 'Kervan', desc: 'Barışçıl ticaret',
+    riskClass: 'risk-low', riskLabel: 'Düşük Risk',
+    rewardClass: 'reward-gold', rewardLabel: 'Altın Kazancı',
+    cardClass: 'choice-card-kervan',
+  },
+  kara_bayrak: {
+    icon: '🏴‍☠️', label: 'Kara Bayrak', desc: 'Saldır ve yağmala',
+    riskClass: 'risk-high', riskLabel: 'Yüksek Risk',
+    rewardClass: 'reward-plunder', rewardLabel: 'Yağma',
+    cardClass: 'choice-card-kara_bayrak',
+  },
+  pusula: {
+    icon: '🧭', label: 'Pusula', desc: 'Keşfet ve gözle',
+    riskClass: 'risk-medium', riskLabel: 'Orta Risk',
+    rewardClass: 'reward-discovery', rewardLabel: 'Keşif',
+    cardClass: 'choice-card-pusula',
+  },
+  duman: {
+    icon: '🌫️', label: 'Duman', desc: 'Sessiz geçiş, istihbarat topla',
+    riskClass: 'risk-low', riskLabel: 'Düşük Risk',
+    rewardClass: 'reward-intel', rewardLabel: 'İstihbarat',
+    cardClass: 'choice-card-duman',
+  },
 };
 
 const TACTIC_INFO: Record<Tactic, { icon: string; label: string; desc: string }> = {
@@ -136,12 +156,16 @@ export default function EmirView() {
             return (
               <button
                 key={intent}
-                className={`choice-card ${order.intent === intent ? 'choice-card-selected' : ''}`}
+                className={`choice-card ${info.cardClass} ${order.intent === intent ? 'choice-card-selected' : ''}`}
                 onClick={() => setOrder({ intent })}
               >
                 <span className="choice-icon">{info.icon}</span>
                 <strong>{info.label}</strong>
                 <span className="choice-desc">{info.desc}</span>
+                <div className="intent-meta">
+                  <span className={`risk-tag ${info.riskClass}`}>{info.riskLabel}</span>
+                  <span className={`reward-tag ${info.rewardClass}`}>{info.rewardLabel}</span>
+                </div>
               </button>
             );
           })}

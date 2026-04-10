@@ -2,7 +2,7 @@
 
 interface BadgeProps {
   label: string;
-  variant?: 'default' | 'gold' | 'danger' | 'success';
+  variant?: 'default' | 'gold' | 'danger' | 'success' | 'purple' | 'teal';
 }
 
 const VARIANT_CLASS: Record<string, string> = {
@@ -10,6 +10,8 @@ const VARIANT_CLASS: Record<string, string> = {
   gold: 'badge badge-gold',
   danger: 'badge badge-danger',
   success: 'badge badge-success',
+  purple: 'badge badge-purple',
+  teal: 'badge badge-teal',
 };
 
 export default function Badge({ label, variant = 'default' }: BadgeProps) {

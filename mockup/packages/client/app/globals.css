@@ -1,44 +1,61 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Mare Nostrum — Design System v2
-   Sleek, contemporary Mediterranean strategy game UI
-   Glassmorphism · Refined typography · Micro-interactions
+   Mare Nostrum — Design System v3
+   Ottoman / Mediterranean Court Aesthetic
+   Diplomacy-focused · Warm parchment · Regal purple & gold
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Design Tokens ────────────────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
 
-  /* Core palette — deeper, richer navy */
-  --bg: #060d1a;
-  --bg-surface: #0a1424;
-  --card: rgba(12, 20, 38, 0.85);
-  --card-solid: #0c1426;
-  --card-hover: rgba(18, 28, 48, 0.9);
-  --line: rgba(30, 41, 59, 0.6);
-  --line-light: rgba(148, 163, 184, 0.1);
+  /* Core palette — deep Ottoman navy */
+  --bg: #0a0e1a;
+  --bg-surface: #111827;
+  --card: rgba(17, 24, 37, 0.88);
+  --card-solid: #111827;
+  --card-hover: rgba(26, 32, 53, 0.92);
+  --line: #2a3550;
+  --line-light: rgba(42, 53, 80, 0.4);
 
   /* Glass effect */
-  --glass: rgba(12, 20, 38, 0.65);
-  --glass-border: rgba(148, 163, 184, 0.12);
+  --glass: rgba(10, 14, 26, 0.72);
+  --glass-border: rgba(201, 168, 76, 0.1);
   --glass-blur: 16px;
 
-  /* Text — crisper contrast */
-  --text: #e8edf5;
-  --text-bright: #f8fafc;
-  --muted: #8b9bb5;
-  --muted-dim: #5a6a80;
+  /* Text — warm parchment */
+  --text: #e8dcc8;
+  --text-bright: #f5ead8;
+  --muted: #8a7d6a;
+  --muted-dim: #5a5046;
 
-  /* Accent & semantic — warmer gold */
-  --accent: #f0a030;
-  --accent-hover: #d48a20;
-  --accent-glow: rgba(240, 160, 48, 0.2);
-  --accent-soft: rgba(240, 160, 48, 0.08);
-  --danger: #ef4444;
-  --danger-dim: rgba(239, 68, 68, 0.12);
-  --success: #34d399;
-  --success-dim: rgba(52, 211, 153, 0.12);
-  --info: #60a5fa;
-  --info-dim: rgba(96, 165, 250, 0.12);
+  /* Ottoman Gold — the primary accent */
+  --accent: #c9a84c;
+  --accent-hover: #b08c38;
+  --accent-glow: rgba(201, 168, 76, 0.22);
+  --accent-soft: rgba(201, 168, 76, 0.08);
+
+  /* Diplomatic Purple — secondary accent */
+  --purple: #6b4fa0;
+  --purple-light: #8b6fc0;
+  --purple-dim: rgba(107, 79, 160, 0.15);
+  --purple-glow: rgba(107, 79, 160, 0.3);
+  --purple-border: rgba(107, 79, 160, 0.35);
+
+  /* Mediterranean Teal */
+  --teal: #2e7d88;
+  --teal-light: #4a9ea8;
+  --teal-dim: rgba(46, 125, 136, 0.15);
+  --teal-border: rgba(46, 125, 136, 0.3);
+
+  /* Semantic */
+  --danger: #8b2635;
+  --danger-bright: #c0394a;
+  --danger-dim: rgba(139, 38, 53, 0.15);
+  --success: #2d6a4f;
+  --success-bright: #4a9e77;
+  --success-dim: rgba(45, 106, 79, 0.15);
+  --info: #2e7d88;
+  --info-dim: rgba(46, 125, 136, 0.12);
 
   /* Parchment accents */
   --parchment: #f5e6c8;
@@ -89,8 +106,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: var(--bg);
   background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(16, 32, 61, 0.8) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(10, 20, 40, 0.6) 0%, transparent 50%);
+    radial-gradient(ellipse at 15% 0%, rgba(107, 79, 160, 0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 100%, rgba(46, 125, 136, 0.08) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 60%);
   color: var(--text);
   line-height: 1.6;
   letter-spacing: 0.01em;
@@ -160,19 +178,19 @@ button:active:not(:disabled) {
 }
 button.primary {
   background: linear-gradient(135deg, var(--accent-hover), var(--accent));
-  color: #111827;
+  color: #0a0e1a;
   font-weight: 700;
   border: none;
-  box-shadow: 0 4px 16px rgba(240, 160, 48, 0.25);
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
 }
 button.primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #b45309, var(--accent-hover));
-  box-shadow: 0 6px 24px rgba(240, 160, 48, 0.35);
+  background: linear-gradient(135deg, #8a6c28, var(--accent-hover));
+  box-shadow: 0 6px 24px rgba(201, 168, 76, 0.4);
   transform: translateY(-2px);
 }
 button.primary:active:not(:disabled) {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 8px rgba(240, 160, 48, 0.2);
+  box-shadow: 0 2px 8px rgba(201, 168, 76, 0.25);
 }
 button.small {
   padding: 0.3rem 0.65rem;
@@ -254,7 +272,18 @@ label {
 .detail-list strong { display: block; margin-top: 2px; }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   TOP BAR
+   PHASE TRANSITIONS — Smooth content fade
+   ══════════════════════════════════════════════════════════════════════════ */
+.game-content {
+  animation: phaseIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes phaseIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TOP BAR — Elegant status ribbon enhancements
    ══════════════════════════════════════════════════════════════════════════ */
 .top-bar {
   display: flex;
@@ -262,12 +291,20 @@ label {
   align-items: center;
   padding: var(--space-md) var(--space-2xl);
   background: var(--glass);
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(201, 168, 76, 0.12);
   border-radius: var(--radius-2xl);
   margin-bottom: var(--space-xl);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(201,168,76,0.06);
+  position: relative;
+}
+.top-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), rgba(107,79,160,0.2), rgba(201,168,76,0.3), transparent);
 }
 .top-bar-left, .top-bar-right {
   display: flex;
@@ -290,10 +327,10 @@ label {
   gap: 4px;
 }
 .top-bar-item strong { color: var(--text-bright); }
-.gold-icon { font-size: 1rem; filter: drop-shadow(0 0 4px rgba(240, 160, 48, 0.4)); }
-.ship-name { color: var(--info); }
-.socket-status { font-size: 0.72rem; color: var(--danger); font-weight: 600; }
-.socket-status.connected { color: var(--success); }
+.gold-icon { font-size: 1rem; filter: drop-shadow(0 0 4px rgba(201, 168, 76, 0.5)); }
+.ship-name { color: var(--teal-light); }
+.socket-status { font-size: 0.72rem; color: var(--danger-bright); font-weight: 600; }
+.socket-status.connected { color: var(--success-bright); }
 
 /* ── Badge ────────────────────────────────────────────────────────────────── */
 .badge {
@@ -309,9 +346,11 @@ label {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-.badge-gold { background: rgba(240, 160, 48, 0.15); color: var(--accent); border: 1px solid rgba(240, 160, 48, 0.3); }
-.badge-danger { background: var(--danger-dim); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
-.badge-success { background: var(--success-dim); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.2); }
+.badge-gold { background: rgba(201, 168, 76, 0.15); color: var(--accent); border: 1px solid rgba(201, 168, 76, 0.35); }
+.badge-danger { background: var(--danger-dim); color: var(--danger-bright); border: 1px solid rgba(139, 38, 53, 0.3); }
+.badge-success { background: var(--success-dim); color: var(--success-bright); border: 1px solid rgba(45, 106, 79, 0.3); }
+.badge-purple { background: var(--purple-dim); color: var(--purple-light); border: 1px solid var(--purple-border); }
+.badge-teal { background: var(--teal-dim); color: var(--teal-light); border: 1px solid var(--teal-border); }
 
 /* ══════════════════════════════════════════════════════════════════════════
    PHASE NAVIGATION — Pill tabs
@@ -320,10 +359,10 @@ label {
   display: flex;
   gap: var(--space-sm);
   margin-bottom: var(--space-xl);
-  background: rgba(6, 13, 26, 0.5);
+  background: rgba(10, 14, 26, 0.6);
   padding: var(--space-xs);
   border-radius: var(--radius-2xl);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--line);
 }
 .phase-btn {
   flex: 1;
@@ -345,8 +384,8 @@ label {
 }
 .phase-btn-active {
   color: var(--text-bright);
-  background: rgba(240, 160, 48, 0.12);
-  box-shadow: 0 2px 12px rgba(240, 160, 48, 0.15), inset 0 1px 0 rgba(255,255,255,0.05);
+  background: rgba(201, 168, 76, 0.12);
+  box-shadow: 0 2px 12px rgba(201, 168, 76, 0.18), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -417,7 +456,15 @@ label {
   height: 2px;
   background: var(--accent);
   border-radius: 1px 1px 0 0;
-  box-shadow: 0 0 8px rgba(240, 160, 48, 0.4);
+  box-shadow: 0 0 8px rgba(201, 168, 76, 0.5);
+}
+/* Muzakere tab gets a purple tint when active */
+.fondaco-tab[data-tab="muzakere"].fondaco-tab-active {
+  color: var(--purple-light) !important;
+}
+.fondaco-tab[data-tab="muzakere"].fondaco-tab-active::after {
+  background: var(--purple-light);
+  box-shadow: 0 0 8px var(--purple-glow);
 }
 .tab-icon { font-size: 1.05rem; }
 .tab-label { font-size: 0.88rem; }
@@ -453,7 +500,7 @@ label {
   transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 .whisper-card:hover {
-  border-color: rgba(240, 160, 48, 0.2);
+  border-color: rgba(201, 168, 76, 0.2);
   background: rgba(10, 18, 32, 0.8);
 }
 .whisper-card:nth-child(2) { animation-delay: 0.12s; }
@@ -621,8 +668,166 @@ label {
 .exp-item strong { display: block; margin-top: 4px; font-size: 1.1rem; color: var(--text-bright); }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   MUZAKERE (Negotiation) — Clean chat UI
+   MUZAKERE (Diplomacy) — Ottoman Court Aesthetic
    ══════════════════════════════════════════════════════════════════════════ */
+.muzakere-panel {
+  padding: var(--space-sm) 0;
+}
+
+/* Ornamental header with seal motif */
+.muzakere-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  position: relative;
+}
+.muzakere-header::before,
+.muzakere-header::after {
+  content: '✦';
+  color: var(--purple-light);
+  opacity: 0.5;
+  font-size: 0.9rem;
+  margin: 0 var(--space-lg);
+}
+.muzakere-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--purple-light);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+.muzakere-subtitle {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: var(--space-xs);
+}
+
+/* Wax-seal ornamental border around the chat area */
+.muzakere-court {
+  border: 1px solid var(--purple-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(107,79,160,0.07) 0%, rgba(10,14,26,0.5) 40%);
+  box-shadow: 0 0 0 1px rgba(107,79,160,0.08), inset 0 1px 0 rgba(139,111,192,0.1);
+  position: relative;
+}
+/* Ornamental corner accents */
+.muzakere-court::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 5%, var(--purple) 30%, var(--accent) 50%, var(--purple) 70%, transparent 95%);
+  opacity: 0.6;
+}
+
+.muzakere-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--purple-border);
+}
+.muzakere-tab {
+  flex: 1;
+  padding: var(--space-md);
+  border: none;
+  border-radius: 0;
+  background: rgba(107, 79, 160, 0.06);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+.muzakere-tab:hover:not(:disabled) { color: var(--purple-light); transform: none; box-shadow: none; background: rgba(107,79,160,0.1); }
+.muzakere-tab.active {
+  background: rgba(107, 79, 160, 0.14);
+  color: var(--purple-light);
+  box-shadow: inset 0 -2px 0 var(--purple-light);
+}
+
+.muzakere-body {
+  padding: var(--space-xl);
+  min-height: 140px;
+  background: rgba(10, 14, 26, 0.2);
+}
+.muzakere-system-msg {
+  color: var(--muted-dim);
+  font-size: 0.85rem;
+  margin: var(--space-sm) 0;
+  font-style: italic;
+  padding-left: var(--space-lg);
+  border-left: 2px solid rgba(107,79,160,0.3);
+}
+
+.muzakere-input-row {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: rgba(107, 79, 160, 0.05);
+  border-top: 1px solid var(--purple-border);
+}
+.muzakere-input {
+  flex: 1;
+  padding: var(--space-sm) var(--space-lg);
+  background: rgba(10, 14, 26, 0.6);
+  border: 1px solid var(--purple-border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  transition: border-color var(--transition-fast);
+}
+.muzakere-input:focus { outline: none; border-color: var(--purple-light); box-shadow: 0 0 0 3px var(--purple-dim); }
+.muzakere-input:disabled { opacity: 0.3; }
+.muzakere-send-btn {
+  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  color: var(--text-bright);
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 2px 10px var(--purple-glow);
+}
+.muzakere-send-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--purple-light), #9e80d8);
+  box-shadow: 0 4px 16px var(--purple-glow);
+}
+
+/* Mürekkep (diplomacy XP) hint — purple glow indicator */
+.muzakere-rep-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--purple-dim);
+  border: 1px solid var(--purple-border);
+  border-radius: var(--radius-lg);
+}
+.muzakere-rep-icon {
+  font-size: 1.4rem;
+  filter: drop-shadow(0 0 6px var(--purple-glow));
+}
+.muzakere-rep-info { flex: 1; }
+.muzakere-rep-label {
+  font-size: 0.72rem;
+  color: var(--purple-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+.muzakere-rep-dots {
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+}
+.muzakere-rep-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--purple-dim);
+  border: 1px solid var(--purple-border);
+  transition: all var(--transition-normal);
+}
+.muzakere-rep-dot.filled {
+  background: var(--purple-light);
+  box-shadow: 0 0 6px var(--purple-glow);
+  border-color: var(--purple-light);
+}
+
+/* Legacy chat styles (kept for backward compat) */
 .chat-placeholder {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
@@ -698,7 +903,7 @@ label {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .progress-fill-gradient {
-  background: linear-gradient(90deg, var(--danger) 0%, var(--accent) 50%, var(--success) 100%);
+  background: linear-gradient(90deg, var(--danger-bright) 0%, var(--accent) 50%, var(--success-bright) 100%);
 }
 .progress-label {
   position: absolute;
@@ -739,8 +944,8 @@ label {
 .emir-dest-preview {
   margin-top: var(--space-md);
   padding: var(--space-md) var(--space-xl);
-  background: rgba(240, 160, 48, 0.06);
-  border: 1px solid rgba(240, 160, 48, 0.15);
+  background: rgba(201, 168, 76, 0.06);
+  border: 1px solid rgba(201, 168, 76, 0.18);
   border-radius: var(--radius-lg);
   font-size: 0.95rem;
   text-align: center;
@@ -784,8 +989,8 @@ label {
 }
 .choice-card-selected {
   border-color: var(--accent) !important;
-  background: rgba(240, 160, 48, 0.08) !important;
-  box-shadow: 0 4px 20px rgba(240, 160, 48, 0.15), inset 0 1px 0 rgba(240, 160, 48, 0.1);
+  background: rgba(201, 168, 76, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(201, 168, 76, 0.18), inset 0 1px 0 rgba(201, 168, 76, 0.1);
 }
 .choice-icon { font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
 .choice-desc {
@@ -793,6 +998,36 @@ label {
   color: var(--muted);
   line-height: 1.4;
 }
+
+/* Intent card risk/reward visual tags */
+.intent-meta {
+  display: flex;
+  gap: 6px;
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.risk-tag, .reward-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+.risk-low   { background: var(--success-dim); color: var(--success-bright); border: 1px solid rgba(45,106,79,0.3); }
+.risk-medium { background: rgba(201,168,76,0.1); color: var(--accent); border: 1px solid rgba(201,168,76,0.25); }
+.risk-high  { background: var(--danger-dim); color: var(--danger-bright); border: 1px solid rgba(139,38,53,0.3); }
+.reward-gold   { background: rgba(201,168,76,0.1); color: var(--accent); border: 1px solid rgba(201,168,76,0.25); }
+.reward-intel  { background: var(--purple-dim); color: var(--purple-light); border: 1px solid var(--purple-border); }
+.reward-discovery { background: var(--teal-dim); color: var(--teal-light); border: 1px solid var(--teal-border); }
+.reward-plunder { background: var(--danger-dim); color: var(--danger-bright); border: 1px solid rgba(139,38,53,0.3); }
+
+/* Intent card — colour-coded border left per type */
+.choice-card-kervan     { border-left: 3px solid var(--teal); }
+.choice-card-kara_bayrak { border-left: 3px solid var(--danger-bright); }
+.choice-card-pusula     { border-left: 3px solid var(--route-tramontana); }
+.choice-card-duman      { border-left: 3px solid var(--purple-light); }
 
 /* Emir summary strip — Frosted glass */
 .emir-summary {
@@ -836,11 +1071,11 @@ label {
 .ruzgar-rumor {
   margin-bottom: var(--space-2xl);
   padding: var(--space-xl);
-  background: rgba(96, 165, 250, 0.06);
-  border: 1px solid rgba(96, 165, 250, 0.15);
+  background: rgba(46, 125, 136, 0.06);
+  border: 1px solid rgba(46, 125, 136, 0.2);
   border-radius: var(--radius-lg);
 }
-.ruzgar-rumor h3 { margin: 0 0 var(--space-sm); color: var(--info); }
+.ruzgar-rumor h3 { margin: 0 0 var(--space-sm); color: var(--teal-light); }
 .ruzgar-actions {
   display: flex;
   justify-content: center;
@@ -858,9 +1093,9 @@ label {
   margin: 0;
   padding: var(--space-md) var(--space-xl);
   border-radius: var(--radius-lg);
-  background: rgba(6, 13, 26, 0.5);
+  background: rgba(10, 14, 26, 0.5);
   border: 1px solid var(--line);
-  border-left: 3px solid var(--info);
+  border-left: 3px solid var(--teal);
   font-size: 0.92rem;
   line-height: 1.5;
 }
@@ -899,10 +1134,11 @@ label {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 30% 15%, rgba(240, 160, 48, 0.07) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 85%, rgba(96, 165, 250, 0.05) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(10, 20, 40, 0.6) 0%, transparent 70%),
-    linear-gradient(180deg, #060d1a 0%, #0a1424 50%, #060d1a 100%);
+    radial-gradient(ellipse at 30% 15%, rgba(201, 168, 76, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 85%, rgba(107, 79, 160, 0.1) 0%, transparent 45%),
+    radial-gradient(ellipse at 20% 70%, rgba(46, 125, 136, 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, rgba(10, 14, 26, 0.7) 0%, transparent 70%),
+    linear-gradient(180deg, #0a0e1a 0%, #111827 50%, #0a0e1a 100%);
   z-index: 0;
 }
 .menu-backdrop::before {
@@ -910,8 +1146,8 @@ label {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 30%, rgba(240, 160, 48, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.03) 0%, transparent 40%);
+    radial-gradient(circle at 20% 30%, rgba(201, 168, 76, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(107, 79, 160, 0.06) 0%, transparent 40%);
   animation: menuGlow 8s ease-in-out infinite alternate;
 }
 @keyframes menuGlow {
@@ -933,7 +1169,7 @@ label {
   color: var(--accent);
   margin: 0;
   letter-spacing: 0.06em;
-  text-shadow: 0 4px 24px rgba(240, 160, 48, 0.3), 0 0 60px rgba(240, 160, 48, 0.1);
+  text-shadow: 0 4px 24px rgba(201, 168, 76, 0.35), 0 0 60px rgba(201, 168, 76, 0.12), 0 0 2px rgba(107,79,160,0.3);
   line-height: 1.1;
 }
 .menu-subtitle {
@@ -1109,7 +1345,7 @@ label {
 .loading-spinner {
   font-size: 2.5rem;
   animation: spin 1.2s linear infinite;
-  filter: drop-shadow(0 0 8px rgba(240, 160, 48, 0.3));
+  filter: drop-shadow(0 0 8px rgba(201, 168, 76, 0.4));
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
@@ -1172,6 +1408,6 @@ button:focus-visible {
    SELECTION — Branded highlight
    ══════════════════════════════════════════════════════════════════════════ */
 ::selection {
-  background: rgba(240, 160, 48, 0.25);
+  background: rgba(201, 168, 76, 0.25);
   color: var(--text-bright);
 }

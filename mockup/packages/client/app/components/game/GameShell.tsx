@@ -121,7 +121,7 @@ export default function GameShell() {
       </nav>
 
       {/* ── View content ─────────────────────────────── */}
-      <div className="game-content">
+      <div className="game-content" key={activeView}>
         {activeView === 'fondaco' && (
           <section className="grid layout">
             <div className="fondaco-main">

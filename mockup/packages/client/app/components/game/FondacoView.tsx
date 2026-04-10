@@ -34,6 +34,7 @@ export default function FondacoView() {
             key={tab.key}
             role="tab"
             aria-selected={activeTab === tab.key}
+            data-tab={tab.key}
             className={`fondaco-tab ${activeTab === tab.key ? 'fondaco-tab-active' : ''}`}
             onClick={() => setTab(tab.key)}
           >
