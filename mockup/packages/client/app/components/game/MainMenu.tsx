@@ -10,9 +10,9 @@ export default function MainMenu() {
       <div className="menu-backdrop" />
       <div className="menu-content">
         <div className="menu-logo">
+          <p className="menu-era">XI — XVIII. Yüzyıl</p>
           <h1 className="menu-title">Mare Nostrum</h1>
           <p className="menu-subtitle">Akdeniz&apos;in Efendisi</p>
-          <p className="menu-era">XI — XVIII. Yüzyıl</p>
         </div>
 
         <nav className="menu-buttons">

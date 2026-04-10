@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mare Nostrum — 06 Rüzgâr (Resolution)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{color-scheme:dark;--bg:#060d1a;--card:rgba(12,20,38,0.85);--accent:#f0a030;--accent-hover:#d48a20;--text:#e8edf5;--text-bright:#f8fafc;--muted:#8b9bb5;--muted-dim:#5a6a80;--line:rgba(30,41,59,0.6);--glass:rgba(12,20,38,0.65);--glass-border:rgba(148,163,184,0.12);--success:#34d399;--danger:#ef4444;--info:#60a5fa;--radius-md:12px;--radius-lg:16px;--radius-xl:20px;--radius-2xl:24px;--radius-full:9999px;--shadow-card:0 8px 32px rgba(0,0,0,0.25),0 2px 8px rgba(0,0,0,0.1)}
+body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgba(16,32,61,0.8) 0%,transparent 50%);color:var(--text);line-height:1.6;min-height:100vh;padding-bottom:140px}
+.shell{width:min(820px,calc(100vw - 40px));margin:0 auto;padding:20px 0 48px}
+.card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:20px;box-shadow:var(--shadow-card);backdrop-filter:blur(16px)}
+
+/* Top Bar */
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-2xl);margin-bottom:20px;backdrop-filter:blur(20px)}
+.top-bar-left,.top-bar-right{display:flex;align-items:center;gap:16px}
+.top-bar-title{font-size:1.1rem;font-weight:800;color:var(--accent)}
+.top-bar-sep{color:var(--muted-dim);opacity:.4}
+.top-bar-item{font-size:.88rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.top-bar-item strong{color:var(--text-bright)}
+.badge-gold{display:inline-flex;align-items:center;padding:3px 12px;border-radius:var(--radius-full);font-size:.72rem;font-weight:700;background:rgba(240,160,48,0.15);color:var(--accent);border:1px solid rgba(240,160,48,0.3)}
+.connected{color:var(--success);font-size:.72rem;font-weight:600}
+
+/* Phase Nav */
+.phase-nav{display:flex;gap:8px;margin-bottom:20px;background:rgba(6,13,26,0.5);padding:4px;border-radius:var(--radius-2xl);border:1px solid var(--glass-border)}
+.phase-btn{flex:1;padding:12px 16px;background:transparent;border:none;border-radius:var(--radius-xl);font-size:.95rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit}
+.phase-btn-active{color:var(--text-bright);background:rgba(240,160,48,0.12);box-shadow:0 2px 12px rgba(240,160,48,0.15)}
+
+/* Log items */
+.ruzgar-view{max-width:820px;margin:0 auto}
+.log-item{margin:0;padding:12px 20px;border-radius:var(--radius-lg);background:rgba(6,13,26,0.5);border:1px solid var(--line);border-left:3px solid var(--info);font-size:.92rem;line-height:1.5;margin-bottom:8px;animation:logIn .4s cubic-bezier(.4,0,.2,1) backwards}
+.log-item:nth-child(2){animation-delay:.1s}
+.log-item:nth-child(3){animation-delay:.2s}
+.log-item:nth-child(4){animation-delay:.3s}
+.log-item:nth-child(5){animation-delay:.35s}
+@keyframes logIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.log-item strong{color:var(--text-bright)}
+.log-combat{border-left-color:var(--danger)}
+.log-trade{border-left-color:var(--success)}
+.log-exp{border-left-color:var(--accent)}
+.log-rumor{border-left-color:#c4b5fd}
+
+/* Rumor Section */
+.ruzgar-rumor{margin-bottom:24px;padding:20px;background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.15);border-radius:var(--radius-lg)}
+.ruzgar-rumor h3{margin:0 0 8px;color:var(--info)}
+.rumor-text{margin:0;font-style:italic;color:var(--muted);line-height:1.6}
+
+/* Actions */
+.ruzgar-actions{display:flex;justify-content:center;margin-top:24px}
+.ruzgar-actions .primary{padding:16px 48px;font-size:1.1rem;border-radius:var(--radius-full);background:linear-gradient(135deg,var(--accent-hover),var(--accent));color:#111827;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(240,160,48,0.25);font-family:inherit;transition:all .25s cubic-bezier(.4,0,.2,1)}
+.ruzgar-actions .primary:hover{box-shadow:0 6px 24px rgba(240,160,48,0.35);transform:translateY(-2px)}
+
+.section-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:16px;align-items:center}
+.section-head h2{margin:0}
+.muted{color:var(--muted);font-size:.85rem}
+button{font:inherit}
+
+/* Result Cards */
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.result-card{padding:16px;border-radius:var(--radius-lg);background:rgba(6,13,26,0.5);border:1px solid var(--line);text-align:center}
+.result-card-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.result-card-value{font-size:1.4rem;font-weight:700;color:var(--text-bright)}
+.result-card-value.gold{color:var(--accent)}
+.result-card-value.combat{color:var(--danger)}
+.result-card-value.trade{color:var(--success)}
+
+/* Annotations */
+.annotations{position:fixed;top:0;left:0;right:0;bottom:140px;z-index:10;pointer-events:none}
+.balloon{position:absolute;padding:12px 16px;border-radius:12px;font-size:.82rem;line-height:1.5;max-width:260px;pointer-events:auto;box-shadow:0 4px 20px rgba(0,0,0,0.3);backdrop-filter:blur(12px)}
+.balloon-gold{background:rgba(240,160,48,0.15);border:1px solid rgba(240,160,48,0.3);color:#f0a030}
+.balloon-blue{background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#60a5fa}
+.balloon-green{background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:#34d399}
+.balloon-red{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#ef4444}
+.balloon-label{font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;display:block}
+
+.notes-panel{position:fixed;bottom:0;left:0;right:0;background:rgba(6,13,26,0.95);border-top:1px solid var(--glass-border);backdrop-filter:blur(20px);padding:16px 24px;z-index:20;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.notes-panel h3{color:var(--accent);font-size:.85rem;margin:0 0 6px;letter-spacing:.1em;text-transform:uppercase;width:100%}
+.note-item{font-size:.8rem;color:var(--muted);line-height:1.5;flex:1;min-width:200px}
+.note-item strong{color:var(--text);display:block;margin-bottom:2px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <span class="top-bar-title">Mare Nostrum</span>
+      <span class="top-bar-sep">·</span>
+      <span class="top-bar-item">Tur <strong>4</strong></span>
+      <span class="top-bar-item">❄️ Kış</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="badge-gold">★ Tüccar</span>
+      <span class="top-bar-item"><span class="gold-icon">🪙</span> <strong>210</strong></span>
+      <span class="top-bar-item" style="color:var(--info)">⛵ karaka</span>
+      <span class="top-bar-item connected">● bağlı</span>
+    </div>
+  </header>
+
+  <nav class="phase-nav">
+    <button class="phase-btn">🏛️ Fondaco</button>
+    <button class="phase-btn">📜 Emir</button>
+    <button class="phase-btn phase-btn-active">🌊 Rüzgâr</button>
+  </nav>
+
+  <div class="ruzgar-view">
+    <div class="section-head"><h2>🌊 Tur Çözümü</h2></div>
+
+    <!-- Result Summary Cards -->
+    <div class="result-grid">
+      <div class="result-card">
+        <div class="result-card-label">Savaş Sonucu</div>
+        <div class="result-card-value combat">⚔️ Zafer</div>
+      </div>
+      <div class="result-card">
+        <div class="result-card-label">Ticaret Geliri</div>
+        <div class="result-card-value gold">+65 🪙</div>
+      </div>
+      <div class="result-card">
+        <div class="result-card-label">Yeni Liman</div>
+        <div class="result-card-value">🏛️ İstanbul</div>
+      </div>
+      <div class="result-card">
+        <div class="result-card-label">Deneyim</div>
+        <div class="result-card-value trade">+2 Meltem</div>
+      </div>
+    </div>
+
+    <!-- Turn Log -->
+    <div style="margin-bottom:24px">
+      <div class="log-item log-combat">
+        ⚔️ <strong>Savaş:</strong> Fortuna rotasında korsan filosuyla karşılaştınız! Pruva taktiğiyle saldırdınız ve düşmanı yendiniz. Gemi hasarı: -12 dayanıklılık.
+      </div>
+      <div class="log-item log-trade">
+        💰 <strong>Ticaret:</strong> İstanbul'da Murano Camı sattınız. Kış mevsimi lüks bonus: ×1.2. Gelir: 65 altın.
+      </div>
+      <div class="log-item log-exp">
+        📈 <strong>Deneyim:</strong> +2 Meltem (deniz). Kervan niyetiyle seyahat ettiniz.
+      </div>
+      <div class="log-item">
+        🏛️ <strong>Varış:</strong> İstanbul limanına ulaştınız. Fondaco kapıları açık.
+      </div>
+      <div class="log-item log-rumor">
+        🌬️ <strong>Söylenti:</strong> İstanbul kahvehanelerinde Venedikli bir kaptanın cesur yolculuğu anlatılıyor.
+      </div>
+    </div>
+
+    <!-- Rumor Section -->
+    <div class="ruzgar-rumor">
+      <h3>🎭 Limandan Fısıltılar</h3>
+      <p class="rumor-text">
+        "Venedikli kaptan, fırtınalı denizde korsanları yenip İstanbul'a ulaşmış. Şimdi kahvehanelerde herkesin dilinde."
+      </p>
+    </div>
+
+    <!-- Next Turn Button -->
+    <div class="ruzgar-actions">
+      <button class="primary">🏛️ Fondaco'ya Dön</button>
+    </div>
+  </div>
+</div>
+
+<!-- Annotations -->
+<div class="annotations">
+  <div class="balloon balloon-gold" style="top:100px;right:12px">
+    <span class="balloon-label">🟡 Result Cards</span>
+    4-grid summary cards show combat outcome, trade revenue, new port, and experience gain at a glance.
+  </div>
+  <div class="balloon balloon-blue" style="top:240px;left:12px">
+    <span class="balloon-label">🔵 Color-coded Log</span>
+    Left border colors: 🔴 combat, 🟢 trade, 🟡 experience, 🔵 default, 🟣 rumor. Staggered entrance animation.
+  </div>
+  <div class="balloon balloon-green" style="top:420px;right:12px">
+    <span class="balloon-label">🟢 Rumor Feed</span>
+    Blue-tinted card shows port gossip about the player. This builds the emergent narrative of the game.
+  </div>
+  <div class="balloon balloon-gold" style="top:520px;left:12px">
+    <span class="balloon-label">🟡 Renown Badge</span>
+    "★ Tüccar" badge in top bar — earned from sufficient Terazi experience. Hidden from other players' views.
+  </div>
+  <div class="balloon balloon-red" style="top:340px;left:12px;max-width:240px">
+    <span class="balloon-label">🔴 Known Gap</span>
+    Turn resolution is currently one-shot. No step-by-step animation or dramatic reveal sequence yet.
+  </div>
+</div>
+
+<!-- Notes -->
+<div class="notes-panel">
+  <h3>📝 Improvement Notes — Rüzgâr (Resolution)</h3>
+  <div class="note-item">
+    <strong>🎬 Cinematic Resolution</strong>
+    Add a step-by-step animated sequence: ship leaves port → encounters → combat → arrival → trade. Each step revealed with dramatic timing.
+  </div>
+  <div class="note-item">
+    <strong>📊 Detailed Breakdown</strong>
+    Expand result cards into a collapsible detailed view showing exact formulas: base price × season multiplier × route bonus.
+  </div>
+  <div class="note-item">
+    <strong>🔄 Multiplayer Sync</strong>
+    In multiplayer, show all players' movements simultaneously on the map during Rüzgâr phase. Battles resolve visually.
+  </div>
+  <div class="note-item">
+    <strong>🎵 Sound Effects</strong>
+    Add audio: sword clash for combat, coin sound for trade, wind for sailing, crowd murmur for rumor spread.
+  </div>
+</div>
+
+</body>
+</html>

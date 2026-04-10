@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mare Nostrum — 02 Fondaco: Kahvehane</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{color-scheme:dark;--bg:#060d1a;--bg-surface:#0a1424;--card:rgba(12,20,38,0.85);--accent:#f0a030;--accent-hover:#d48a20;--accent-glow:rgba(240,160,48,0.2);--accent-soft:rgba(240,160,48,0.08);--text:#e8edf5;--text-bright:#f8fafc;--muted:#8b9bb5;--muted-dim:#5a6a80;--line:rgba(30,41,59,0.6);--glass:rgba(12,20,38,0.65);--glass-border:rgba(148,163,184,0.12);--danger:#ef4444;--success:#34d399;--info:#60a5fa;--radius-md:12px;--radius-lg:16px;--radius-xl:20px;--radius-2xl:24px;--radius-full:9999px;--shadow-card:0 8px 32px rgba(0,0,0,0.25),0 2px 8px rgba(0,0,0,0.1)}
+body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgba(16,32,61,0.8) 0%,transparent 50%);color:var(--text);line-height:1.6;min-height:100vh;padding-bottom:120px}
+
+.shell{width:min(1400px,calc(100vw - 40px));margin:0 auto;padding:20px 0 48px}
+.card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:20px;box-shadow:var(--shadow-card);backdrop-filter:blur(16px)}
+
+/* Top Bar */
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-2xl);margin-bottom:20px;backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(0,0,0,0.2)}
+.top-bar-left,.top-bar-right{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.top-bar-title{font-size:1.1rem;font-weight:800;color:var(--accent)}
+.top-bar-sep{color:var(--muted-dim);opacity:.4}
+.top-bar-item{font-size:.88rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.top-bar-item strong{color:var(--text-bright)}
+.gold-icon{filter:drop-shadow(0 0 4px rgba(240,160,48,0.4))}
+.badge-gold{display:inline-flex;align-items:center;padding:3px 12px;border-radius:var(--radius-full);font-size:.72rem;font-weight:700;background:rgba(240,160,48,0.15);color:var(--accent);border:1px solid rgba(240,160,48,0.3)}
+.socket-status{font-size:.72rem;font-weight:600}
+.connected{color:var(--success)}
+
+/* Phase Nav */
+.phase-nav{display:flex;gap:8px;margin-bottom:20px;background:rgba(6,13,26,0.5);padding:4px;border-radius:var(--radius-2xl);border:1px solid var(--glass-border)}
+.phase-btn{flex:1;padding:12px 16px;background:transparent;border:none;border-radius:var(--radius-xl);font-size:.95rem;font-weight:600;color:var(--muted);cursor:pointer}
+.phase-btn-active{color:var(--text-bright);background:rgba(240,160,48,0.12);box-shadow:0 2px 12px rgba(240,160,48,0.15)}
+
+/* Layout */
+.grid{display:grid;gap:20px}
+.layout{grid-template-columns:2fr 1fr}
+.fondaco-main{display:grid;gap:20px}
+
+/* Fondaco Tabs */
+.fondaco-view{margin-top:20px}
+.fondaco-tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:0}
+.fondaco-tab{display:flex;align-items:center;gap:8px;padding:12px 20px;border:none;background:transparent;color:var(--muted);font-weight:500;font-size:.9rem;cursor:pointer;position:relative}
+.fondaco-tab-active{color:var(--accent)!important}
+.fondaco-tab-active::after{content:'';position:absolute;bottom:-1px;left:12px;right:12px;height:2px;background:var(--accent);border-radius:1px 1px 0 0;box-shadow:0 0 8px rgba(240,160,48,0.4)}
+
+/* Whisper Cards */
+.whisper-stack{display:grid;gap:12px;margin-bottom:16px}
+.whisper-card{display:flex;gap:16px;padding:16px 20px;border-radius:var(--radius-lg);background:rgba(6,13,26,0.6);border:1px solid var(--glass-border);backdrop-filter:blur(8px);animation:whisperIn .5s cubic-bezier(.4,0,.2,1) backwards}
+.whisper-card:nth-child(2){animation-delay:.12s}
+.whisper-card:nth-child(3){animation-delay:.24s}
+@keyframes whisperIn{from{opacity:0;transform:translateX(-16px) scale(.98)}to{opacity:1;transform:translateX(0) scale(1)}}
+.whisper-icon{font-size:1.4rem;flex-shrink:0;opacity:.8}
+.whisper-text{margin:0;line-height:1.5}
+
+/* Rumor Actions */
+.rumor-actions{display:flex;gap:8px;flex-wrap:wrap}
+.rumor-btn{font-size:.78rem;padding:6px 12px;border-radius:var(--radius-full);font-weight:600;border:1px solid var(--line);background:rgba(16,28,50,0.7);color:var(--text);cursor:pointer}
+
+/* Port Panel */
+.port-panel-name{color:var(--accent);margin:0 0 16px;font-size:1.2rem}
+.section-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:16px;align-items:center}
+.section-head h2,.section-head h3{margin:0}
+.detail-list{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:8px}
+.detail-list li{background:rgba(6,13,26,0.6);border:1px solid var(--line);border-radius:var(--radius-md);padding:12px 16px}
+.detail-list span{color:var(--muted);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em}
+.detail-list strong{display:block;margin-top:2px}
+.trivia-text{font-style:italic;padding:12px 16px;background:rgba(240,160,48,0.04);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:.88rem;color:var(--muted)}
+.muted{color:var(--muted);font-size:.85rem}
+.note{color:var(--muted);font-size:.88rem}
+button{font:inherit}
+
+/* Map placeholder */
+.map-placeholder{background:linear-gradient(180deg,var(--bg) 0%,#0d1a30 100%);border:1px solid var(--glass-border);border-radius:var(--radius-xl);height:280px;display:flex;align-items:center;justify-content:center;color:var(--muted-dim);font-size:.9rem;box-shadow:inset 0 2px 16px rgba(0,0,0,0.2)}
+
+/* Annotations */
+.annotations{position:fixed;top:0;left:0;right:0;bottom:120px;z-index:10;pointer-events:none}
+.balloon{position:absolute;padding:12px 16px;border-radius:12px;font-size:.82rem;line-height:1.5;max-width:260px;pointer-events:auto;box-shadow:0 4px 20px rgba(0,0,0,0.3);backdrop-filter:blur(12px)}
+.balloon-gold{background:rgba(240,160,48,0.15);border:1px solid rgba(240,160,48,0.3);color:#f0a030}
+.balloon-blue{background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:#60a5fa}
+.balloon-green{background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:#34d399}
+.balloon-red{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#ef4444}
+.balloon-label{font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;display:block}
+
+/* Notes */
+.notes-panel{position:fixed;bottom:0;left:0;right:0;background:rgba(6,13,26,0.95);border-top:1px solid var(--glass-border);backdrop-filter:blur(20px);padding:16px 24px;z-index:20;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.notes-panel h3{color:var(--accent);font-size:.85rem;margin:0 0 6px;letter-spacing:.1em;text-transform:uppercase;width:100%}
+.note-item{font-size:.8rem;color:var(--muted);line-height:1.5;flex:1;min-width:200px}
+.note-item strong{color:var(--text);display:block;margin-bottom:2px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <span class="top-bar-title">Mare Nostrum</span>
+      <span class="top-bar-sep">·</span>
+      <span class="top-bar-item">Tur <strong>1</strong></span>
+      <span class="top-bar-item">☀️ Yaz</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="top-bar-item"><span class="gold-icon">🪙</span> <strong>200</strong></span>
+      <span class="top-bar-item" style="color:var(--info)">⛵ karaka</span>
+      <span class="top-bar-item socket-status connected">● bağlı</span>
+    </div>
+  </header>
+
+  <!-- Phase Nav -->
+  <nav class="phase-nav">
+    <button class="phase-btn phase-btn-active">🏛️ Fondaco</button>
+    <button class="phase-btn">📜 Emir</button>
+    <button class="phase-btn">🌊 Rüzgâr</button>
+  </nav>
+
+  <!-- Game Layout -->
+  <section class="grid layout">
+    <div class="fondaco-main">
+      <!-- Map Card -->
+      <article class="card">
+        <div class="section-head"><h2>🗺️ Harita</h2></div>
+        <div class="map-placeholder">🗺️ SVG Akdeniz Haritası — 15 liman, 29 rota, 3 darboğaz</div>
+      </article>
+
+      <!-- Fondaco View -->
+      <div class="fondaco-view card">
+        <nav class="fondaco-tabs">
+          <button class="fondaco-tab fondaco-tab-active"><span>☕</span> <span>Kahvehane</span></button>
+          <button class="fondaco-tab"><span>🏪</span> <span>Pazar</span></button>
+          <button class="fondaco-tab"><span>🤝</span> <span>Müzakere</span></button>
+          <button class="fondaco-tab"><span>⚓</span> <span>Tersane</span></button>
+        </nav>
+
+        <div>
+          <div class="section-head">
+            <h2>☕ Kahvehane</h2>
+            <button class="rumor-btn">3 fısıltıyı yenile</button>
+          </div>
+          <p class="note" style="margin-bottom:12px">Limandaki dedikodulara kulak ver. Bilgi güçtür.</p>
+
+          <div class="whisper-stack">
+            <div class="whisper-card">
+              <span class="whisper-icon">🗣️</span>
+              <p class="whisper-text">İstanbul'dan gelen bir tüccar, doğu baharatının fiyatının yakında düşeceğini fısıldadı.</p>
+            </div>
+            <div class="whisper-card">
+              <span class="whisper-icon">🗣️</span>
+              <p class="whisper-text">Sicilyalı korsanlar yine Otranto boğazında avlanıyormuş. Dikkatli ol.</p>
+            </div>
+            <div class="whisper-card">
+              <span class="whisper-icon">🗣️</span>
+              <p class="whisper-text">İskenderiye'de bir Mısırlı kaptan büyük bir ipek stoku topluyor.</p>
+            </div>
+          </div>
+
+          <div class="rumor-actions">
+            <button class="rumor-btn">👂 Dinle</button>
+            <button class="rumor-btn">🌬️ Gözdağı</button>
+            <button class="rumor-btn">🌬️ Suçlama</button>
+            <button class="rumor-btn">🌬️ Karalama</button>
+            <button class="rumor-btn">🌬️ Övgü</button>
+            <button class="rumor-btn">🌬️ İfşa</button>
+            <button class="rumor-btn">🌬️ Piyasa</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Port Panel Sidebar -->
+    <aside class="card">
+      <div class="section-head"><h2>Liman Detayı</h2></div>
+      <h3 class="port-panel-name">Venedik Limanı</h3>
+      <ul class="detail-list">
+        <li><span>Bölge</span><strong>bati</strong></li>
+        <li><span>Ürettiği</span><strong>murano_cami</strong></li>
+        <li><span>Aradığı</span><strong>baharat</strong></li>
+        <li><span>Kontrol</span><strong>venedik</strong></li>
+      </ul>
+      <p class="trivia-text">☽ Venedik'in cam ustaları, Murano adasında sırlarını korurdu.</p>
+
+      <div class="section-head" style="margin-top:16px"><h3>Kaptan Profili</h3></div>
+      <ul class="detail-list">
+        <li><span>Gemi</span><strong>⛵ karaka / kapasite 5</strong></li>
+        <li><span>Dayanıklılık</span><strong>100/100</strong></li>
+        <li><span>Ün</span><strong>Henüz yok</strong></li>
+        <li><span>Kargo</span><strong>Murano Camı</strong></li>
+      </ul>
+    </aside>
+  </section>
+</div>
+
+<!-- Annotations -->
+<div class="annotations">
+  <div class="balloon balloon-gold" style="top:8px;left:50%;transform:translateX(-50%)">
+    <span class="balloon-label">🟡 Top Bar</span>
+    Frosted glass header shows turn, season, gold, ship, and connection status at a glance.
+  </div>
+  <div class="balloon balloon-blue" style="top:72px;right:12px">
+    <span class="balloon-label">🔵 Phase Nav</span>
+    Pill-style capsule tabs. Active state uses warm glow. Three phases: Fondaco → Emir → Rüzgâr.
+  </div>
+  <div class="balloon balloon-green" style="top:340px;left:12px">
+    <span class="balloon-label">🟢 Whisper Cards</span>
+    Animate in with staggered slide-in. Hover reveals subtle gold border. Future: add whisper reliability rating.
+  </div>
+  <div class="balloon balloon-gold" style="top:530px;left:12px;max-width:220px">
+    <span class="balloon-label">🟡 Rumor System</span>
+    Six rumor templates (25 gold each). Target port selector. Passive listening is free.
+  </div>
+  <div class="balloon balloon-green" style="top:200px;right:12px;max-width:220px">
+    <span class="balloon-label">🟢 Port Panel</span>
+    Port details + Captain profile in sidebar. Future: add mini trade route indicator and demand strength meter.
+  </div>
+</div>
+
+<!-- Notes -->
+<div class="notes-panel">
+  <h3>📝 Improvement Notes — Fondaco: Kahvehane</h3>
+  <div class="note-item">
+    <strong>🎯 Whisper Quality</strong>
+    Add visual reliability indicators (★★★) based on Simsar experience. Unreliable whispers should feel different.
+  </div>
+  <div class="note-item">
+    <strong>📊 Rumor Impact</strong>
+    Show preview of rumor reach before spending 25 gold. Add confirmation dialog with expected port spread count.
+  </div>
+  <div class="note-item">
+    <strong>🗺️ Map Integration</strong>
+    Highlight ports mentioned in whispers on the map. Clicking a whisper should zoom to the relevant port.
+  </div>
+  <div class="note-item">
+    <strong>🔔 Turn Alerts</strong>
+    Add subtle notification dots on Fondaco tabs when new info is available (e.g., new whispers, price changes).
+  </div>
+</div>
+
+</body>
+</html>
