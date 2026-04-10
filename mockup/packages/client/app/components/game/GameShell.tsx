@@ -81,17 +81,17 @@ export default function GameShell() {
       <TopBar />
 
       {(actionError || notice || actionLoading) && (
-        <div className="card" style={{ marginBottom: 12 }}>
-          {actionLoading && <p className="note">⏳ İşlem sürüyor...</p>}
+        <div className="card" style={{ marginBottom: 16, borderLeft: actionError ? '3px solid var(--danger)' : notice ? '3px solid var(--success)' : '3px solid var(--info)' }}>
+          {actionLoading && <p className="note" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>⏳ İşlem sürüyor...</p>}
           {actionError && (
             <div className="section-head">
-              <p>⚠️ {actionError}</p>
+              <p style={{ color: 'var(--danger)' }}>⚠️ {actionError}</p>
               <button className="small" onClick={clearActionError}>Kapat</button>
             </div>
           )}
           {notice && (
             <div className="section-head">
-              <p>✅ {notice}</p>
+              <p style={{ color: 'var(--success)' }}>✅ {notice}</p>
               <button className="small" onClick={clearNotice}>Kapat</button>
             </div>
           )}

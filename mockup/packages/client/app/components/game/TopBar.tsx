@@ -18,7 +18,7 @@ export default function TopBar() {
     <header className="top-bar">
       <div className="top-bar-left">
         <span className="top-bar-title">Mare Nostrum</span>
-        <span className="top-bar-sep">|</span>
+        <span className="top-bar-sep">·</span>
         <span className="top-bar-item">
           Tur <strong>{turn}</strong>
         </span>
