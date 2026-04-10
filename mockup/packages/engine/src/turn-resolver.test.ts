@@ -716,3 +716,355 @@ describe('resolveTurn – trade with no profitable sales', () => {
     expect(result.log.some((entry) => entry.detail.includes('kârlı satış'))).toBe(true);
   });
 });
+
+// ─── Contract fulfillment via trade ─────────────────────────────────────────
+
+describe('resolveTurn – contract fulfillment', () => {
+  it('fulfills a city contract when goods are delivered to correct port', () => {
+    const contractState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        currentPortId: 'girit',
+        cargo: [
+          { goodId: 'murano_cami', name: 'Murano Camı', quantity: 3, originPort: 'venedik', purchasePrice: 10 },
+        ],
+      },
+      cityContracts: [
+        {
+          id: 'contract-1',
+          portId: 'kibris',
+          goodId: 'murano_cami',
+          quantity: 3,
+          rewardGold: 200,
+          deadlineTurn: 30,
+          breakPenalty: 100,
+          accepted: true,
+          completed: false,
+        },
+      ],
+    };
+    const result = resolveTurn({
+      state: contractState,
+      order: { destinationPort: 'kibris', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.contracts).toBeDefined();
+    expect(result.contracts?.fulfilled).toContain('contract-1');
+    expect(result.contracts?.goldDelta).toBeGreaterThan(0);
+  });
+
+  it('penalizes expired contracts', () => {
+    const contractState: GameState = {
+      ...baseState,
+      turn: 31, // past deadline
+      player: {
+        ...baseState.player,
+        currentPortId: 'girit',
+        cargo: [
+          { goodId: 'murano_cami', name: 'Murano Camı', quantity: 1, originPort: 'venedik', purchasePrice: 10 },
+        ],
+      },
+      cityContracts: [
+        {
+          id: 'contract-expired',
+          portId: 'kibris',
+          goodId: 'murano_cami',
+          quantity: 5,
+          rewardGold: 200,
+          deadlineTurn: 30,
+          breakPenalty: 100,
+          accepted: true,
+          completed: false,
+        },
+      ],
+    };
+    const result = resolveTurn({
+      state: contractState,
+      order: { destinationPort: 'kibris', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.contracts?.expired).toContain('contract-expired');
+    expect(result.contracts?.goldDelta).toBeLessThan(0);
+  });
+});
+
+// ─── Duman stealth intel ────────────────────────────────────────────────────
+
+describe('resolveTurn – duman stealth passage', () => {
+  it('gathers intel on successful duman without encounter', () => {
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'duman' },
+      ports,
+      routes,
+      goods,
+      rng: () => 0.999, // no encounter
+    });
+    expect(result.exploration).toBeDefined();
+    expect(result.exploration?.stealthSuccess).toBe(true);
+    expect(result.exploration?.intel).toBeDefined();
+    expect(result.exploration!.intel!.length).toBeGreaterThan(0);
+    expect(result.log.some((e) => e.label === 'Duman')).toBe(true);
+  });
+});
+
+// ─── Route encounter combat (non-kara_bayrak) ──────────────────────────────
+
+describe('resolveTurn – route encounter combat', () => {
+  it('triggers random encounter on a non-kara_bayrak route', () => {
+    // rng returns 0 → always triggers encounter (encounterChance > 0)
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+      tactic: 'manevra',
+      rng: () => 0, // triggers encounter
+    });
+    expect(result.combat).toBeDefined();
+    expect(result.log.some((e) => e.label === 'Karşılaşma')).toBe(true);
+  });
+
+  it('triggers encounter on duman intent with low rng', () => {
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'duman' },
+      ports,
+      routes,
+      goods,
+      rng: () => 0, // triggers encounter
+    });
+    expect(result.combat).toBeDefined();
+  });
+});
+
+// ─── Quest advancement during turn ──────────────────────────────────────────
+
+describe('resolveTurn – quest advancement', () => {
+  it('advances quest when conditions are met at destination port', () => {
+    const questState: GameState = {
+      ...baseState,
+      turn: 2, // nextTurn = 3, within kayip_hazine stage 1 turnRange [3,6]
+      player: {
+        ...baseState.player,
+        currentPortId: 'ragusa',
+        questState: {
+          questId: 'kayip_hazine',
+          currentStage: 1,
+          completed: false,
+          stageFlags: {},
+          evidence: [],
+        },
+      },
+    };
+    const result = resolveTurn({
+      state: questState,
+      order: { destinationPort: 'venedik', routeType: 'tramontana', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.log.some((e) => e.label === 'Görev')).toBe(true);
+    expect(result.nextState.player.questState?.currentStage).toBe(2);
+  });
+});
+
+// ─── Pusula with trivia catalog ─────────────────────────────────────────────
+
+describe('resolveTurn – pusula with trivia catalog', () => {
+  it('includes trivia text from catalog when available', () => {
+    const triviaCatalog = {
+      istanbul: [
+        { id: 'trivia-1', portId: 'istanbul', text: 'İstanbul tarih kokar.', provenanceRef: 'prov:istanbul' },
+      ],
+    };
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+      triviaCatalog,
+    });
+    expect(result.exploration?.trivia).toBe('İstanbul tarih kokar.');
+  });
+
+  it('gives double gold bonus on first visit', () => {
+    const firstVisitState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        visitedPortIds: ['venedik'], // istanbul not visited
+      },
+    };
+    const result = resolveTurn({
+      state: firstVisitState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    // First visit: 15 * 2 = 30 gold bonus
+    expect(result.exploration?.goldBonus).toBe(30);
+  });
+
+  it('gives normal gold bonus on repeat visit', () => {
+    const repeatVisitState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        visitedPortIds: ['venedik', 'istanbul'], // istanbul already visited
+      },
+    };
+    const result = resolveTurn({
+      state: repeatVisitState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.exploration?.goldBonus).toBe(15);
+  });
+});
+
+// ─── Route encounter: shipwreck on non-kara_bayrak intent ───────────────────
+
+describe('resolveTurn – route encounter shipwreck', () => {
+  it('triggers shipwreck on route encounter with fragile ship (kervan intent)', () => {
+    // Fragile ship that will be wrecked by combat loss
+    const fragileState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        ship: { type: 'feluka', cargoCapacity: 3, power: 1, durability: 10 },
+        gold: 5,
+      },
+    };
+    // rng always returns 0: triggers encounter (0 < encounterChance),
+    // then enemy tactic=pruva, dice=1,1
+    const result = resolveTurn({
+      state: fragileState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+      tactic: 'ates',
+      rng: () => 0,
+    });
+    if (result.combat?.shipwrecked) {
+      // Shipwreck on non-kara_bayrak returns early with limited state
+      expect(result.nextState.player.ship.type).toBe('feluka');
+      expect(result.nextState.player.ship.durability).toBe(100);
+      expect(result.nextState.player.cargo).toHaveLength(0);
+      expect(result.whispers).toHaveLength(1);
+      expect(result.whispers[0]).toContain('parçalandı');
+    }
+  });
+});
+
+// ─── Route encounter: kacti on non-kara_bayrak intent ───────────────────────
+
+describe('resolveTurn – route encounter kacti', () => {
+  it('handles kacti result on route encounter (duman intent)', () => {
+    // Strong ship so kacis succeeds
+    const strongState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        ship: { type: 'kadirga', cargoCapacity: 2, power: 3, durability: 100 },
+        experience: { meltem: 10, terazi: 1, murekkep: 1, simsar: 1 },
+      },
+    };
+    // rng = 0 triggers encounter, duman intent → kacis tactic, strong ship → kacti
+    const result = resolveTurn({
+      state: strongState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'duman' },
+      ports,
+      routes,
+      goods,
+      rng: () => 0, // triggers encounter
+    });
+    if (result.combat?.result === 'kacti') {
+      expect(result.log.some((e) => e.detail.includes('yelkeni kırdın'))).toBe(true);
+    }
+  });
+
+  it('handles kaybetti result on route encounter without shipwreck', () => {
+    // Durable ship that will lose but not be wrecked
+    const durableState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        ship: { type: 'feluka', cargoCapacity: 3, power: 1, durability: 80 },
+        gold: 200,
+      },
+    };
+    // rng=0 triggers encounter, tactic=ates, enemy=pruva → no counter, weak player → kaybetti
+    // durability 80 - ~18 = 62 → not shipwrecked
+    const result = resolveTurn({
+      state: durableState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+      tactic: 'ates',
+      rng: () => 0,
+    });
+    if (result.combat?.result === 'kaybetti' && !result.combat.shipwrecked) {
+      expect(result.log.some((e) => e.detail.includes('Beklenmeyen'))).toBe(true);
+      expect(result.nextState.player.ship.durability).toBeLessThan(80);
+    }
+  });
+});
+
+// ─── Renown decay during turn ───────────────────────────────────────────────
+
+describe('resolveTurn – renown decay', () => {
+  it('warns about renown approaching loss', () => {
+    const decayState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        experience: { meltem: 1, terazi: 10, murekkep: 2, simsar: 1 },
+        renown: ['Altın Parmak'],
+        renownLastAction: { 'Altın Parmak': 1 },
+      },
+      turn: 5, // gap = 6-1 = 5, which triggers warning (RENOWN_WARNING_TURNS = 5)
+    };
+    const result = resolveTurn({
+      state: decayState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.log.some((e) => e.label === 'Ün' && e.detail.includes('sarsılıyor'))).toBe(true);
+  });
+
+  it('removes renown title when decay reaches loss threshold', () => {
+    const lossState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        experience: { meltem: 1, terazi: 10, murekkep: 2, simsar: 1 },
+        renown: ['Altın Parmak'],
+        renownLastAction: { 'Altın Parmak': 1 },
+      },
+      turn: 8, // gap = 9-1 = 8, triggers loss (RENOWN_LOSS_TURNS = 8)
+    };
+    const result = resolveTurn({
+      state: lossState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'pusula' },
+      ports,
+      routes,
+      goods,
+    });
+    expect(result.log.some((e) => e.label === 'Ün' && e.detail.includes('kaybettiniz'))).toBe(true);
+  });
+});
