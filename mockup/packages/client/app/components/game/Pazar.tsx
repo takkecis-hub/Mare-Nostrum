@@ -39,7 +39,7 @@ export default function Pazar() {
   return (
     <div className="fondaco-panel">
       <div className="section-head">
-        <h2>🏪 Pazar</h2>
+        <h2>Pazar</h2>
       </div>
 
       {/* ── Port production ──────────────────────────── */}
@@ -68,7 +68,7 @@ export default function Pazar() {
             onClick={() => void buyCurrentGood(good.id)}
             disabled={!canBuy}
           >
-            {`${good.name} al (-${GOOD_PURCHASE_COST} 🪙)`}
+            {`${good.name} al (-${GOOD_PURCHASE_COST} altın)`}
           </button>
         ))}
       </div>

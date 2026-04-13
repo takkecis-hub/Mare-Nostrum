@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-export type GameView = 'menu' | 'fondaco' | 'emir' | 'ruzgar';
-export type FondacoTab = 'kahvehane' | 'pazar' | 'muzakere' | 'tersane';
+export type GameView = 'menu' | 'fondaco' | 'muzakere' | 'emir' | 'ruzgar';
+export type FondacoTab = 'pazar' | 'tersane';
 
 interface UIStore {
   /* ── navigation ──────────────────────────────────── */
@@ -23,7 +23,7 @@ interface UIStore {
 
 export const useUIStore = create<UIStore>((set) => ({
   activeView: 'menu',
-  fondacoTab: 'kahvehane',
+  fondacoTab: 'pazar',
   selectedPortId: 'venedik',
 
   showCombatResult: false,

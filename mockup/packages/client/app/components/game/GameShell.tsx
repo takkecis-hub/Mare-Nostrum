@@ -8,6 +8,7 @@ import TopBar from './TopBar';
 import MapView from './MapView';
 import PortPanel from './PortPanel';
 import FondacoView from './FondacoView';
+import Muzakere from './Muzakere';
 import EmirView from './EmirView';
 import RuzgarView from './RuzgarView';
 import MainMenu from './MainMenu';
@@ -49,7 +50,7 @@ export default function GameShell() {
     return (
       <main className="shell">
         <div className="loading-screen">
-          <span className="loading-spinner">⏳</span>
+          <span className="loading-spinner" aria-hidden="true" />
           <p>Mockup yükleniyor...</p>
         </div>
       </main>
@@ -60,7 +61,7 @@ export default function GameShell() {
     return (
       <main className="shell">
         <div className="error-screen card">
-            <h2>⚠️ Bağlantı Hatası</h2>
+            <h2>Bağlantı Hatası</h2>
             <p>{error}</p>
             <button className="primary" onClick={() => void bootstrap()}>
               Tekrar Dene
@@ -82,16 +83,16 @@ export default function GameShell() {
 
       {(actionError || notice || actionLoading) && (
         <div className="card" style={{ marginBottom: 16, borderLeft: actionError ? '3px solid var(--danger)' : notice ? '3px solid var(--success)' : '3px solid var(--info)' }}>
-          {actionLoading && <p className="note" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>⏳ İşlem sürüyor...</p>}
+          {actionLoading && <p className="note">İşlem sürüyor...</p>}
           {actionError && (
             <div className="section-head">
-              <p style={{ color: 'var(--danger)' }}>⚠️ {actionError}</p>
+              <p style={{ color: 'var(--danger)' }}>{actionError}</p>
               <button className="small" onClick={clearActionError}>Kapat</button>
             </div>
           )}
           {notice && (
             <div className="section-head">
-              <p style={{ color: 'var(--success)' }}>✅ {notice}</p>
+              <p style={{ color: 'var(--success)' }}>{notice}</p>
               <button className="small" onClick={clearNotice}>Kapat</button>
             </div>
           )}
@@ -104,19 +105,25 @@ export default function GameShell() {
           className={`phase-btn ${activeView === 'fondaco' ? 'phase-btn-active' : ''}`}
           onClick={() => setActiveView('fondaco')}
         >
-          🏛️ Fondaco
+          Fondaco
+        </button>
+        <button
+          className={`phase-btn ${activeView === 'muzakere' ? 'phase-btn-active' : ''}`}
+          onClick={() => setActiveView('muzakere')}
+        >
+          Müzakere
         </button>
         <button
           className={`phase-btn ${activeView === 'emir' ? 'phase-btn-active' : ''}`}
           onClick={() => setActiveView('emir')}
         >
-          📜 Emir
+          Emir
         </button>
         <button
           className={`phase-btn ${activeView === 'ruzgar' ? 'phase-btn-active' : ''}`}
           onClick={() => setActiveView('ruzgar')}
         >
-          🌊 Rüzgâr
+          Rüzgâr
         </button>
       </nav>
 
@@ -127,7 +134,7 @@ export default function GameShell() {
             <div className="fondaco-main">
               <article className="card map-card">
                 <div className="section-head">
-                  <h2>🗺️ Harita</h2>
+                  <h2>Harita</h2>
                 </div>
                 <MapView />
               </article>
@@ -139,6 +146,7 @@ export default function GameShell() {
           </section>
         )}
 
+        {activeView === 'muzakere' && <Muzakere />}
         {activeView === 'emir' && <EmirView />}
         {activeView === 'ruzgar' && <RuzgarView />}
       </div>

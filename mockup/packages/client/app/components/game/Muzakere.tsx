@@ -1,33 +1,138 @@
 'use client';
 
-export default function Muzakere() {
-  return (
-    <div className="fondaco-panel">
-      <div className="section-head">
-        <h2>🤝 Müzakere</h2>
-      </div>
-      <p className="note">
-        Diğer kaptanlarla veya NPC&apos;lerle diplomatik görüşmeler yap.
-      </p>
+import { useEffect, useMemo, useState } from 'react';
+import { useGameStore } from '../../stores/useGameStore';
+import { RUMOR_SPREAD_COST } from '../../../../shared/src/constants/index.js';
+import type { RumorTemplateId } from '../../../../shared/src/types/index.js';
 
-      <div className="chat-placeholder">
-        <div className="chat-tabs">
-          <button className="chat-tab active">Genel</button>
-          <button className="chat-tab">Özel Mesaj</button>
+const TEMPLATE_LABELS: Record<RumorTemplateId, string> = {
+  gozdagi: 'Gözdağı',
+  suclama: 'Suçlama',
+  karalama: 'Karalama',
+  ovgu: 'Övgü',
+  ifsa: 'İfşa',
+  piyasa: 'Piyasa',
+};
+
+export default function Muzakere() {
+  const gameState = useGameStore((s) => s.gameState);
+  const ports = useGameStore((s) => s.ports);
+  const refreshWhispers = useGameStore((s) => s.refreshWhispers);
+  const spreadRumor = useGameStore((s) => s.spreadRumor);
+  const [targetPortId, setTargetPortId] = useState('');
+
+  const targetOptions = useMemo(
+    () => ports.filter((port) => port.id !== gameState?.player.currentPortId),
+    [ports, gameState?.player.currentPortId],
+  );
+
+  useEffect(() => {
+    if (targetOptions.some((port) => port.id === targetPortId)) {
+      return;
+    }
+
+    setTargetPortId(targetOptions[0]?.id ?? '');
+  }, [targetOptions, targetPortId]);
+
+  if (!gameState) return null;
+
+  return (
+    <div className="muzakere-view">
+      <section className="card intel-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Müzakere</p>
+            <h2>İstihbarat</h2>
+          </div>
+          <button className="small" onClick={() => void refreshWhispers()}>
+            Yenile
+          </button>
         </div>
-        <div className="chat-body">
-          <p className="chat-system-msg">
-            💬 Müzakere sistemi çok oyunculu modda aktif olacak.
-          </p>
-          <p className="chat-system-msg">
-            Tek oyunculu modda NPC diyalogları burada görünecek.
-          </p>
+
+        <p className="note">
+          Limandaki fısıltıları topla, hedef liman seç ve söylentiyi sessizce yay.
+        </p>
+
+        <div className="whisper-stack">
+          {gameState.lastWhispers.length > 0 ? (
+            gameState.lastWhispers.map((whisper, idx) => (
+              <div key={idx} className="whisper-card">
+                <p className="whisper-text">{whisper}</p>
+              </div>
+            ))
+          ) : (
+            <p className="note">Henüz fısıltı yok. İstihbaratı yenileyerek dinlemeye başla.</p>
+          )}
         </div>
-        <div className="chat-input-row">
-          <input className="chat-input" type="text" placeholder="Mesaj yaz..." disabled />
-          <button disabled>Gönder</button>
+
+        <div className="rumor-controls">
+          <label className="rumor-target">
+            Hedef liman
+            <select
+              value={targetPortId}
+              onChange={(event) => setTargetPortId(event.target.value)}
+              disabled={targetOptions.length === 0}
+            >
+              {targetOptions.length > 0 ? (
+                targetOptions.map((port) => (
+                  <option key={port.id} value={port.id}>
+                    {port.displayName}
+                  </option>
+                ))
+              ) : (
+                <option value="">Uygun hedef yok</option>
+              )}
+            </select>
+          </label>
+
+          <div className="rumor-grid">
+            {(Object.keys(TEMPLATE_LABELS) as RumorTemplateId[]).map((templateId) => (
+              <button
+                key={templateId}
+                className="rumor-btn"
+                title={`${TEMPLATE_LABELS[templateId]} söylentisi yay (${RUMOR_SPREAD_COST} altın)`}
+                onClick={() => void spreadRumor(templateId, targetPortId)}
+                disabled={!targetPortId}
+              >
+                {TEMPLATE_LABELS[templateId]}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      <section className="card negotiation-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Müzakere</p>
+            <h2>Sohbet</h2>
+          </div>
+          <span className="muted">Çok oyunculu hazırlık</span>
+        </div>
+
+        <p className="note">
+          Diğer kaptanlarla veya NPC&apos;lerle diplomatik görüşmeler bu alanda toplanacak.
+        </p>
+
+        <div className="chat-placeholder">
+          <div className="chat-tabs">
+            <button className="chat-tab active" type="button">Genel</button>
+            <button className="chat-tab" type="button">Özel Mesaj</button>
+          </div>
+          <div className="chat-body">
+            <p className="chat-system-msg">
+              Müzakere sistemi çok oyunculu modda aktif olacak.
+            </p>
+            <p className="chat-system-msg">
+              Tek oyunculu modda NPC diyalogları burada görünecek.
+            </p>
+          </div>
+          <div className="chat-input-row">
+            <input className="chat-input" type="text" placeholder="Mesaj yaz..." disabled />
+            <button disabled type="button">Gönder</button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

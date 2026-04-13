@@ -17,16 +17,16 @@ export default function MainMenu() {
 
         <nav className="menu-buttons">
           <button className="menu-btn primary" onClick={() => setActiveView('fondaco')}>
-            ⛵ Yeni Oyun
+            Yeni Oyun
           </button>
           <button className="menu-btn" disabled>
-            📂 Devam Et
+            Devam Et
           </button>
           <button className="menu-btn" disabled>
-            ⚙️ Ayarlar
+            Ayarlar
           </button>
           <button className="menu-btn" disabled>
-            ℹ️ Hakkında
+            Hakkında
           </button>
         </nav>
 
