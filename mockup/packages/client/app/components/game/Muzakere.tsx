@@ -1,7 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGameStore } from '../../stores/useGameStore';
+import { RUMOR_SPREAD_COST } from '../../../../shared/src/constants/index.js';
 import type { RumorTemplateId } from '../../../../shared/src/types/index.js';
 
 const TEMPLATE_LABELS: Record<RumorTemplateId, string> = {
@@ -18,18 +19,22 @@ export default function Muzakere() {
   const ports = useGameStore((s) => s.ports);
   const refreshWhispers = useGameStore((s) => s.refreshWhispers);
   const spreadRumor = useGameStore((s) => s.spreadRumor);
-  const [targetPortId, setTargetPortId] = useState('venedik');
+  const [targetPortId, setTargetPortId] = useState('');
 
   const targetOptions = useMemo(
     () => ports.filter((port) => port.id !== gameState?.player.currentPortId),
     [ports, gameState?.player.currentPortId],
   );
 
-  if (!gameState) return null;
+  useEffect(() => {
+    if (targetOptions.some((port) => port.id === targetPortId)) {
+      return;
+    }
 
-  const activeTarget = targetOptions.some((port) => port.id === targetPortId)
-    ? targetPortId
-    : targetOptions[0]?.id ?? gameState.player.currentPortId;
+    setTargetPortId(targetOptions[0]?.id ?? '');
+  }, [targetOptions, targetPortId]);
+
+  if (!gameState) return null;
 
   return (
     <div className="muzakere-view">
@@ -51,7 +56,7 @@ export default function Muzakere() {
         <div className="whisper-stack">
           {gameState.lastWhispers.length > 0 ? (
             gameState.lastWhispers.map((whisper, idx) => (
-              <div key={`${whisper.slice(0, 20)}-${idx}`} className="whisper-card">
+              <div key={idx} className="whisper-card">
                 <p className="whisper-text">{whisper}</p>
               </div>
             ))
@@ -63,12 +68,20 @@ export default function Muzakere() {
         <div className="rumor-controls">
           <label className="rumor-target">
             Hedef liman
-            <select value={activeTarget} onChange={(event) => setTargetPortId(event.target.value)}>
-              {targetOptions.map((port) => (
-                <option key={port.id} value={port.id}>
-                  {port.displayName}
-                </option>
-              ))}
+            <select
+              value={targetPortId}
+              onChange={(event) => setTargetPortId(event.target.value)}
+              disabled={targetOptions.length === 0}
+            >
+              {targetOptions.length > 0 ? (
+                targetOptions.map((port) => (
+                  <option key={port.id} value={port.id}>
+                    {port.displayName}
+                  </option>
+                ))
+              ) : (
+                <option value="">Uygun hedef yok</option>
+              )}
             </select>
           </label>
 
@@ -77,9 +90,9 @@ export default function Muzakere() {
               <button
                 key={templateId}
                 className="rumor-btn"
-                title={`${TEMPLATE_LABELS[templateId]} söylentisi yay (25 altın)`}
-                onClick={() => void spreadRumor(templateId, activeTarget)}
-                disabled={activeTarget === gameState.player.currentPortId}
+                title={`${TEMPLATE_LABELS[templateId]} söylentisi yay (${RUMOR_SPREAD_COST} altın)`}
+                onClick={() => void spreadRumor(templateId, targetPortId)}
+                disabled={!targetPortId}
               >
                 {TEMPLATE_LABELS[templateId]}
               </button>
