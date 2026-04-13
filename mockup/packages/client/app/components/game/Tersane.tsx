@@ -24,7 +24,7 @@ export default function Tersane() {
   return (
     <div className="fondaco-panel">
       <div className="section-head">
-        <h2>⚓ Tersane</h2>
+        <h2>Tersane</h2>
       </div>
 
       {/* ── Ship identity ──────────────────────────────── */}
@@ -44,7 +44,7 @@ export default function Tersane() {
         <ProgressBar value={ship.durability} max={100} label={`${ship.durability}/100`} gradient />
         {canRepair && (
           <button className="repair-btn" onClick={repairShip}>
-            🔧 Tamir et ({repairCost} 🪙)
+            Tamir et ({repairCost} altın)
           </button>
         )}
         {!needsRepair && <span className="note">Gemi tam durumda.</span>}

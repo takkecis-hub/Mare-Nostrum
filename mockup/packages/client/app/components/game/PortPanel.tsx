@@ -46,7 +46,7 @@ export default function PortPanel() {
           <strong>{selectedPort.controller}</strong>
         </li>
       </ul>
-      {selectedPort.trivia[0] && <p className="note trivia-text">☽ {selectedPort.trivia[0]}</p>}
+      {selectedPort.trivia[0] && <p className="note trivia-text">{selectedPort.trivia[0]}</p>}
 
       <div className="section-head" style={{ marginTop: 16 }}>
         <h3>Kaptan Profili</h3>
@@ -54,7 +54,7 @@ export default function PortPanel() {
       <ul className="detail-list small">
         <li>
           <span>Gemi</span>
-          <strong>⛵ {player.ship.type} / kapasite {player.ship.cargoCapacity}</strong>
+          <strong>{player.ship.type} / kapasite {player.ship.cargoCapacity}</strong>
         </li>
         <li>
           <span>Dayanıklılık</span>

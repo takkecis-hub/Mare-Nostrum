@@ -88,13 +88,13 @@ export default function EmirView() {
   return (
     <div className="emir-view">
       <div className="emir-header">
-        <h2>⚓ Emir Sistemi</h2>
+        <h2>Emir Sistemi</h2>
         <p className="muted">Nereye gideceksin, nasıl gideceksin, niyetin ne?</p>
       </div>
 
       {/* ── NEREYE? (Where) ─────────────────────────── */}
       <div className="emir-section">
-        <h3>📍 NEREYE?</h3>
+        <h3>NEREYE?</h3>
         <div className="emir-map-container card">
           <MapView interactive highlightReachable onPortClick={handlePortSelect} />
         </div>
@@ -107,7 +107,7 @@ export default function EmirView() {
 
       {/* ── NASIL? (How) ────────────────────────────── */}
       <div className="emir-section">
-        <h3>🧭 NASIL?</h3>
+        <h3>NASIL?</h3>
         <div className="choice-cards">
           {availableRouteTypes.map((type) => {
             const info = ROUTE_INFO[type];
@@ -129,7 +129,7 @@ export default function EmirView() {
 
       {/* ── NIYET? (Intent) ─────────────────────────── */}
       <div className="emir-section">
-        <h3>🎯 NİYET?</h3>
+        <h3>NİYET?</h3>
         <div className="choice-cards">
           {(Object.keys(INTENT_INFO) as Intent[]).map((intent) => {
             const info = INTENT_INFO[intent];
@@ -151,7 +151,7 @@ export default function EmirView() {
       {/* ── TAKTİK (Tactic — visible when intent is kara_bayrak) ─ */}
       {order.intent === 'kara_bayrak' && (
         <div className="emir-section">
-          <h3>⚔️ TAKTİK</h3>
+          <h3>TAKTİK</h3>
           <div className="choice-cards">
             {(Object.keys(TACTIC_INFO) as Tactic[]).map((t) => {
               const info = TACTIC_INFO[t];
@@ -174,13 +174,13 @@ export default function EmirView() {
       {/* ── Summary + Lock ──────────────────────────── */}
       <div className="emir-summary">
         <div className="emir-summary-items">
-          <span>📍 {destPort?.name ?? '?'}</span>
-          <span>🧭 {ROUTE_INFO[order.routeType]?.label}</span>
-          <span>🎯 {INTENT_INFO[order.intent]?.label}</span>
-          {order.intent === 'kara_bayrak' && <span>⚔️ {TACTIC_INFO[tactic]?.label}</span>}
+          <span>{destPort?.name ?? '?'}</span>
+          <span>{ROUTE_INFO[order.routeType]?.label}</span>
+          <span>{INTENT_INFO[order.intent]?.label}</span>
+          {order.intent === 'kara_bayrak' && <span>{TACTIC_INFO[tactic]?.label}</span>}
         </div>
         <button className="primary emir-lock-btn" onClick={handleLockOrder} disabled={!canLockOrder}>
-          🔒 Emri Kilitle ve Çöz
+          Emri Kilitle
         </button>
       </div>
     </div>

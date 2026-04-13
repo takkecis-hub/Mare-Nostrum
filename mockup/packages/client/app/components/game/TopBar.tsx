@@ -23,17 +23,17 @@ export default function TopBar() {
           Tur <strong>{turn}</strong>
         </span>
         <span className="top-bar-item">
-          {season === 'yaz' ? '☀️' : '❄️'} {season === 'yaz' ? 'Yaz' : 'Kış'}
+          {season === 'yaz' ? 'Yaz' : 'Kış'}
         </span>
       </div>
       <div className="top-bar-right">
         {player.renown.length > 0 &&
-          player.renown.map((title) => <Badge key={title} label={`★ ${title}`} variant="gold" />)}
+          player.renown.map((title) => <Badge key={title} label={title} variant="gold" />)}
         <span className="top-bar-item">
-          <span className="gold-icon">🪙</span> <strong>{player.gold}</strong>
+          <strong>{player.gold}</strong> altın
         </span>
         <span className="top-bar-item ship-name">
-          ⛵ {player.ship.type}
+          {player.ship.type}
         </span>
         <span className={`top-bar-item socket-status ${CONNECTED_STATUSES.includes(socketStatus) ? 'connected' : ''}`}>
           ● {socketStatus}

@@ -22,7 +22,7 @@ export default function RuzgarView() {
   return (
     <div className="ruzgar-view">
       <div className="section-head">
-        <h2>🌊 Rüzgâr Özeti</h2>
+        <h2>Rüzgâr Özeti</h2>
         <p className="muted">Son çözümleme akışı</p>
       </div>
 
@@ -44,7 +44,7 @@ export default function RuzgarView() {
       {/* ── Latest rumor ─────────────────────────────── */}
       {latestRumor && (
         <div className="ruzgar-rumor card">
-          <h3>📢 Aktif Söylenti</h3>
+          <h3>Aktif Söylenti</h3>
           <p>{latestRumor.text}</p>
         </div>
       )}
@@ -52,12 +52,12 @@ export default function RuzgarView() {
       {/* ── Continue button ──────────────────────────── */}
       <div className="ruzgar-actions">
         <button className="primary" onClick={() => setActiveView('fondaco')}>
-          ➡️ Sonraki Tura Geç
+          Sonraki Tur
         </button>
       </div>
 
       {/* ── Combat result modal ──────────────────────── */}
-      <Modal open={showCombatResult} onClose={() => setShowCombatResult(false)} title="⚔️ Savaş Sonucu">
+      <Modal open={showCombatResult} onClose={() => setShowCombatResult(false)} title="Savaş Sonucu">
         {lastResolution?.combat ? (
           <div className="stack">
             <p><strong>Sonuç:</strong> {lastResolution.combat.result}</p>
@@ -73,7 +73,7 @@ export default function RuzgarView() {
       </Modal>
 
       {/* ── Trade result modal ───────────────────────── */}
-      <Modal open={showTradeResult} onClose={() => setShowTradeResult(false)} title="💰 Ticaret Sonucu">
+      <Modal open={showTradeResult} onClose={() => setShowTradeResult(false)} title="Ticaret Sonucu">
         {lastResolution?.trade ? (
           <div className="stack">
             <p><strong>Satılan mallar:</strong> {lastResolution.trade.sold.join(', ') || 'Yok'}</p>
