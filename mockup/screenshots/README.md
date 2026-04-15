@@ -7,7 +7,7 @@ Visual mockups of every gameplay phase, annotated with explanation balloons and 
 | # | File | Phase | Description |
 |---|------|-------|-------------|
 | 1 | [01-main-menu.html](01-main-menu.html) | Main Menu | Cinematic hero screen with game title, era badge, and navigation |
-| 2 | [02-fondaco-kahvehane.html](02-fondaco-kahvehane.html) | Fondaco → Kahvehane | Port phase: coffeehouse whispers, rumor system, map view |
+| 2 | [02-fondaco-kahvehane.html](02-fondaco-kahvehane.html) | Müzakere | Diplomacy phase: intelligence whispers, rumor controls, chat placeholder *(filename kept for compatibility — content is now the Müzakere phase)* |
 | 3 | [03-fondaco-pazar.html](03-fondaco-pazar.html) | Fondaco → Pazar | Port phase: market trading, cargo management, price indicators |
 | 4 | [04-fondaco-tersane.html](04-fondaco-tersane.html) | Fondaco → Tersane | Port phase: ship status, repairs, experience dashboard |
 | 5 | [05-emir.html](05-emir.html) | Emir (Orders) | Navigation: route selection, intent choice, tactic system |
@@ -24,13 +24,15 @@ Open any `.html` file directly in a browser — they are fully self-contained wi
 - 🟢 **Green balloons** — Improvement suggestions for future work
 - 🔴 **Red balloons** — Known issues or limitations
 
-## Design System v2 Highlights
+## Design System v3 Highlights
 
-- **Glassmorphism**: Frosted glass cards with `backdrop-filter: blur()`
-- **Richer palette**: Deeper navy (#060d1a) with warm gold (#f0a030) accents
-- **Spring transitions**: `cubic-bezier(0.34, 1.56, 0.64, 1)` for playful micro-interactions
-- **Pill navigation**: Phase switcher uses capsule-shaped tabs
-- **Glass borders**: `rgba(148, 163, 184, 0.12)` for subtle depth
-- **Layered shadows**: Multi-stop shadows for card depth
+- **Flat/Minimal**: No glassmorphism — transparent top bar with a single `border-bottom`, zero `backdrop-filter`
+- **Smaller radii**: `--radius-sm:6px` · `--radius-md:8px` · `--radius-lg:10px` · `--radius-xl:12px`
+- **Simpler shadow**: `0 2px 8px rgba(0,0,0,0.15)` replaces the heavy multi-stop shadow
+- **Underline phase nav**: 4 tabs (`Fondaco | Müzakere | Emir | Rüzgâr`) with a 2px accent underline on active
+- **Flat fondaco tabs**: 2-tab sub-nav (`Pazar | Tersane`) — Kahvehane and Müzakere moved to top-level phases
+- **Altın notation**: Gold shown as `200 altın` — no emoji, no icon class
+- **Intent trade-offs**: Emir intent cards show green reward tag + red risk tag for each option
+- **No raw XP numbers**: Experience shown as star fill (★★★☆☆) — never exposed as integers
+- **Glass borders**: `rgba(148, 163, 184, 0.08)` (`--line-light`) for ultra-subtle card depth
 - **Focus styles**: Accessible focus rings with accent glow
-- **Custom scrollbar**: Minimal 6px scrollbar

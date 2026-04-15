@@ -7,13 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{color-scheme:dark;--bg:#060d1a;--card:rgba(12,20,38,0.85);--accent:#f0a030;--accent-hover:#d48a20;--text:#e8edf5;--text-bright:#f8fafc;--muted:#8b9bb5;--muted-dim:#5a6a80;--line:rgba(30,41,59,0.6);--glass:rgba(12,20,38,0.65);--glass-border:rgba(148,163,184,0.12);--success:#34d399;--danger:#ef4444;--info:#60a5fa;--radius-md:12px;--radius-lg:16px;--radius-xl:20px;--radius-2xl:24px;--radius-full:9999px;--shadow-card:0 8px 32px rgba(0,0,0,0.25),0 2px 8px rgba(0,0,0,0.1)}
+:root{color-scheme:dark;--bg:#060d1a;--bg-surface:#0a1424;--card:rgba(12,20,38,0.85);--card-solid:#0c1426;--accent:#f0a030;--accent-hover:#d48a20;--text:#e8edf5;--text-bright:#f8fafc;--muted:#8b9bb5;--muted-dim:#5a6a80;--line:rgba(30,41,59,0.6);--line-light:rgba(148,163,184,0.08);--glass:rgba(12,20,38,0.65);--glass-border:rgba(148,163,184,0.12);--success:#34d399;--danger:#ef4444;--info:#60a5fa;--radius-sm:6px;--radius-md:8px;--radius-lg:10px;--radius-xl:12px;--radius-2xl:24px;--radius-full:9999px;--shadow-card:0 2px 8px rgba(0,0,0,0.15)}
 body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);background-image:radial-gradient(ellipse at 20% 0%,rgba(16,32,61,0.8) 0%,transparent 50%);color:var(--text);line-height:1.6;min-height:100vh;padding-bottom:120px}
 .shell{width:min(900px,calc(100vw - 40px));margin:0 auto;padding:20px 0 48px}
-.card{background:var(--card);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:20px;box-shadow:var(--shadow-card);backdrop-filter:blur(16px)}
+.card{background:rgba(12,20,38,0.72);border:1px solid var(--line-light);border-radius:10px;padding:16px;box-shadow:var(--shadow-card)}
 
-/* Top Bar */
-.top-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-2xl);margin-bottom:20px;backdrop-filter:blur(20px)}
+/* Top Bar — flat/minimal */
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 0 12px;background:transparent;border:none;border-bottom:1px solid var(--line-light);border-radius:0;margin-bottom:20px;box-shadow:none}
 .top-bar-left,.top-bar-right{display:flex;align-items:center;gap:16px}
 .top-bar-title{font-size:1.1rem;font-weight:800;color:var(--accent)}
 .top-bar-sep{color:var(--muted-dim);opacity:.4}
@@ -21,19 +21,26 @@ body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 .top-bar-item strong{color:var(--text-bright)}
 .connected{color:var(--success);font-size:.72rem;font-weight:600}
 
-/* Fondaco Tabs */
-.fondaco-tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--line)}
-.fondaco-tab{display:flex;align-items:center;gap:8px;padding:12px 20px;border:none;background:transparent;color:var(--muted);font-weight:500;font-size:.9rem;cursor:pointer;position:relative;font-family:inherit}
+/* Phase Nav — flat underline */
+.phase-nav{display:flex;gap:0;margin-bottom:20px;background:transparent;padding:0;border-radius:0;border-bottom:1px solid var(--line-light)}
+.phase-btn{flex:1;padding:0.7rem 0.9rem;background:transparent;border:none;border-radius:0;font-size:.92rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;position:relative}
+.phase-btn:hover{color:var(--text)}
+.phase-btn-active{color:var(--text-bright);background:transparent}
+.phase-btn-active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent)}
+
+/* Fondaco Tabs — flat underline */
+.fondaco-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--line-light)}
+.fondaco-tab{display:flex;align-items:center;gap:8px;padding:10px 20px;border:none;background:transparent;color:var(--muted);font-weight:500;font-size:.9rem;cursor:pointer;position:relative;font-family:inherit;border-radius:0}
 .fondaco-tab-active{color:var(--accent)!important}
-.fondaco-tab-active::after{content:'';position:absolute;bottom:-1px;left:12px;right:12px;height:2px;background:var(--accent);border-radius:1px 1px 0 0;box-shadow:0 0 8px rgba(240,160,48,0.4)}
+.fondaco-tab-active::after{content:'';position:absolute;bottom:-1px;left:12px;right:12px;height:2px;background:var(--accent)}
 
 /* Ship Display */
 .ship-display{display:flex;gap:20px;align-items:center;margin-bottom:20px;padding:16px;background:rgba(6,13,26,0.4);border-radius:var(--radius-lg);border:1px solid var(--line)}
-.ship-silhouette{font-size:2.5rem;width:68px;height:68px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(6,13,26,0.8),rgba(16,28,50,0.6));border:1px solid var(--glass-border);border-radius:var(--radius-lg)}
+.ship-silhouette{font-size:2.5rem;width:68px;height:68px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(6,13,26,0.8),rgba(16,28,50,0.6));border:1px solid var(--line-light);border-radius:var(--radius-lg)}
 .ship-identity h3{margin:0;font-size:1.15rem}
 
 /* Progress Bar (Durability) */
-.progress-bar{position:relative;height:30px;background:rgba(6,13,26,0.6);border:1px solid var(--line);border-radius:var(--radius-full);overflow:hidden;margin-bottom:12px}
+.progress-bar{position:relative;height:28px;background:rgba(6,13,26,0.6);border:1px solid var(--line);border-radius:var(--radius-full);overflow:hidden;margin-bottom:12px}
 .progress-fill-gradient{height:100%;background:linear-gradient(90deg,var(--danger) 0%,var(--accent) 50%,var(--success) 100%);border-radius:var(--radius-full);box-shadow:inset 0 1px 0 rgba(255,255,255,0.15)}
 .progress-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.78rem;font-weight:700;color:var(--text-bright);text-shadow:0 1px 4px rgba(0,0,0,0.7)}
 
@@ -48,12 +55,12 @@ body{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 .stat-box span{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
 .stat-box strong{display:block;margin-top:4px;font-size:1.15rem;color:var(--text-bright)}
 
-/* Experience Grid */
+/* Experience Grid — no raw numbers */
 .exp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .exp-item{background:rgba(6,13,26,0.5);border:1px solid var(--line);border-radius:var(--radius-md);padding:12px 16px}
 .exp-item:hover{border-color:var(--muted-dim)}
 .exp-item span{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
-.exp-item strong{display:block;margin-top:4px;font-size:1.1rem;color:var(--text-bright)}
+.exp-stars{margin-top:6px;font-size:1rem;letter-spacing:2px;color:var(--accent)}
 
 .section-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:16px;align-items:center}
 .section-head h2,.section-head h3{margin:0}
@@ -79,26 +86,33 @@ button{font:inherit}
 <body>
 
 <div class="shell">
+  <!-- Top Bar — flat/minimal -->
   <header class="top-bar">
     <div class="top-bar-left">
       <span class="top-bar-title">Mare Nostrum</span>
       <span class="top-bar-sep">·</span>
       <span class="top-bar-item">Tur <strong>5</strong></span>
-      <span class="top-bar-item">☀️ Yaz</span>
+      <span class="top-bar-item">Yaz</span>
     </div>
     <div class="top-bar-right">
-      <span class="top-bar-item"><span class="gold-icon">🪙</span> <strong>87</strong></span>
-      <span class="top-bar-item" style="color:var(--info)">⛵ karaka</span>
+      <span class="top-bar-item"><strong>87</strong> altın</span>
+      <span class="top-bar-item" style="color:var(--info)">karaka</span>
       <span class="top-bar-item connected">● bağlı</span>
     </div>
   </header>
 
+  <!-- Phase Nav — 4 tabs, Fondaco active -->
+  <nav class="phase-nav">
+    <button class="phase-btn phase-btn-active">Fondaco</button>
+    <button class="phase-btn">Müzakere</button>
+    <button class="phase-btn">Emir</button>
+    <button class="phase-btn">Rüzgâr</button>
+  </nav>
+
   <div class="card">
     <nav class="fondaco-tabs">
-      <button class="fondaco-tab"><span>☕</span> <span>Kahvehane</span></button>
-      <button class="fondaco-tab"><span>🏪</span> <span>Pazar</span></button>
-      <button class="fondaco-tab"><span>🤝</span> <span>Müzakere</span></button>
-      <button class="fondaco-tab fondaco-tab-active"><span>⚓</span> <span>Tersane</span></button>
+      <button class="fondaco-tab">Pazar</button>
+      <button class="fondaco-tab fondaco-tab-active">Tersane</button>
     </nav>
 
     <div>
@@ -120,7 +134,7 @@ button{font:inherit}
           <div class="progress-fill-gradient" style="width:72%"></div>
           <span class="progress-label">72/100</span>
         </div>
-        <button class="repair-btn">🔧 Tamir et (56 🪙)</button>
+        <button class="repair-btn">Tamir et (56 altın)</button>
       </div>
 
       <!-- Ship Stats -->
@@ -139,24 +153,24 @@ button{font:inherit}
         </div>
       </div>
 
-      <!-- Experience -->
+      <!-- Experience — no raw numbers, star cues -->
       <div class="section-head" style="margin-top:16px"><h3>Deneyim</h3></div>
       <div class="exp-grid">
         <div class="exp-item">
           <span>Meltem (Deniz)</span>
-          <strong>4</strong>
+          <div class="exp-stars">★★★★☆</div>
         </div>
         <div class="exp-item">
           <span>Terazi (Pazar)</span>
-          <strong>6</strong>
+          <div class="exp-stars">★★★★★</div>
         </div>
         <div class="exp-item">
           <span>Mürekkep (Diplomasi)</span>
-          <strong>2</strong>
+          <div class="exp-stars">★★☆☆☆</div>
         </div>
         <div class="exp-item">
           <span>Simsar (Gölge)</span>
-          <strong>3</strong>
+          <div class="exp-stars">★★★☆☆</div>
         </div>
       </div>
     </div>
@@ -165,23 +179,27 @@ button{font:inherit}
 
 <!-- Annotations -->
 <div class="annotations">
-  <div class="balloon balloon-gold" style="top:130px;right:12px">
+  <div class="balloon balloon-blue" style="top:60px;left:12px;max-width:230px">
+    <span class="balloon-label">🔵 Phase Nav</span>
+    4-tab flat underline nav: Fondaco | Müzakere | Emir | Rüzgâr. Fondaco active. Only 2 fondaco sub-tabs: Pazar | Tersane.
+  </div>
+  <div class="balloon balloon-gold" style="top:170px;right:12px">
     <span class="balloon-label">🟡 Ship Identity</span>
-    Ship silhouette with emoji icon, type name, and captain identity. Glass-bordered card gives a dashboard feel.
+    Ship silhouette with type name and captain identity. Flat card border with subtle bottom-only radius.
   </div>
-  <div class="balloon balloon-blue" style="top:250px;left:12px">
+  <div class="balloon balloon-blue" style="top:280px;left:12px">
     <span class="balloon-label">🔵 Durability Bar</span>
-    Rounded pill bar with red→orange→green gradient. 72/100 shows damage from combat. Repair cost = 2 gold per point.
+    Rounded pill bar with red→orange→green gradient. 72/100 shows damage from combat. Repair cost = 2 altın per point.
   </div>
-  <div class="balloon balloon-green" style="top:360px;right:12px">
+  <div class="balloon balloon-green" style="top:380px;right:12px">
     <span class="balloon-label">🟢 Ship Stats</span>
     Three-column stat boxes with hover effect. Future: add ship upgrade options (mast, hull, cannon improvements).
   </div>
-  <div class="balloon balloon-gold" style="top:480px;left:12px">
+  <div class="balloon balloon-gold" style="top:490px;left:12px;max-width:240px">
     <span class="balloon-label">🟡 Experience System</span>
-    Four experience tracks: Meltem (sea), Terazi (market), Mürekkep (diplomacy), Simsar (shadow). Hidden from other players.
+    Four tracks: Meltem, Terazi, Mürekkep, Simsar. Shown as star fill — no raw numbers exposed. Hidden from other players.
   </div>
-  <div class="balloon balloon-red" style="top:540px;right:12px;max-width:240px">
+  <div class="balloon balloon-red" style="top:560px;right:12px;max-width:240px">
     <span class="balloon-label">🔴 Missing Feature</span>
     No ship upgrade system yet. Players can't upgrade from Feluka → Karaka → Kadırga.
   </div>
@@ -192,7 +210,7 @@ button{font:inherit}
   <h3>📝 Improvement Notes — Fondaco: Tersane</h3>
   <div class="note-item">
     <strong>🚢 Ship Upgrades</strong>
-    Add upgrade paths: Feluka → Karaka (300 gold), Karaka → Kadırga (500 gold). Each tier unlocks new stats and tactics.
+    Add upgrade paths: Feluka → Karaka (300 altın), Karaka → Kadırga (500 altın). Each tier unlocks new stats and tactics.
   </div>
   <div class="note-item">
     <strong>📊 Experience Visualization</strong>
