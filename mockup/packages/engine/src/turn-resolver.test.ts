@@ -177,10 +177,9 @@ describe('resolveTurn', () => {
 
     expect(result.combat?.result).toBe('kaybetti');
     expect(result.combat?.shipwrecked).toBe(false);
-    expect(result.nextState.player.gold).toBe(Math.max(0, losingState.player.gold + (result.combat?.goldDelta ?? 0)));
-    expect(result.nextState.player.ship.durability).toBe(
-      Math.max(1, losingState.player.ship.durability + (result.combat?.durabilityDelta ?? 0)),
-    );
+    // fixedRng gives enemy tactic=pruva and die rolls of 1, so goldDelta=-36 and durabilityDelta=-18.
+    expect(result.nextState.player.gold).toBe(0);
+    expect(result.nextState.player.ship.durability).toBe(62);
   });
 
   it('does not crash on kervan turn with empty cargo', () => {
@@ -886,6 +885,7 @@ describe('resolveTurn – uzun_kabotaj trade bonus', () => {
       goods,
     });
 
+    // 5 * 20 * 1 * 1.25 desired-base-price * 1.25 route bonus * 1.2 yaz luxury bonus = 187.5 → 188.
     expect(result.trade?.goldDelta).toBe(188);
     expect(result.nextState.player.gold).toBe(baseState.player.gold + 188);
   });

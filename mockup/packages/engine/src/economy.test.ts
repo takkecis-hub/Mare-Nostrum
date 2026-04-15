@@ -183,11 +183,31 @@ describe('priceIndicatorForPort – additional coverage', () => {
   const lowIndicatorGood: Good = { id: 'cheap_good', name: 'Cheap Good', category: 'luks', originPort: 'other', priceIndicator: 1 };
   const highIndicatorGood: Good = { id: 'pricey_good', name: 'Pricey Good', category: 'luks', originPort: 'other', priceIndicator: 5 };
   const bonusDesirePort: Port = {
-    ...venedik,
+    id: 'bonus-desire-port',
+    name: 'Bonus Desire Port',
+    displayName: 'Bonus Desire Port',
+    region: 'bati',
+    controller: 'venedik',
+    produces: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
+    desires: { good: 'lubnan_sediri', category: 'savas', basePrice: 'pahali' },
+    special: [],
+    trivia: [],
+    x: 0,
+    y: 0,
     bonusDesires: [{ good: 'bonus_good', category: 'luks', basePrice: 'pahali' }],
   };
   const bonusProducePort: Port = {
-    ...tunus,
+    id: 'bonus-produce-port',
+    name: 'Bonus Produce Port',
+    displayName: 'Bonus Produce Port',
+    region: 'guney',
+    controller: 'tunus',
+    produces: { good: 'atlas', category: 'luks', basePrice: 'normal' },
+    desires: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
+    special: [],
+    trivia: [],
+    x: 0,
+    y: 0,
     bonusProduces: [{ good: 'bonus_good', category: 'luks', basePrice: 'normal' }],
   };
   const bonusGood: Good = { id: 'bonus_good', name: 'Bonus Good', category: 'luks', originPort: 'other', priceIndicator: 3 };
