@@ -859,7 +859,7 @@ describe('resolveTurn – contract fulfillment', () => {
 });
 
 describe('resolveTurn – uzun_kabotaj trade bonus', () => {
-  it('applies the kabotaj trade bonus to single-turn uzun_kabotaj routes', () => {
+  it('applies the trade bonus to single-turn uzun_kabotaj routes', () => {
     const testPorts = [
       ports.find((port) => port.id === 'venedik')!,
       {

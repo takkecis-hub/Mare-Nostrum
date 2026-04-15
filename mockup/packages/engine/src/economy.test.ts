@@ -678,6 +678,7 @@ describe('priceVisibilityTier', () => {
 
   it('returns local at the minimum local visibility threshold', () => {
     const localTerazi: HiddenExperience = { meltem: 2, terazi: 1, murekkep: 1, simsar: 1 };
+    // terazi ratio = 1 / 5 = 0.2, which is exactly the local-visibility threshold.
     expect(priceVisibilityTier(localTerazi)).toBe('local');
   });
 
