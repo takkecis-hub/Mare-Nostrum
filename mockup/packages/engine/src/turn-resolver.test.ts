@@ -156,6 +156,33 @@ describe('resolveTurn', () => {
     }
   });
 
+  it('applies combat gold and durability losses on piracy defeat without shipwreck', () => {
+    const losingState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        gold: 20,
+        ship: { type: 'feluka', cargoCapacity: 3, power: 1, durability: 80 },
+      },
+    };
+    const result = resolveTurn({
+      state: losingState,
+      order: { destinationPort: 'istanbul', routeType: 'fortuna', intent: 'kara_bayrak' },
+      ports,
+      routes,
+      goods,
+      tactic: 'ates',
+      rng: fixedRng,
+    });
+
+    expect(result.combat?.result).toBe('kaybetti');
+    expect(result.combat?.shipwrecked).toBe(false);
+    expect(result.nextState.player.gold).toBe(Math.max(0, losingState.player.gold + (result.combat?.goldDelta ?? 0)));
+    expect(result.nextState.player.ship.durability).toBe(
+      Math.max(1, losingState.player.ship.durability + (result.combat?.durabilityDelta ?? 0)),
+    );
+  });
+
   it('does not crash on kervan turn with empty cargo', () => {
     const noCargo: GameState = {
       ...baseState,
@@ -756,6 +783,44 @@ describe('resolveTurn – contract fulfillment', () => {
     expect(result.contracts?.goldDelta).toBeGreaterThan(0);
   });
 
+  it('does not fulfill a city contract when the same goods are delivered to a different port', () => {
+    const wrongPortState: GameState = {
+      ...baseState,
+      player: {
+        ...baseState.player,
+        currentPortId: 'girit',
+        cargo: [
+          { goodId: 'murano_cami', name: 'Murano Camı', quantity: 3, originPort: 'venedik', purchasePrice: 10 },
+        ],
+      },
+      cityContracts: [
+        {
+          id: 'contract-wrong-port',
+          portId: 'kibris',
+          goodId: 'murano_cami',
+          quantity: 3,
+          rewardGold: 200,
+          deadlineTurn: 30,
+          breakPenalty: 100,
+          accepted: true,
+          completed: false,
+        },
+      ],
+    };
+    const result = resolveTurn({
+      state: wrongPortState,
+      order: { destinationPort: 'istanbul', routeType: 'tramontana', intent: 'kervan' },
+      ports,
+      routes,
+      goods,
+    });
+
+    expect(result.contracts).toBeDefined();
+    expect(result.contracts?.fulfilled).toEqual([]);
+    expect(result.contracts?.goldDelta).toBe(0);
+    expect(result.nextState.cityContracts?.[0].completed).toBe(false);
+  });
+
   it('penalizes expired contracts', () => {
     const contractState: GameState = {
       ...baseState,
@@ -790,6 +855,39 @@ describe('resolveTurn – contract fulfillment', () => {
     });
     expect(result.contracts?.expired).toContain('contract-expired');
     expect(result.contracts?.goldDelta).toBeLessThan(0);
+  });
+});
+
+describe('resolveTurn – uzun_kabotaj trade bonus', () => {
+  it('applies the kabotaj trade bonus to single-turn uzun_kabotaj routes', () => {
+    const testPorts = [
+      ports.find((port) => port.id === 'venedik')!,
+      {
+        ...ports.find((port) => port.id === 'istanbul')!,
+        desires: { good: 'murano_cami', category: 'luks' as const, basePrice: 'pahali' as const },
+      },
+    ];
+    const testRoutes = [
+      {
+        id: 'synthetic-uzun-kabotaj',
+        from: 'venedik',
+        to: 'istanbul',
+        type: 'uzun_kabotaj' as const,
+        isChokepoint: null,
+        encounterChance: 0,
+        turnsRequired: 1,
+      },
+    ];
+    const result = resolveTurn({
+      state: baseState,
+      order: { destinationPort: 'istanbul', routeType: 'uzun_kabotaj', intent: 'kervan' },
+      ports: testPorts,
+      routes: testRoutes,
+      goods,
+    });
+
+    expect(result.trade?.goldDelta).toBe(188);
+    expect(result.nextState.player.gold).toBe(baseState.player.gold + 188);
   });
 });
 
