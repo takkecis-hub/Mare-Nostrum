@@ -177,7 +177,8 @@ describe('resolveTurn', () => {
 
     expect(result.combat?.result).toBe('kaybetti');
     expect(result.combat?.shipwrecked).toBe(false);
-    // fixedRng gives enemy tactic=pruva and die rolls of 1, so goldDelta=-36 and durabilityDelta=-18.
+    // fixedRng is () => 0, so combat picks the first enemy tactic (pruva) and both d6 rolls become 1.
+    // For this state that yields a deterministic combat loss with goldDelta=-36 and durabilityDelta=-18.
     expect(result.nextState.player.gold).toBe(0);
     expect(result.nextState.player.ship.durability).toBe(62);
   });
@@ -885,7 +886,9 @@ describe('resolveTurn – uzun_kabotaj trade bonus', () => {
       goods,
     });
 
-    // 5 * 20 * 1 * 1.25 desired-base-price * 1.25 route bonus * 1.2 yaz luxury bonus = 187.5 → 188.
+    // desired goods use indicator 5, sell formula uses the fixed 20 gold step and quantity 1,
+    // Istanbul's desire slot is pahali (×1.25), uzun_kabotaj gets the kabotaj route bonus (×1.25),
+    // and turn 2 is still yaz so lüks cargo gets the seasonal ×1.2 multiplier: 5*20*1*1.25*1.25*1.2 = 188.
     expect(result.trade?.goldDelta).toBe(188);
     expect(result.nextState.player.gold).toBe(baseState.player.gold + 188);
   });

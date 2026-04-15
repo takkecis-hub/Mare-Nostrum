@@ -33,6 +33,23 @@ const tunus: Port = {
 const muranoCami: Good = { id: 'murano_cami', name: 'Murano Camı', category: 'luks', originPort: 'venedik', priceIndicator: 3 };
 const atlas: Good = { id: 'atlas', name: 'Atlas', category: 'luks', originPort: 'tunus', priceIndicator: 3 };
 
+function createTestPort(overrides: Partial<Port>): Port {
+  return {
+    id: 'test-port',
+    name: 'Test Port',
+    displayName: 'Test Port',
+    region: 'bati',
+    controller: 'venedik',
+    produces: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
+    desires: { good: 'lubnan_sediri', category: 'savas', basePrice: 'pahali' },
+    special: [],
+    trivia: [],
+    x: 0,
+    y: 0,
+    ...overrides,
+  };
+}
+
 describe('priceIndicatorForPort', () => {
   it('returns 2 when port produces the good', () => {
     expect(priceIndicatorForPort(venedik, muranoCami)).toBe(2);
@@ -182,21 +199,13 @@ describe('saturationMultiplier – additional coverage', () => {
 describe('priceIndicatorForPort – additional coverage', () => {
   const lowIndicatorGood: Good = { id: 'cheap_good', name: 'Cheap Good', category: 'luks', originPort: 'other', priceIndicator: 1 };
   const highIndicatorGood: Good = { id: 'pricey_good', name: 'Pricey Good', category: 'luks', originPort: 'other', priceIndicator: 5 };
-  const bonusDesirePort: Port = {
+  const bonusDesirePort = createTestPort({
     id: 'bonus-desire-port',
     name: 'Bonus Desire Port',
     displayName: 'Bonus Desire Port',
-    region: 'bati',
-    controller: 'venedik',
-    produces: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
-    desires: { good: 'lubnan_sediri', category: 'savas', basePrice: 'pahali' },
-    special: [],
-    trivia: [],
-    x: 0,
-    y: 0,
     bonusDesires: [{ good: 'bonus_good', category: 'luks', basePrice: 'pahali' }],
-  };
-  const bonusProducePort: Port = {
+  });
+  const bonusProducePort = createTestPort({
     id: 'bonus-produce-port',
     name: 'Bonus Produce Port',
     displayName: 'Bonus Produce Port',
@@ -204,12 +213,8 @@ describe('priceIndicatorForPort – additional coverage', () => {
     controller: 'tunus',
     produces: { good: 'atlas', category: 'luks', basePrice: 'normal' },
     desires: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
-    special: [],
-    trivia: [],
-    x: 0,
-    y: 0,
     bonusProduces: [{ good: 'bonus_good', category: 'luks', basePrice: 'normal' }],
-  };
+  });
   const bonusGood: Good = { id: 'bonus_good', name: 'Bonus Good', category: 'luks', originPort: 'other', priceIndicator: 3 };
 
   it('returns 1 for a good with priceIndicator=1 at unrelated port', () => {
