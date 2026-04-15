@@ -178,7 +178,8 @@ describe('resolveTurn', () => {
     expect(result.combat?.result).toBe('kaybetti');
     expect(result.combat?.shipwrecked).toBe(false);
     // fixedRng is () => 0, so combat picks the first enemy tactic (pruva) and both d6 rolls become 1.
-    // For this state that yields a deterministic combat loss with goldDelta=-36 and durabilityDelta=-18.
+    // For this state that yields goldDelta=-36 and durabilityDelta=-18, taking the player from 20 gold / 80 durability
+    // to 0 gold (floored) / 62 durability.
     expect(result.nextState.player.gold).toBe(0);
     expect(result.nextState.player.ship.durability).toBe(62);
   });
