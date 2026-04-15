@@ -97,6 +97,11 @@ describe('counterRumorBackfireRate', () => {
     expect(rate).toBeGreaterThan(0);
   });
 
+  it('returns zero at the exact murekkep threshold', () => {
+    const thresholdMurekkep: HiddenExperience = { meltem: 6, terazi: 4, murekkep: 7, simsar: 3 };
+    expect(counterRumorBackfireRate(thresholdMurekkep)).toBe(0);
+  });
+
   it('returns zero rate for high murekkep', () => {
     const rate = counterRumorBackfireRate(highMurekkep);
     expect(rate).toBe(0);

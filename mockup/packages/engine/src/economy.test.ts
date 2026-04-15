@@ -33,6 +33,23 @@ const tunus: Port = {
 const muranoCami: Good = { id: 'murano_cami', name: 'Murano Camı', category: 'luks', originPort: 'venedik', priceIndicator: 3 };
 const atlas: Good = { id: 'atlas', name: 'Atlas', category: 'luks', originPort: 'tunus', priceIndicator: 3 };
 
+function createTestPort(overrides: Partial<Port>): Port {
+  return {
+    id: 'test-port',
+    name: 'Test Port',
+    displayName: 'Test Port',
+    region: 'bati',
+    controller: 'venedik',
+    produces: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
+    desires: { good: 'lubnan_sediri', category: 'savas', basePrice: 'pahali' },
+    special: [],
+    trivia: [],
+    x: 0,
+    y: 0,
+    ...overrides,
+  };
+}
+
 describe('priceIndicatorForPort', () => {
   it('returns 2 when port produces the good', () => {
     expect(priceIndicatorForPort(venedik, muranoCami)).toBe(2);
@@ -182,6 +199,23 @@ describe('saturationMultiplier – additional coverage', () => {
 describe('priceIndicatorForPort – additional coverage', () => {
   const lowIndicatorGood: Good = { id: 'cheap_good', name: 'Cheap Good', category: 'luks', originPort: 'other', priceIndicator: 1 };
   const highIndicatorGood: Good = { id: 'pricey_good', name: 'Pricey Good', category: 'luks', originPort: 'other', priceIndicator: 5 };
+  const bonusDesirePort = createTestPort({
+    id: 'bonus-desire-port',
+    name: 'Bonus Desire Port',
+    displayName: 'Bonus Desire Port',
+    bonusDesires: [{ good: 'bonus_good', category: 'luks', basePrice: 'pahali' }],
+  });
+  const bonusProducePort = createTestPort({
+    id: 'bonus-produce-port',
+    name: 'Bonus Produce Port',
+    displayName: 'Bonus Produce Port',
+    region: 'guney',
+    controller: 'tunus',
+    produces: { good: 'atlas', category: 'luks', basePrice: 'normal' },
+    desires: { good: 'murano_cami', category: 'luks', basePrice: 'pahali' },
+    bonusProduces: [{ good: 'bonus_good', category: 'luks', basePrice: 'normal' }],
+  });
+  const bonusGood: Good = { id: 'bonus_good', name: 'Bonus Good', category: 'luks', originPort: 'other', priceIndicator: 3 };
 
   it('returns 1 for a good with priceIndicator=1 at unrelated port', () => {
     expect(priceIndicatorForPort(venedik, lowIndicatorGood)).toBe(1);
@@ -189,6 +223,14 @@ describe('priceIndicatorForPort – additional coverage', () => {
 
   it('returns 5 for a good with priceIndicator=5 at unrelated port', () => {
     expect(priceIndicatorForPort(venedik, highIndicatorGood)).toBe(5);
+  });
+
+  it('returns 5 when a bonus desire slot matches the good', () => {
+    expect(priceIndicatorForPort(bonusDesirePort, bonusGood)).toBe(5);
+  });
+
+  it('returns 2 when a bonus produce slot matches the good', () => {
+    expect(priceIndicatorForPort(bonusProducePort, bonusGood)).toBe(2);
   });
 });
 
@@ -583,6 +625,12 @@ describe('checkContractFulfillment', () => {
     expect(result.expired).toBe(true);
   });
 
+  it('does not expire when delivery happens exactly on the deadline turn', () => {
+    const result = checkContractFulfillment(contract, [{ goodId: 'murano_cami', quantity: 3 }], 20);
+    expect(result.fulfilled).toBe(true);
+    expect(result.expired).toBe(false);
+  });
+
   it('returns not fulfilled for completed contracts', () => {
     const completed = { ...contract, completed: true };
     const result = checkContractFulfillment(completed, [{ goodId: 'murano_cami', quantity: 5 }], 10);
@@ -626,6 +674,12 @@ describe('priceVisibilityTier', () => {
   it('returns none for low terazi', () => {
     const lowTerazi: HiddenExperience = { meltem: 10, terazi: 0, murekkep: 10, simsar: 10 };
     expect(priceVisibilityTier(lowTerazi)).toBe('none');
+  });
+
+  it('returns local at the minimum local visibility threshold', () => {
+    const localTerazi: HiddenExperience = { meltem: 2, terazi: 1, murekkep: 1, simsar: 1 };
+    // terazi ratio = 1 / (2 + 1 + 1 + 1) = 0.2, which is exactly the local-visibility threshold.
+    expect(priceVisibilityTier(localTerazi)).toBe('local');
   });
 
   it('returns local for terazi >= 20%', () => {

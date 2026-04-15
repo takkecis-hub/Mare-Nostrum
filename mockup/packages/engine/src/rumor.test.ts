@@ -84,6 +84,14 @@ describe('spreadRumors', () => {
     expect(result).toHaveLength(0);
   });
 
+  it('keeps a live rumor at its origin when there are no routes to spread across', () => {
+    const rumor = createRumor('kervan', 'venedik');
+    const result = spreadRumors([rumor], []);
+    expect(result[0].currentPorts).toEqual(['venedik']);
+    expect(result[0].age).toBe(1);
+    expect(result[0].strength).toBe(85);
+  });
+
   it('spreads from bidirectional routes (to→from direction)', () => {
     const rumor = createRumor('kervan', 'istanbul');
     const result = spreadRumors([rumor], sampleRoutes);
