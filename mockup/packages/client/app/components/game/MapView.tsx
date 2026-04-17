@@ -48,6 +48,8 @@ const CHOKEPOINT_PILL = {
   stroke: 'rgba(255, 204, 68, 0.3)',
 } as const;
 
+const PORT_FILL_DARK = 'rgba(4, 10, 18, 0.96)';
+
 /* ════════════════════════════════════════════════════════
    Helpers
    ════════════════════════════════════════════════════════ */
@@ -536,7 +538,7 @@ export default function MapView({
               cx={port.x}
               cy={port.y}
               r={r}
-              fill={isSelected ? '#facc15' : isCurrent ? 'var(--accent)' : 'rgba(4,10,18,0.96)'}
+              fill={isSelected ? '#facc15' : isCurrent ? 'var(--accent)' : PORT_FILL_DARK}
               stroke={isCurrent ? 'var(--accent)' : catColor}
               strokeWidth={isMajor ? 3 : 2.5}
             />
