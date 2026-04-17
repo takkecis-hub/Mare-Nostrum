@@ -10,8 +10,9 @@ Visual mockups of every gameplay phase, annotated with explanation balloons and 
 | 2 | [02-fondaco-kahvehane.html](02-fondaco-kahvehane.html) | Müzakere | Diplomacy phase: intelligence whispers, rumor controls, chat placeholder *(filename kept for compatibility — content is now the Müzakere phase)* |
 | 3 | [03-fondaco-pazar.html](03-fondaco-pazar.html) | Fondaco → Pazar | Port phase: market trading, cargo management, price indicators |
 | 4 | [04-fondaco-tersane.html](04-fondaco-tersane.html) | Fondaco → Tersane | Port phase: ship status, repairs, experience dashboard |
-| 5 | [05-emir.html](05-emir.html) | Emir (Orders) | Navigation: route selection, intent choice, tactic system |
-| 6 | [06-ruzgar.html](06-ruzgar.html) | Rüzgâr (Resolution) | Turn resolution: combat/trade results, log, rumor feed |
+| 5 | [05-emir.html](05-emir.html) | Emir (Orders) | Navigation: **full SVG map** for destination selection, route choice, intent system, tactic system |
+| 6 | [06-ruzgar.html](06-ruzgar.html) | Rüzgâr (Resolution) | Turn resolution: **voyage mini-map**, combat/trade results, log, rumor feed |
+| 7 | [07-harita.html](07-harita.html) | Harita (Full Map) | **Complete Mediterranean map** with 15 ports, 29 routes, 3 chokepoints, coastlines, islands, legends |
 
 ## How to View
 
@@ -34,5 +35,8 @@ Open any `.html` file directly in a browser — they are fully self-contained wi
 - **Altın notation**: Gold shown as `200 altın` — no emoji, no icon class
 - **Intent trade-offs**: Emir intent cards show green reward tag + red risk tag for each option
 - **No raw XP numbers**: Experience shown as star fill (★★★☆☆) — never exposed as integers
+- **SVG map**: Full Mediterranean map (860×520 viewBox) with sea gradient, wave texture, coastlines, islands, 4 region overlays, and compass rose
+- **Map in Emir**: Destination picker shows reachable ports bright, unreachable dimmed (30%), selected route animated with gold dashes
+- **Voyage map in Rüzgâr**: Mini map shows origin→destination with animated path, encounter markers, and arrival confirmation
 - **Glass borders**: `rgba(148, 163, 184, 0.08)` (`--line-light`) for ultra-subtle card depth
 - **Focus styles**: Accessible focus rings with accent glow
