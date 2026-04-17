@@ -49,6 +49,12 @@ const CHOKEPOINT_PILL = {
 } as const;
 
 const PORT_FILL_DARK = 'rgba(4, 10, 18, 0.96)';
+const SPACEBAR_KEY = ' ';
+const COMPASS_ROSE_PANEL = {
+  fill: 'rgba(7, 14, 24, 0.38)',
+  stroke: 'rgba(200, 169, 110, 0.18)',
+  opacity: '0.62',
+} as const;
 
 /* ════════════════════════════════════════════════════════
    Helpers
@@ -144,8 +150,8 @@ function GoodCategoryLegend() {
 
 function CompassRose() {
   return (
-    <g transform="translate(810, 470)" opacity="0.62">
-      <circle cx="0" cy="0" r="32" fill="rgba(7, 14, 24, 0.38)" stroke="rgba(200, 169, 110, 0.18)" strokeWidth="0.8" />
+    <g transform="translate(810, 470)" opacity={COMPASS_ROSE_PANEL.opacity}>
+      <circle cx="0" cy="0" r="32" fill={COMPASS_ROSE_PANEL.fill} stroke={COMPASS_ROSE_PANEL.stroke} strokeWidth="0.8" />
       <circle cx="0" cy="0" r="28" fill="none" stroke="#c8a96e" strokeWidth="0.3" />
       <circle cx="0" cy="0" r="24" fill="none" stroke="#c8a96e" strokeWidth="0.5" />
       <circle cx="0" cy="0" r="8" fill="none" stroke="#c8a96e" strokeWidth="0.4" />
@@ -362,7 +368,7 @@ export default function MapView({
   const handlePortKeyDown = useCallback(
     (event: KeyboardEvent<SVGGElement>, portId: string) => {
       if (!interactive) return;
-      if (event.key !== 'Enter' && event.key !== ' ') return;
+      if (event.key !== 'Enter' && event.key !== SPACEBAR_KEY) return;
       event.preventDefault();
       handlePortClick(portId);
     },
