@@ -33,6 +33,21 @@ const chokepointLabels: Record<string, string> = {
   otranto: 'OTRANTO',
 };
 
+const MAP_GLASS_GRADIENT = {
+  topColor: '#111b2a',
+  topOpacity: '0.78',
+  bottomColor: '#070d18',
+  bottomOpacity: '0.92',
+} as const;
+
+const CHOKEPOINT_PILL = {
+  offsetY: -12,
+  height: 22,
+  radius: 7,
+  fill: 'rgba(9, 18, 30, 0.8)',
+  stroke: 'rgba(255, 204, 68, 0.3)',
+} as const;
+
 /* ════════════════════════════════════════════════════════
    Helpers
    ════════════════════════════════════════════════════════ */
@@ -362,8 +377,8 @@ export default function MapView({
       <desc>Uydu tarzı kabartmalı Mare Nostrum haritası; limanlar, rotalar, darboğazlar ve derinlik katmanları gösterilir.</desc>
       <defs>
         <linearGradient id="mapGlassPanel" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#111b2a" stopOpacity="0.78" />
-          <stop offset="100%" stopColor="#070d18" stopOpacity="0.92" />
+          <stop offset="0%" stopColor={MAP_GLASS_GRADIENT.topColor} stopOpacity={MAP_GLASS_GRADIENT.topOpacity} />
+          <stop offset="100%" stopColor={MAP_GLASS_GRADIENT.bottomColor} stopOpacity={MAP_GLASS_GRADIENT.bottomOpacity} />
         </linearGradient>
       </defs>
       {/* ── Background layer ──────────────────────────── */}
@@ -425,7 +440,16 @@ export default function MapView({
         const w = label.length * 8 + 16;
         return (
           <g key={`choke-${key}`} transform={`translate(${mx}, ${my})`}>
-            <rect x={-w / 2} y="-12" width={w} height="22" rx="7" fill="rgba(9, 18, 30, 0.8)" stroke="rgba(255, 204, 68, 0.3)" strokeWidth="1" />
+            <rect
+              x={-w / 2}
+              y={CHOKEPOINT_PILL.offsetY}
+              width={w}
+              height={CHOKEPOINT_PILL.height}
+              rx={CHOKEPOINT_PILL.radius}
+              fill={CHOKEPOINT_PILL.fill}
+              stroke={CHOKEPOINT_PILL.stroke}
+              strokeWidth="1"
+            />
             <text
               textAnchor="middle"
               fontFamily="Georgia, serif"
