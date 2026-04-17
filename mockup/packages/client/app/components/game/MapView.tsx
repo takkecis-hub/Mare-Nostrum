@@ -372,7 +372,7 @@ export default function MapView({
     : null;
 
   return (
-    <svg viewBox="0 0 860 520" className="map" role="img" aria-label="Akdeniz haritası">
+    <svg viewBox="0 0 860 520" className="map" role="img" aria-label="Akdeniz haritası" lang="tr">
       <title>Akdeniz haritası</title>
       <desc>Uydu tarzı kabartmalı Mare Nostrum haritası; limanlar, rotalar, darboğazlar ve derinlik katmanları gösterilir.</desc>
       <defs>
@@ -487,7 +487,7 @@ export default function MapView({
             className={interactive ? 'port-node' : ''}
             role={interactive ? 'button' : undefined}
             tabIndex={interactive ? 0 : undefined}
-            aria-label={`${port.displayName} limanı`}
+            aria-label={`Liman ${port.displayName}`}
             opacity={dimmed ? 0.3 : 1}
           >
             {/* Major port pulsing outer ring */}
