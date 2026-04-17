@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, type KeyboardEvent } from 'react';
 import { useGameStore } from '../../stores/useGameStore';
 import { useUIStore } from '../../stores/useUIStore';
 import type { RouteType, GoodCategory, Port, Route } from '../../../../shared/src/types/index.js';
@@ -343,7 +343,7 @@ export default function MapView({
   );
 
   const handlePortKeyDown = useCallback(
-    (event: React.KeyboardEvent<SVGGElement>, portId: string) => {
+    (event: KeyboardEvent<SVGGElement>, portId: string) => {
       if (!interactive) return;
       if (event.key !== 'Enter' && event.key !== ' ') return;
       event.preventDefault();
@@ -362,8 +362,8 @@ export default function MapView({
       <desc>Uydu tarzı kabartmalı Mare Nostrum haritası; limanlar, rotalar, darboğazlar ve derinlik katmanları gösterilir.</desc>
       <defs>
         <linearGradient id="mapGlassPanel" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgba(17, 27, 42, 0.78)" />
-          <stop offset="100%" stopColor="rgba(7, 13, 24, 0.92)" />
+          <stop offset="0%" stopColor="#111b2a" stopOpacity="0.78" />
+          <stop offset="100%" stopColor="#070d18" stopOpacity="0.92" />
         </linearGradient>
       </defs>
       {/* ── Background layer ──────────────────────────── */}
