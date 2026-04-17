@@ -43,6 +43,7 @@
   /* Parchment accents */
   --parchment: #f5e6c8;
   --parchment-dark: #c9a96e;
+  --focus-ring: #f8e7a6;
 
   /* Route colors */
   --route-tramontana: #7dd3fc;
@@ -394,8 +395,15 @@ label {
   font-size: 12px;
   pointer-events: none;
 }
-.port-node { cursor: pointer; }
-.port-node:hover { filter: brightness(1.2); }
+.port-node { cursor: pointer; outline: none; }
+.port-node:hover,
+.port-node:focus-visible {
+  filter: brightness(1.12);
+}
+.port-node:focus-visible circle:last-of-type {
+  stroke: var(--focus-ring);
+  stroke-width: 3.5px;
+}
 
 /* ══════════════════════════════════════════════════════════════════════════
    FONDACO TABS — Sleek underline style
