@@ -125,6 +125,7 @@ function GoodCategoryLegend() {
 
 function CompassRose() {
   return (
+    {/* Compass shifted up 10px to clear vignette border */}
     <g transform="translate(810, 470)" opacity="0.55">
       {/* Outer decorative circles */}
       <circle cx="0" cy="0" r="28" fill="none" stroke="#c8a96e" strokeWidth="0.3" />
