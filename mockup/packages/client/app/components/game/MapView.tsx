@@ -83,7 +83,8 @@ function routePath(from: Port, to: Port, route: Route): string {
 function RouteLegend() {
   return (
     <g transform="translate(16, 12)">
-      <rect x="0" y="0" width="192" height="122" rx="6" fill="rgba(8,16,32,0.85)" stroke="rgba(30,50,70,0.6)" strokeWidth="1" />
+      <rect x="0" y="0" width="192" height="122" rx="10" fill="url(#mapGlassPanel)" stroke="rgba(206, 222, 241, 0.24)" strokeWidth="1" />
+      <rect x="1.5" y="1.5" width="189" height="119" rx="8.5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
       <text x="12" y="20" fontFamily="Georgia, serif" fontSize="12" fill="#c8a96e" fontWeight="bold" letterSpacing="1">MARE NOSTRUM</text>
       <text x="12" y="33" fontFamily="Georgia, serif" fontSize="8" fill="#6a8aaa" fontStyle="italic">Akdeniz Ticaret Haritası</text>
 
@@ -108,7 +109,8 @@ function RouteLegend() {
 function GoodCategoryLegend() {
   return (
     <g transform="translate(660, 12)">
-      <rect x="0" y="0" width="184" height="82" rx="6" fill="rgba(8,16,32,0.85)" stroke="rgba(30,50,70,0.6)" strokeWidth="1" />
+      <rect x="0" y="0" width="184" height="82" rx="10" fill="url(#mapGlassPanel)" stroke="rgba(206, 222, 241, 0.24)" strokeWidth="1" />
+      <rect x="1.5" y="1.5" width="181" height="79" rx="8.5" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
       <text x="12" y="20" fontFamily="Georgia, serif" fontSize="11" fill="#c8a96e" fontWeight="bold" letterSpacing="1">MAL TÜRLERİ</text>
 
       <circle cx="20" cy="38" r="5" fill="rgba(10,20,40,0.8)" stroke="#f1c40f" strokeWidth="2" />
@@ -125,39 +127,26 @@ function GoodCategoryLegend() {
 
 function CompassRose() {
   return (
-    {/* Compass shifted up 10px to clear vignette border */}
-    <g transform="translate(810, 470)" opacity="0.55">
-      {/* Outer decorative circles */}
+    <g transform="translate(810, 470)" opacity="0.62">
+      <circle cx="0" cy="0" r="32" fill="rgba(7, 14, 24, 0.38)" stroke="rgba(200, 169, 110, 0.18)" strokeWidth="0.8" />
       <circle cx="0" cy="0" r="28" fill="none" stroke="#c8a96e" strokeWidth="0.3" />
       <circle cx="0" cy="0" r="24" fill="none" stroke="#c8a96e" strokeWidth="0.5" />
       <circle cx="0" cy="0" r="8" fill="none" stroke="#c8a96e" strokeWidth="0.4" />
-
-      {/* Cardinal direction lines */}
       <line x1="0" y1="-22" x2="0" y2="-10" stroke="#c8a96e" strokeWidth="1.5" />
       <line x1="0" y1="22" x2="0" y2="10" stroke="#c8a96e" strokeWidth="0.8" />
       <line x1="22" y1="0" x2="10" y2="0" stroke="#c8a96e" strokeWidth="0.8" />
       <line x1="-22" y1="0" x2="-10" y2="0" stroke="#c8a96e" strokeWidth="0.8" />
-
-      {/* North pointer (ornate) */}
       <polygon points="0,-26 -4,-16 0,-10 4,-16" fill="#c8a96e" opacity="0.8" />
       <polygon points="0,-26 0,-10 4,-16" fill="#a88a4e" opacity="0.6" />
-
-      {/* South pointer */}
       <polygon points="0,26 -3,16 0,10 3,16" fill="none" stroke="#c8a96e" strokeWidth="0.5" opacity="0.5" />
-
-      {/* Intercardinal lines */}
       <line x1="15" y1="-15" x2="8" y2="-8" stroke="#c8a96e" strokeWidth="0.6" />
       <line x1="-15" y1="-15" x2="-8" y2="-8" stroke="#c8a96e" strokeWidth="0.6" />
       <line x1="15" y1="15" x2="8" y2="8" stroke="#c8a96e" strokeWidth="0.6" />
       <line x1="-15" y1="15" x2="-8" y2="8" stroke="#c8a96e" strokeWidth="0.6" />
-
-      {/* Tick marks */}
       <line x1="0" y1="-24" x2="0" y2="-28" stroke="#c8a96e" strokeWidth="0.8" />
       <line x1="0" y1="24" x2="0" y2="28" stroke="#c8a96e" strokeWidth="0.5" />
       <line x1="24" y1="0" x2="28" y2="0" stroke="#c8a96e" strokeWidth="0.5" />
       <line x1="-24" y1="0" x2="-28" y2="0" stroke="#c8a96e" strokeWidth="0.5" />
-
-      {/* Cardinal labels */}
       <text x="0" y="-30" textAnchor="middle" fontFamily="Georgia, serif" fontSize="8" fill="#c8a96e" fontWeight="bold">K</text>
       <text x="0" y="37" textAnchor="middle" fontFamily="Georgia, serif" fontSize="6" fill="#c8a96e">G</text>
       <text x="33" y="3" textAnchor="middle" fontFamily="Georgia, serif" fontSize="6" fill="#c8a96e">D</text>
@@ -248,9 +237,19 @@ function PortTooltip({ port, x, y }: TooltipProps) {
         y={ty}
         width="155"
         height="72"
-        rx="6"
-        fill="rgba(6,12,28,0.92)"
-        stroke="rgba(40,60,80,0.7)"
+        rx="10"
+        fill="url(#mapGlassPanel)"
+        stroke="rgba(206, 222, 241, 0.24)"
+        strokeWidth="1"
+      />
+      <rect
+        x={tx + 1.5}
+        y={ty + 1.5}
+        width="152"
+        height="69"
+        rx="8.5"
+        fill="none"
+        stroke="rgba(255,255,255,0.08)"
         strokeWidth="1"
       />
       <text x={tx + 8} y={ty + 16} fontFamily="Georgia, serif" fontSize="11" fill="#e2e8f0" fontWeight="bold">
@@ -343,12 +342,30 @@ export default function MapView({
     [interactive, setSelectedPortId, onPortClick],
   );
 
+  const handlePortKeyDown = useCallback(
+    (event: React.KeyboardEvent<SVGGElement>, portId: string) => {
+      if (!interactive) return;
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      handlePortClick(portId);
+    },
+    [handlePortClick, interactive],
+  );
+
   const hoveredPort = hoveredPortId
     ? ports.find((p) => p.id === hoveredPortId) ?? null
     : null;
 
   return (
     <svg viewBox="0 0 860 520" className="map" role="img" aria-label="Akdeniz haritası">
+      <title>Akdeniz haritası</title>
+      <desc>Uydu tarzı kabartmalı Mare Nostrum haritası; limanlar, rotalar, darboğazlar ve derinlik katmanları gösterilir.</desc>
+      <defs>
+        <linearGradient id="mapGlassPanel" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="rgba(17, 27, 42, 0.78)" />
+          <stop offset="100%" stopColor="rgba(7, 13, 24, 0.92)" />
+        </linearGradient>
+      </defs>
       {/* ── Background layer ──────────────────────────── */}
       <MapBackground />
 
@@ -408,7 +425,7 @@ export default function MapView({
         const w = label.length * 8 + 16;
         return (
           <g key={`choke-${key}`} transform={`translate(${mx}, ${my})`}>
-            <rect x={-w / 2} y="-9" width={w} height="18" rx="4" fill="#ffcc44" opacity="0.15" />
+            <rect x={-w / 2} y="-12" width={w} height="22" rx="7" fill="rgba(9, 18, 30, 0.8)" stroke="rgba(255, 204, 68, 0.3)" strokeWidth="1" />
             <text
               textAnchor="middle"
               fontFamily="Georgia, serif"
@@ -440,9 +457,13 @@ export default function MapView({
           <g
             key={port.id}
             onClick={() => handlePortClick(port.id)}
+            onKeyDown={(event) => handlePortKeyDown(event, port.id)}
             onMouseEnter={() => setHoveredPortId(port.id)}
             onMouseLeave={() => setHoveredPortId(null)}
             className={interactive ? 'port-node' : ''}
+            role={interactive ? 'button' : undefined}
+            tabIndex={interactive ? 0 : undefined}
+            aria-label={`${port.displayName} limanı`}
             opacity={dimmed ? 0.3 : 1}
           >
             {/* Major port pulsing outer ring */}
@@ -491,7 +512,7 @@ export default function MapView({
               cx={port.x}
               cy={port.y}
               r={r}
-              fill={isSelected ? '#facc15' : isCurrent ? 'var(--accent)' : 'rgba(8,16,32,0.9)'}
+              fill={isSelected ? '#facc15' : isCurrent ? 'var(--accent)' : 'rgba(4,10,18,0.96)'}
               stroke={isCurrent ? 'var(--accent)' : catColor}
               strokeWidth={isMajor ? 3 : 2.5}
             />
