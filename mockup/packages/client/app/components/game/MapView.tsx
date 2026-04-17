@@ -83,9 +83,9 @@ function routePath(from: Port, to: Port, route: Route): string {
 function RouteLegend() {
   return (
     <g transform="translate(16, 12)">
-      <rect x="0" y="0" width="192" height="122" rx="6" fill="#0a1628" stroke="#2a3a4a" strokeWidth="1" opacity="0.9" />
+      <rect x="0" y="0" width="192" height="122" rx="6" fill="rgba(8,16,32,0.85)" stroke="rgba(30,50,70,0.6)" strokeWidth="1" />
       <text x="12" y="20" fontFamily="Georgia, serif" fontSize="12" fill="#c8a96e" fontWeight="bold" letterSpacing="1">MARE NOSTRUM</text>
-      <text x="12" y="33" fontFamily="Georgia, serif" fontSize="8" fill="#8899aa" fontStyle="italic">Akdeniz Ticaret Haritası</text>
+      <text x="12" y="33" fontFamily="Georgia, serif" fontSize="8" fill="#6a8aaa" fontStyle="italic">Akdeniz Ticaret Haritası</text>
 
       <line x1="12" y1="48" x2="40" y2="48" stroke="#7dd3fc" strokeWidth="2.5" />
       <text x="46" y="52" fontFamily="monospace" fontSize="9" fill="#7dd3fc">Tramontana (1 tur)</text>
@@ -108,16 +108,16 @@ function RouteLegend() {
 function GoodCategoryLegend() {
   return (
     <g transform="translate(660, 12)">
-      <rect x="0" y="0" width="184" height="82" rx="6" fill="#0a1628" stroke="#2a3a4a" strokeWidth="1" opacity="0.9" />
+      <rect x="0" y="0" width="184" height="82" rx="6" fill="rgba(8,16,32,0.85)" stroke="rgba(30,50,70,0.6)" strokeWidth="1" />
       <text x="12" y="20" fontFamily="Georgia, serif" fontSize="11" fill="#c8a96e" fontWeight="bold" letterSpacing="1">MAL TÜRLERİ</text>
 
-      <circle cx="20" cy="38" r="5" fill="#0f172a" stroke="#f1c40f" strokeWidth="2" />
+      <circle cx="20" cy="38" r="5" fill="rgba(10,20,40,0.8)" stroke="#f1c40f" strokeWidth="2" />
       <text x="32" y="42" fontFamily="monospace" fontSize="9" fill="#f1c40f">Lüks (ipek, baharat, cam)</text>
 
-      <circle cx="20" cy="55" r="5" fill="#0f172a" stroke="#2ecc71" strokeWidth="2" />
+      <circle cx="20" cy="55" r="5" fill="rgba(10,20,40,0.8)" stroke="#2ecc71" strokeWidth="2" />
       <text x="32" y="59" fontFamily="monospace" fontSize="9" fill="#2ecc71">Yemek (buğday, zeytinyağı)</text>
 
-      <circle cx="20" cy="72" r="5" fill="#0f172a" stroke="#e74c3c" strokeWidth="2" />
+      <circle cx="20" cy="72" r="5" fill="rgba(10,20,40,0.8)" stroke="#e74c3c" strokeWidth="2" />
       <text x="32" y="76" fontFamily="monospace" fontSize="9" fill="#e74c3c">Savaş (demir, silah, çelik)</text>
     </g>
   );
@@ -125,18 +125,42 @@ function GoodCategoryLegend() {
 
 function CompassRose() {
   return (
-    <g transform="translate(810, 480)" opacity="0.4">
-      <circle cx="0" cy="0" r="20" fill="none" stroke="#c8a96e" strokeWidth="0.5" />
-      <line x1="0" y1="-18" x2="0" y2="-8" stroke="#c8a96e" strokeWidth="1.5" />
-      <polygon points="0,-20 -3,-14 3,-14" fill="#c8a96e" />
-      <text x="0" y="-22" textAnchor="middle" fontFamily="Georgia, serif" fontSize="8" fill="#c8a96e" fontWeight="bold">K</text>
-      <line x1="0" y1="18" x2="0" y2="8" stroke="#c8a96e" strokeWidth="0.8" />
-      <line x1="18" y1="0" x2="8" y2="0" stroke="#c8a96e" strokeWidth="0.8" />
-      <line x1="-18" y1="0" x2="-8" y2="0" stroke="#c8a96e" strokeWidth="0.8" />
-      <line x1="12" y1="-12" x2="6" y2="-6" stroke="#c8a96e" strokeWidth="0.4" />
-      <line x1="-12" y1="-12" x2="-6" y2="-6" stroke="#c8a96e" strokeWidth="0.4" />
-      <line x1="12" y1="12" x2="6" y2="6" stroke="#c8a96e" strokeWidth="0.4" />
-      <line x1="-12" y1="12" x2="-6" y2="6" stroke="#c8a96e" strokeWidth="0.4" />
+    <g transform="translate(810, 470)" opacity="0.55">
+      {/* Outer decorative circles */}
+      <circle cx="0" cy="0" r="28" fill="none" stroke="#c8a96e" strokeWidth="0.3" />
+      <circle cx="0" cy="0" r="24" fill="none" stroke="#c8a96e" strokeWidth="0.5" />
+      <circle cx="0" cy="0" r="8" fill="none" stroke="#c8a96e" strokeWidth="0.4" />
+
+      {/* Cardinal direction lines */}
+      <line x1="0" y1="-22" x2="0" y2="-10" stroke="#c8a96e" strokeWidth="1.5" />
+      <line x1="0" y1="22" x2="0" y2="10" stroke="#c8a96e" strokeWidth="0.8" />
+      <line x1="22" y1="0" x2="10" y2="0" stroke="#c8a96e" strokeWidth="0.8" />
+      <line x1="-22" y1="0" x2="-10" y2="0" stroke="#c8a96e" strokeWidth="0.8" />
+
+      {/* North pointer (ornate) */}
+      <polygon points="0,-26 -4,-16 0,-10 4,-16" fill="#c8a96e" opacity="0.8" />
+      <polygon points="0,-26 0,-10 4,-16" fill="#a88a4e" opacity="0.6" />
+
+      {/* South pointer */}
+      <polygon points="0,26 -3,16 0,10 3,16" fill="none" stroke="#c8a96e" strokeWidth="0.5" opacity="0.5" />
+
+      {/* Intercardinal lines */}
+      <line x1="15" y1="-15" x2="8" y2="-8" stroke="#c8a96e" strokeWidth="0.6" />
+      <line x1="-15" y1="-15" x2="-8" y2="-8" stroke="#c8a96e" strokeWidth="0.6" />
+      <line x1="15" y1="15" x2="8" y2="8" stroke="#c8a96e" strokeWidth="0.6" />
+      <line x1="-15" y1="15" x2="-8" y2="8" stroke="#c8a96e" strokeWidth="0.6" />
+
+      {/* Tick marks */}
+      <line x1="0" y1="-24" x2="0" y2="-28" stroke="#c8a96e" strokeWidth="0.8" />
+      <line x1="0" y1="24" x2="0" y2="28" stroke="#c8a96e" strokeWidth="0.5" />
+      <line x1="24" y1="0" x2="28" y2="0" stroke="#c8a96e" strokeWidth="0.5" />
+      <line x1="-24" y1="0" x2="-28" y2="0" stroke="#c8a96e" strokeWidth="0.5" />
+
+      {/* Cardinal labels */}
+      <text x="0" y="-30" textAnchor="middle" fontFamily="Georgia, serif" fontSize="8" fill="#c8a96e" fontWeight="bold">K</text>
+      <text x="0" y="37" textAnchor="middle" fontFamily="Georgia, serif" fontSize="6" fill="#c8a96e">G</text>
+      <text x="33" y="3" textAnchor="middle" fontFamily="Georgia, serif" fontSize="6" fill="#c8a96e">D</text>
+      <text x="-33" y="3" textAnchor="middle" fontFamily="Georgia, serif" fontSize="6" fill="#c8a96e">B</text>
     </g>
   );
 }
@@ -224,15 +248,14 @@ function PortTooltip({ port, x, y }: TooltipProps) {
         width="155"
         height="72"
         rx="6"
-        fill="#0a1628"
-        stroke="#3a4a5a"
+        fill="rgba(6,12,28,0.92)"
+        stroke="rgba(40,60,80,0.7)"
         strokeWidth="1"
-        opacity="0.95"
       />
       <text x={tx + 8} y={ty + 16} fontFamily="Georgia, serif" fontSize="11" fill="#e2e8f0" fontWeight="bold">
         {port.displayName}
       </text>
-      <text x={tx + 8} y={ty + 30} fontFamily="monospace" fontSize="8" fill="#8899aa">
+      <text x={tx + 8} y={ty + 30} fontFamily="monospace" fontSize="8" fill="#6a8aaa">
         {port.name} · {port.controller}
       </text>
       <text x={tx + 8} y={ty + 44} fontFamily="monospace" fontSize="8" fill={categoryColors[port.produces.category]}>
@@ -467,7 +490,7 @@ export default function MapView({
               cx={port.x}
               cy={port.y}
               r={r}
-              fill={isSelected ? '#facc15' : isCurrent ? 'var(--accent)' : '#0f172a'}
+              fill={isSelected ? '#facc15' : isCurrent ? 'var(--accent)' : 'rgba(8,16,32,0.9)'}
               stroke={isCurrent ? 'var(--accent)' : catColor}
               strokeWidth={isMajor ? 3 : 2.5}
             />
